@@ -1,3 +1,6 @@
 {
-    "files.defaultLanguage": "javascriptreact"
+  "files.defaultLanguage": "javascriptreact",
+  "files.associations": {
+    "*.js": "javascriptreact"
+  }
 }

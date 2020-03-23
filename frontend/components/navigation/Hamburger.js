@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { motion, useCycle } from 'framer-motion';
 
 export default function Hamburger() {
@@ -25,7 +25,7 @@ export default function Hamburger() {
   };
 
   return (
-    <div>
+    <Fragment>
       <button onClick={() => toggleOpen()}>
         <svg
           width="44"
@@ -72,6 +72,10 @@ export default function Hamburger() {
 
       <style jsx>
         {`
+          button {
+            border: none;
+            background-color: #000;
+          }
           .open-2 {
             transform: rotate(45deg) translate(10px, -13px);
           }
@@ -83,6 +87,6 @@ export default function Hamburger() {
           }
         `}
       </style>
-    </div>
+    </Fragment>
   );
 }
