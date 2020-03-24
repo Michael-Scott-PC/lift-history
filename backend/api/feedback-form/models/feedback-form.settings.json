@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "feedback_forms",
+  "info": {
+    "name": "feedback-form"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "lifthistory": {
+      "type": "boolean",
+      "default": false
+    },
+    "dashboard": {
+      "type": "boolean",
+      "default": false
+    },
+    "none": {
+      "type": "boolean",
+      "default": false
+    },
+    "feedback": {
+      "type": "richtext",
+      "minLength": 10,
+      "maxLength": 1000,
+      "required": true
+    }
+  }
+}

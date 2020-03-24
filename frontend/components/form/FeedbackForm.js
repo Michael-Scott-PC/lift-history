@@ -18,9 +18,9 @@ const FeedbackForm = props => {
         validationSchema={feedbackSchema}
         onSubmit={console.log}
         initialValues={{
-          option1: false,
-          option2: false,
-          option3: false,
+          lifthistory: false,
+          dashboard: false,
+          none: false,
           feedback: ''
         }}
         // onSubmit={(values, { setSubmitting }) => {
@@ -46,8 +46,8 @@ const FeedbackForm = props => {
               <Form.Check
                 type="checkbox"
                 label="lifthistory.com"
-                name="option1"
-                value={values.option1}
+                name="lifthistory"
+                value={values.lifthistory}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isValid={touched.category && !errors.category}
@@ -56,8 +56,8 @@ const FeedbackForm = props => {
               <Form.Check
                 type="checkbox"
                 label="The dashboard"
-                name="option2"
-                value={values.option2}
+                name="dashboard"
+                value={values.dashboard}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isValid={touched.category && !errors.category}
@@ -66,8 +66,8 @@ const FeedbackForm = props => {
               <Form.Check
                 type="checkbox"
                 label="None of the above"
-                name="option3"
-                value={values.option3}
+                name="none"
+                value={values.none}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isValid={touched.category && !errors.category}
