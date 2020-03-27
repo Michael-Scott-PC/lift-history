@@ -1,4 +1,4 @@
-import { POST_FEEDBACK, ERROR_POST_FEEDBACK } from '../actions/types';
+import { POST_FEEDBACK, ERROR_POST_FEEDBACK } from '../../actions/types.js';
 
 const initialState = {
   category: [],

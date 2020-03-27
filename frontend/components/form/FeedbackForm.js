@@ -1,22 +1,33 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
 import feedbackSchema from './schema/feedbackSchema';
 import SubmitButton from '../button/SubmitButton';
 
-const FeedbackForm = props => {
-  console.log(props);
+import { postFeedback } from '../../actions/feedbackActions';
 
-  useEffect(() => {
-    console.log(props);
-  }, [props]);
+const FeedbackForm = ({ postFeedback }) => {
+  // console.log(props);
+  // console.log(process.env.strapiAPI);
+
+  // useEffect(() => {
+  //   console.log(props);
+  // }, [props]);
 
   return (
     <div className="feedback-container">
       <Formik
         validationSchema={feedbackSchema}
-        onSubmit={console.log}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            postFeedback(values);
+            setSubmitting(false);
+          }, 400);
+        }}
         initialValues={{
           lifthistory: false,
           dashboard: false,
@@ -103,4 +114,8 @@ const FeedbackForm = props => {
   );
 };
 
-export default FeedbackForm;
+// FeedbackForm.propTypes = {
+
+// }
+
+export default connect(null, { postFeedback })(FeedbackForm);
