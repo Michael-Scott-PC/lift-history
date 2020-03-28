@@ -1,24 +1,35 @@
 import React, { useState, useEffect, Fragment } from 'react';
-// import Modal from 'react-modal';
+import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import FeedbackForm from '../form/FeedbackForm';
 
-const SiteFeedbackModal = props => {
+const FeedbackModal = ({
+  show,
+  setShowFeedbackModal,
+  feedbackReducer: { feedback, error }
+}) => {
   //   Modal.setAppElement('#__next');
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (props.show === true) {
-      setOpen(true);
-      document.getElementById('__next').style.filter = 'blur(5px)';
-    }
-  }, [props.show]);
+  console.log(feedback);
+  console.log(error);
 
   const closeModal = () => {
     document.getElementById('__next').style.filter = 'none';
-    props.setShowFeedbackModal(false);
+    setShowFeedbackModal(false);
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (show === true) {
+      setOpen(true);
+      document.getElementById('__next').style.filter = 'blur(5px)';
+    }
+
+    if (feedback.length > 1 || error.length > 1) {
+      closeModal();
+    }
+  }, [show, feedback, error]);
 
   return (
     <Fragment>
@@ -39,4 +50,9 @@ const SiteFeedbackModal = props => {
   );
 };
 
-export default SiteFeedbackModal;
+const mapStateToProps = state => ({
+  feedbackReducer: state.feedbackReducer,
+  alertReducer: state.alertReducer
+});
+
+export default connect(mapStateToProps)(FeedbackModal);

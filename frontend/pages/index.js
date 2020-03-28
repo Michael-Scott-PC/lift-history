@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowCircleDown, FaRegCopyright } from 'react-icons/fa';
 
+import Alert from '../components/form/Alert';
 import Layout from '../components/Layout/Layout';
 import LiftAnimation from '../components/background/LiftAnimation';
 
 const Home = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  console.log(showFeedbackModal);
+  // console.log(showFeedbackModal);
 
   return (
     <Layout>
+      <Alert />
       <div className="parent-container">
         <main id="main">
           <LiftAnimation />

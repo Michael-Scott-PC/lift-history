@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
-import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+// import PropTypes from 'prop-types';
+// import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import feedbackSchema from './schema/feedbackSchema';
 import SubmitButton from '../button/SubmitButton';
 
-import { postFeedback } from '../../actions/feedbackActions';
+import { postFeedback } from '../../redux/actions/feedbackActions';
 
-const FeedbackForm = ({ postFeedback }) => {
+const FeedbackForm = ({ postFeedback, alertReducer }) => {
   // console.log(props);
   // console.log(process.env.strapiAPI);
 
@@ -22,9 +22,10 @@ const FeedbackForm = ({ postFeedback }) => {
     <div className="feedback-container">
       <Formik
         validationSchema={feedbackSchema}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
           setTimeout(() => {
             postFeedback(values);
+            resetForm(true);
             setSubmitting(false);
           }, 400);
         }}
@@ -118,4 +119,8 @@ const FeedbackForm = ({ postFeedback }) => {
 
 // }
 
-export default connect(null, { postFeedback })(FeedbackForm);
+const mapStateToProps = state => ({
+  alertReducer: state.alertReducer
+});
+
+export default connect(mapStateToProps, { postFeedback })(FeedbackForm);

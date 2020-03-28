@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaRegCopyright } from 'react-icons/fa';
-import SiteFeedbackModal from '../modal/SiteFeedbackModal';
+import FeedbackModal from '../modal/FeedbackModal';
 
 const Footer = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   return (
     <footer>
-      <SiteFeedbackModal
+      <FeedbackModal
         show={showFeedbackModal}
         setShowFeedbackModal={setShowFeedbackModal}
       />

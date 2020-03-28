@@ -1,7 +1,6 @@
-import { POST_FEEDBACK, ERROR_POST_FEEDBACK } from '../../actions/types.js';
+import { SUCCESS_POST_FEEDBACK, ERROR_POST_FEEDBACK } from '../actions/types';
 
 const initialState = {
-  category: [],
   feedback: '',
   sent: false,
   error: {}
@@ -11,10 +10,9 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case POST_FEEDBACK:
+    case SUCCESS_POST_FEEDBACK:
       return {
         ...state,
-        category: payload.category,
         feedback: payload.feedback,
         sent: true
       };
