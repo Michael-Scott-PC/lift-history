@@ -10,6 +10,9 @@ export default yup.object({
       10,
       'It would be greatly appreciated if your feedback is at least 10 characters long.'
     )
-    .max(500, 'The feedback form has a 500 character limit.')
+    .max(
+      500,
+      'The feedback form has a 500 character limit. If your feedback exceeds this, please email: msenochs@gmail.com'
+    )
     .required('Please enter your feedback.')
 });

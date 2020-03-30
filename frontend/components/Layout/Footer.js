@@ -3,20 +3,26 @@ import Link from 'next/link';
 import { FaRegCopyright } from 'react-icons/fa';
 import FeedbackModal from '../modal/FeedbackModal';
 import ContactModal from '../modal/ContactModal';
+import FeatureReqModal from '../modal/FeatureReqModal';
 
 const Footer = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showFeatureReqModal, setShowFeatureReqModal] = useState(false);
 
   return (
     <footer>
       <FeedbackModal
-        show={showFeedbackModal}
+        showFeedbackModal={showFeedbackModal}
         setShowFeedbackModal={setShowFeedbackModal}
       />
       <ContactModal
-        show={showContactModal}
+        showContactModal={showContactModal}
         setShowContactModal={setShowContactModal}
+      />
+      <FeatureReqModal
+        showFeatureReqModal={showFeatureReqModal}
+        setShowFeatureReqModal={setShowFeatureReqModal}
       />
       <div id="footer-links">
         <Link href="/about">
@@ -27,10 +33,10 @@ const Footer = () => {
         <a onClick={() => setShowFeedbackModal(!showFeedbackModal)}>
           Site Feedback
         </a>
+        <a onClick={() => setShowFeatureReqModal(!showFeatureReqModal)}>
+          Feature Request
+        </a>
 
-        <Link href="/feature-request">
-          <a>Feature Request</a>
-        </Link>
         <p style={{ color: '#898888', marginTop: '.5rem' }}>
           <FaRegCopyright
             style={{

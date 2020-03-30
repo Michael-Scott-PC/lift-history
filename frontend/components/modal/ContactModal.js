@@ -1,25 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 
 import ContactForm from '../form/ContactForm';
 
-const ContactModal = ({ show, setShowContactModal }) => {
-  console.log(show);
-  useEffect(() => {
-    if (show) {
-      document.getElementById('__next').style.filter = 'blur(5px)';
-    }
-
-    if (!show) {
-      document.getElementById('__next').style.filter = 'none';
-    }
-  });
-
+const ContactModal = ({ showContactModal, setShowContactModal }) => {
+  console.log(showContactModal);
   return (
     <Modal
-      show={show}
-      onHide={setShowContactModal}
+      show={showContactModal}
+      onHide={() => setShowContactModal(false)}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -40,6 +30,9 @@ const ContactModal = ({ show, setShowContactModal }) => {
   );
 };
 
-ContactModal.propTypes = {};
+ContactModal.propTypes = {
+  showContactModal: PropTypes.bool.isRequired,
+  setShowContactModal: PropTypes.func.isRequired
+};
 
 export default ContactModal;

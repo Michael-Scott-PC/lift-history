@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/feature-request-forms",
+      "handler": "feature-request-form.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature-request-forms/count",
+      "handler": "feature-request-form.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature-request-forms/:id",
+      "handler": "feature-request-form.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feature-request-forms",
+      "handler": "feature-request-form.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/feature-request-forms/:id",
+      "handler": "feature-request-form.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/feature-request-forms/:id",
+      "handler": "feature-request-form.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

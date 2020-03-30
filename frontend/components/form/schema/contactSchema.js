@@ -30,7 +30,7 @@ export default yup.object({
     .min(10, 'The question field needs at least 10 characters.')
     .max(
       1000,
-      'The question field has a max of 1,000 characters. If your question exceeds this, please email Brian: brian@aredetroit.com'
+      'The question field has a max of 1,000 characters. If your question exceeds this, please email: msenochs@gmail.com'
     )
     .required('Required')
 });

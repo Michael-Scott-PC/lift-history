@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "feature_request_forms",
+  "info": {
+    "name": "feature-request-form"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 30,
+      "minLength": 2
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 30,
+      "minLength": 2
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "maxLength": 40,
+      "minLength": 7
+    },
+    "featureRequest": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 1000,
+      "minLength": 10
+    }
+  }
+}
