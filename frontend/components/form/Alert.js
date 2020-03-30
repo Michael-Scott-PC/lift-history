@@ -5,11 +5,8 @@ const Alert = ({ alertReducer }) =>
   alertReducer !== null &&
   alertReducer.length > 0 &&
   alertReducer.map(alert => (
-    <Fragment>
-      <div
-        className={`alert custom-alert alert-${alert.alertType}`}
-        key={alert.id}
-      >
+    <Fragment key={alert.id}>
+      <div className={`alert custom-alert alert-${alert.alertType}`}>
         {alert.msg === 'An internal server error occurred'
           ? 'Your message appears to have already been sent. If you believe this to be an error, email msenochs@gmail.com'
           : alert.msg}

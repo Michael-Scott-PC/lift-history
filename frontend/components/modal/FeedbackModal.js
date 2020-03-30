@@ -11,8 +11,8 @@ const FeedbackModal = ({
   //   Modal.setAppElement('#__next');
   const [open, setOpen] = useState(false);
 
-  console.log(feedback);
-  console.log(error);
+  // console.log(feedback);
+  // console.log(error);
 
   const closeModal = () => {
     document.getElementById('__next').style.filter = 'none';

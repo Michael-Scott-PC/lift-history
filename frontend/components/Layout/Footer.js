@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaRegCopyright } from 'react-icons/fa';
 import FeedbackModal from '../modal/FeedbackModal';
+import ContactModal from '../modal/ContactModal';
 
 const Footer = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   return (
     <footer>
@@ -12,14 +14,16 @@ const Footer = () => {
         show={showFeedbackModal}
         setShowFeedbackModal={setShowFeedbackModal}
       />
+      <ContactModal
+        show={showContactModal}
+        setShowContactModal={setShowContactModal}
+      />
       <div id="footer-links">
         <Link href="/about">
           <a>About</a>
         </Link>
-        <Link href="/contact">
-          <a>Contact</a>
-        </Link>
 
+        <a onClick={() => setShowContactModal(!showContactModal)}>Contact</a>
         <a onClick={() => setShowFeedbackModal(!showFeedbackModal)}>
           Site Feedback
         </a>

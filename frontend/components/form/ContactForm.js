@@ -1,0 +1,161 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Form from 'react-bootstrap/Form';
+import { Formik } from 'formik';
+import { FaEnvelope } from 'react-icons/fa';
+
+import SubmitButton from '../button/SubmitButton';
+
+import contactSchema from '../form/schema/contactSchema';
+
+const ContactForm = props => {
+  console.log(props);
+  return (
+    <Formik
+      validationSchema={contactSchema}
+      onSubmit={console.log}
+      // onSubmit={(values, { setSubmitting, resetForm }) => {
+      //   setTimeout(() => {
+      //     postContact(values);
+      //     resetForm(true);
+      //     setSubmitting(false);
+      //   }, 400);
+      // }}
+      initialValues={{
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: '',
+        question: ''
+      }}
+    >
+      {({
+        values,
+        touched,
+        errors,
+        handleSubmit,
+        handleChange,
+        handleBlur
+      }) => (
+        <Form noValidate className="my-5 px-4" onSubmit={handleSubmit}>
+          <h5 className=" text-center">
+            Get in touch! <FaEnvelope />
+          </h5>
+          <p>
+            If you have any questions about this product or would like to reach
+            the web application developer for general questions, please fill out
+            this form.
+          </p>
+
+          <Form.Group controlId="formGroupFirstName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="first_name"
+              placeholder="enter first name"
+              className="text-center"
+              value={values.first_name}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isValid={touched.first_name && !errors.first_name}
+              isInvalid={touched.first_name && errors.first_name}
+              required
+            />
+            {errors.first_name && touched.first_name ? (
+              <p style={{ color: 'red' }}>{errors.first_name}</p>
+            ) : null}
+          </Form.Group>
+
+          <Form.Group controlId="formGroupLastName">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="last_name"
+              placeholder="enter last name"
+              className="text-center"
+              value={values.last_name}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isValid={touched.last_name && !errors.last_name}
+              isInvalid={touched.last_name && errors.last_name}
+              required
+            />
+            {errors.last_name && touched.last_name ? (
+              <p style={{ color: 'red' }}>{errors.last_name}</p>
+            ) : null}
+          </Form.Group>
+
+          <Form.Group controlId="formGroupEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="enter email"
+              className="text-center"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isValid={touched.email && !errors.email}
+              isInvalid={touched.email && errors.email}
+              required
+            />
+            {errors.email && touched.email ? (
+              <p style={{ color: 'red' }}>{errors.email}</p>
+            ) : null}
+          </Form.Group>
+
+          <Form.Group controlId="formGroupPhoneNumber">
+            <Form.Label>Phone</Form.Label>
+            <Form.Control
+              className="text-center"
+              type="Phone"
+              name="phone"
+              placeholder="enter phone (optional)"
+              value={values.phone}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isValid={touched.phone && !errors.phone}
+              isInvalid={touched.phone && errors.phone}
+            />
+            {errors.phone && touched.phone ? (
+              <p style={{ color: 'red' }}>{errors.phone}</p>
+            ) : null}
+          </Form.Group>
+
+          <Form.Group controlId="formGroupTextArea">
+            <Form.Label>How may I help you?</Form.Label>
+            <Form.Control
+              as="textarea"
+              name="question"
+              value={values.question}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isValid={touched.question && !errors.question}
+              isInvalid={touched.question && errors.question}
+              required
+            />
+            {errors.question && touched.question ? (
+              <p style={{ color: 'red' }}>{errors.question}</p>
+            ) : null}
+          </Form.Group>
+
+          <SubmitButton className="mt-4 mb-5 submit-inquiry" type="submit">
+            Submit
+          </SubmitButton>
+        </Form>
+      )}
+    </Formik>
+
+    //   <style jsx>
+    //     {`
+    //       .contact-container {
+    //         padding: 1rem 2rem;
+    //       }
+    //     `}
+    //   </style>
+  );
+};
+
+ContactForm.propTypes = {};
+
+export default ContactForm;
