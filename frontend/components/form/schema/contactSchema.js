@@ -1,12 +1,12 @@
 import * as yup from 'yup';
 
 export default yup.object({
-  first_name: yup
+  firstName: yup
     .string()
     .min(2, 'First name field is too short.')
     .max(30, 'First name field is too long.')
     .required('Required'),
-  last_name: yup
+  lastName: yup
     .string()
     .min(2, 'Last name field is too short.')
     .max(30, 'Last name field is too long.')

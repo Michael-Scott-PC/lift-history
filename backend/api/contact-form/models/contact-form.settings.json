@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "contact_forms",
+  "info": {
+    "name": "contact"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 30
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 30,
+      "minLength": 2
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "maxLength": 40,
+      "minLength": 7
+    },
+    "phone": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 10
+    },
+    "question": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 1000,
+      "minLength": 10
+    }
+  }
+}

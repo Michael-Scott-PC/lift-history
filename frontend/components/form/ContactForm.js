@@ -22,8 +22,8 @@ const ContactForm = props => {
       //   }, 400);
       // }}
       initialValues={{
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         phone: '',
         question: ''
@@ -51,18 +51,18 @@ const ContactForm = props => {
             <Form.Label>First Name</Form.Label>
             <Form.Control
               type="text"
-              name="first_name"
+              name="firstName"
               placeholder="enter first name"
               className="text-center"
-              value={values.first_name}
+              value={values.firstName}
               onBlur={handleBlur}
               onChange={handleChange}
-              isValid={touched.first_name && !errors.first_name}
-              isInvalid={touched.first_name && errors.first_name}
+              isValid={touched.firstName && !errors.firstName}
+              isInvalid={touched.firstName && errors.firstName}
               required
             />
-            {errors.first_name && touched.first_name ? (
-              <p style={{ color: 'red' }}>{errors.first_name}</p>
+            {errors.firstName && touched.firstName ? (
+              <p style={{ color: 'red' }}>{errors.firstName}</p>
             ) : null}
           </Form.Group>
 
@@ -70,18 +70,18 @@ const ContactForm = props => {
             <Form.Label>Last Name</Form.Label>
             <Form.Control
               type="text"
-              name="last_name"
+              name="lastName"
               placeholder="enter last name"
               className="text-center"
-              value={values.last_name}
+              value={values.lastName}
               onBlur={handleBlur}
               onChange={handleChange}
-              isValid={touched.last_name && !errors.last_name}
-              isInvalid={touched.last_name && errors.last_name}
+              isValid={touched.lastName && !errors.lastName}
+              isInvalid={touched.lastName && errors.lastName}
               required
             />
-            {errors.last_name && touched.last_name ? (
-              <p style={{ color: 'red' }}>{errors.last_name}</p>
+            {errors.lastName && touched.lastName ? (
+              <p style={{ color: 'red' }}>{errors.lastName}</p>
             ) : null}
           </Form.Group>
 

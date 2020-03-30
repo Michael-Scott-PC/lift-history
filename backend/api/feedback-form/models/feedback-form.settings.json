@@ -3,7 +3,7 @@
   "connection": "default",
   "collectionName": "feedback_forms",
   "info": {
-    "name": "feedback-form"
+    "name": "feedback"
   },
   "options": {
     "increments": true,
