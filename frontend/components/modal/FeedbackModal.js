@@ -40,12 +40,24 @@ const FeedbackModal = ({
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Site Feedback</Modal.Title>
+        <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
+          <Modal.Title className="w-100 text-center">Site Feedback</Modal.Title>
+          <button
+            className="customClose"
+            style={{ color: '#fff' }}
+            onClick={closeModal}
+          >
+            X
+          </button>
         </Modal.Header>
-        {/* <button onClick={() => closeModal(false)}>Close</button> */}
         <FeedbackForm />
       </Modal>
+
+      <style jsx>{`
+        .close {
+          color: '#fff !important';
+        }
+      `}</style>
     </Fragment>
   );
 };

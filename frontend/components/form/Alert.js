@@ -15,11 +15,16 @@ const Alert = ({ alertReducer }) =>
       <style jsx>
         {`
           .custom-alert {
-            background-color: rgba(10, 140, 1, 0.9);
             color: #fff;
             position: fixed;
             top: 50%;
             z-index: 1000;
+          }
+          .alert-success {
+            background-color: rgba(10, 140, 1, 0.9);
+          }
+          .alert-danger {
+            background-color: #bf1616;
           }
         `}
       </style>

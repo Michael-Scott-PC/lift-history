@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import ContactForm from '../form/ContactForm';
 
 const ContactModal = ({ show, setShowContactModal }) => {
+  console.log(show);
   useEffect(() => {
     if (show) {
       document.getElementById('__next').style.filter = 'blur(5px)';
@@ -24,10 +25,17 @@ const ContactModal = ({ show, setShowContactModal }) => {
       centered
       style={{ padding: '1rem' }}
     >
-      <Modal.Header closeButton>
-        <Modal.Title className="w-100 text-center">Contact Form</Modal.Title>
+      <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
+        <Modal.Title className="w-100 ml-2 text-center">Contact</Modal.Title>
+        <button
+          className="customClose"
+          style={{ color: '#fff' }}
+          onClick={() => setShowContactModal(false)}
+        >
+          X
+        </button>
       </Modal.Header>
-      <ContactForm />
+      <ContactForm setShowContactModal={setShowContactModal} />
     </Modal>
   );
 };

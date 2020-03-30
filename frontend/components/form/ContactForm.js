@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
@@ -7,20 +8,20 @@ import { FaEnvelope } from 'react-icons/fa';
 import SubmitButton from '../button/SubmitButton';
 
 import contactSchema from '../form/schema/contactSchema';
+import { postContact } from '../../redux/actions/contactActions';
 
-const ContactForm = props => {
-  console.log(props);
+const ContactForm = ({ postContact, setShowContactModal }) => {
   return (
     <Formik
       validationSchema={contactSchema}
-      onSubmit={console.log}
-      // onSubmit={(values, { setSubmitting, resetForm }) => {
-      //   setTimeout(() => {
-      //     postContact(values);
-      //     resetForm(true);
-      //     setSubmitting(false);
-      //   }, 400);
-      // }}
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        setTimeout(() => {
+          postContact(values);
+          resetForm(true);
+          setSubmitting(false);
+          setShowContactModal(false);
+        }, 400);
+      }}
       initialValues={{
         firstName: '',
         lastName: '',
@@ -41,7 +42,7 @@ const ContactForm = props => {
           <h5 className=" text-center">
             Get in touch! <FaEnvelope />
           </h5>
-          <p>
+          <p className="mb-5">
             If you have any questions about this product or would like to reach
             the web application developer for general questions, please fill out
             this form.
@@ -122,7 +123,7 @@ const ContactForm = props => {
             ) : null}
           </Form.Group>
 
-          <Form.Group controlId="formGroupTextArea">
+          <Form.Group className="mb-5" controlId="formGroupTextArea">
             <Form.Label>How may I help you?</Form.Label>
             <Form.Control
               as="textarea"
@@ -145,17 +146,12 @@ const ContactForm = props => {
         </Form>
       )}
     </Formik>
-
-    //   <style jsx>
-    //     {`
-    //       .contact-container {
-    //         padding: 1rem 2rem;
-    //       }
-    //     `}
-    //   </style>
   );
 };
 
-ContactForm.propTypes = {};
+ContactForm.propTypes = {
+  postContact: PropTypes.func.isRequired,
+  setShowContactModal: PropTypes.func.isRequired
+};
 
-export default ContactForm;
+export default connect(null, { postContact })(ContactForm);

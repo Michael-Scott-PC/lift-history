@@ -3,7 +3,7 @@
   "connection": "default",
   "collectionName": "contact_forms",
   "info": {
-    "name": "contact"
+    "name": "contact-form"
   },
   "options": {
     "increments": true,

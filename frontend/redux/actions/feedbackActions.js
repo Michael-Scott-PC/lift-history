@@ -30,5 +30,12 @@ export const postFeedback = values => async dispatch => {
       type: ERROR_POST_FEEDBACK,
       payload: error
     });
+
+    dispatch(
+      setAlert(
+        'There appears to be an issue with the server.  Please email msenochs@gmail.com with your inquiry. Thank you.',
+        'danger'
+      )
+    );
   }
 };

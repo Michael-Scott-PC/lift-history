@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
-// import PropTypes from 'prop-types';
-// import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 
 import feedbackSchema from './schema/feedbackSchema';
@@ -10,14 +9,7 @@ import SubmitButton from '../button/SubmitButton';
 
 import { postFeedback } from '../../redux/actions/feedbackActions';
 
-const FeedbackForm = ({ postFeedback, alertReducer }) => {
-  // console.log(props);
-  // console.log(process.env.strapiAPI);
-
-  // useEffect(() => {
-  //   console.log(props);
-  // }, [props]);
-
+const FeedbackForm = ({ postFeedback }) => {
   return (
     <div className="feedback-container">
       <Formik
@@ -80,7 +72,7 @@ const FeedbackForm = ({ postFeedback, alertReducer }) => {
                 isInvalid={touched.category && errors.category}
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-5">
               <Form.Label>Please share your feedback.</Form.Label>
               <Form.Control
                 name="feedback"
@@ -102,6 +94,7 @@ const FeedbackForm = ({ postFeedback, alertReducer }) => {
         {`
           .feedback-container {
             padding: 1rem 2rem;
+            margin: 2rem 0;
           }
         `}
       </style>
@@ -109,9 +102,9 @@ const FeedbackForm = ({ postFeedback, alertReducer }) => {
   );
 };
 
-// FeedbackForm.propTypes = {
-
-// }
+FeedbackForm.propTypes = {
+  postFeedback: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => ({
   alertReducer: state.alertReducer
