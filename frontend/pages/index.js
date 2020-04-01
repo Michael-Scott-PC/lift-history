@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaArrowCircleDown, FaRegCopyright } from 'react-icons/fa';
 
 import Alert from '../components/form/Alert';
-import Layout from '../components/Layout/Layout';
+import Layout from '../components/layout/Layout';
 import LiftAnimation from '../components/background/LiftAnimation';
 
 const Home = () => {

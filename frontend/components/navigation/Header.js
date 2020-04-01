@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-import Hamburger from './Hamburger';
+import DropDownMenu from './DropDownMenu';
 import SquatLogo from './SquatLogo';
 import LH from './LH';
 
@@ -9,17 +10,17 @@ const Header = () => {
   return (
     <Fragment>
       <nav>
-        <Link href="/">
-          <a>
-            <LH />
-          </a>
-        </Link>
+        <DropDownMenu />
         <Link href="/">
           <a>
             <SquatLogo />
           </a>
         </Link>
-        <Hamburger />
+        <Link href="/">
+          <a>
+            <LH />
+          </a>
+        </Link>
       </nav>
 
       <style jsx>{`
