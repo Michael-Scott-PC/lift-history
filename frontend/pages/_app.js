@@ -1,3 +1,4 @@
+import 'react-calendar/dist/Calendar.css';
 import { Provider } from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 import store from '../redux/store';

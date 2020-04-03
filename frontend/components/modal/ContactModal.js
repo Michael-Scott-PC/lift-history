@@ -5,7 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import ContactForm from '../form/ContactForm';
 
 const ContactModal = ({ showContactModal, setShowContactModal }) => {
-  console.log(showContactModal);
   return (
     <Modal
       show={showContactModal}

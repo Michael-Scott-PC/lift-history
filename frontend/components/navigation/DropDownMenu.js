@@ -9,7 +9,7 @@ const DropDownMenu = () => {
 
   const sidebar = {
     open: {
-      clipPath: `circle(125% at 40px 40px)`,
+      clipPath: `circle(130% at 40px 40px)`,
       backgroundColor: '#000',
       transition: {
         type: 'spring',
@@ -21,7 +21,7 @@ const DropDownMenu = () => {
       clipPath: 'circle(25px at 40px 40px)',
       backgroundColor: '#fff',
       transition: {
-        delay: 0.5,
+        delay: 0.2,
         type: 'spring',
         stiffness: 400,
         damping: 40
@@ -45,7 +45,7 @@ const DropDownMenu = () => {
             left: 0,
             bottom: 0,
             zIndex: 100,
-            width: '70vw',
+            width: '100vw',
             height: '50vh'
           }}
         >
