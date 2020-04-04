@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Layout from '../components/layout/Layout';
-// import Year from '../components/calendar/react-calendar/Year';
-// import YearView from '../components/calendar/my-custom-calendar/YearView';
-import CustomYear from '../components/calendar/my-custom-calendar/CustomYear';
+import YearView from '../components/calendar/my-custom-calendar/YearView';
 
 const dashboard = props => {
   return (
     <Layout>
-      <div>
+      <div id="year-calendar-container">
         <h1>Dashboard</h1>
-        {/* <Year /> */}
-        {/* <YearView /> */}
-        <CustomYear />
+
+        <YearView />
       </div>
+
+      <style jsx>
+        {`
+          #year-calendar-container {
+            padding: 0.75rem;
+          }
+        `}
+      </style>
     </Layout>
   );
 };

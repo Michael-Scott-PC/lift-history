@@ -1,28 +1,49 @@
-// import React, { Fragment } from 'react';
-// import PropTypes from 'prop-types';
-// import fullMonthNames from '../../../full-month-names.json';
+import React, { useState, useEffect, Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-// const YearView = props => {
-//   return (
-//     <Fragment>
-//       <div id="year-view-container">
-//         <h1>YEAR VIEW</h1>
-//         {fullMonthNames.map(month => (
-//           <div>{month}</div>
-//         ))}
-//       </div>
+import Months from './Months';
+import MonthView from './MonthView';
 
-//       <style jsx>{`
-//         #year-view-container {
-//           border: 1px solid purple;
-//         }
-//       `}</style>
-//     </Fragment>
-//   );
-// };
+import { handleMonthClick } from '../../../utils/calendarUtils';
 
-// YearView.propTypes = {
-//   fullMonthNames: PropTypes.object.isRequired
-// };
+import {
+  monthWrapper,
+  highlightCurrentDay
+} from '../../../utils/calendarUtils';
 
-// export default YearView;
+const YearView = props => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    highlightCurrentDay();
+  }, []);
+
+  return (
+    <Fragment>
+      <h1 className="year">2020</h1>
+      <div id="custom-year-container">
+        <Months />
+      </div>
+
+      <MonthView show={show} />
+
+      <style jsx>{`
+        .year {
+          color: red;
+          padding-left: 0.5rem;
+        }
+        #custom-year-container {
+          /* border: 1px solid red; */
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 3rem;
+          margin-bottom: 3rem;
+        }
+      `}</style>
+    </Fragment>
+  );
+};
+
+YearView.propTypes = {};
+
+export default YearView;
