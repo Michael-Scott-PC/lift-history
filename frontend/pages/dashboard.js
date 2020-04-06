@@ -7,7 +7,7 @@ import YearView from '../components/calendar/my-custom-calendar/YearView';
 const dashboard = props => {
   return (
     <Layout>
-      <div id="year-calendar-container">
+      <div id="dashboard-container">
         <h1>Dashboard</h1>
 
         <YearView />
