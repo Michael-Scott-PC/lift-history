@@ -12,7 +12,6 @@ const YearView = props => {
 
   return (
     <Fragment>
-      <h1 className="year">2020</h1>
       <div id="custom-year-container">
         <Months />
       </div>
@@ -21,6 +20,7 @@ const YearView = props => {
         .year {
           color: red;
           padding-left: 0.5rem;
+          width: 100%;
         }
         #custom-year-container {
           display: flex;

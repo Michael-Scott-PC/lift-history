@@ -62,6 +62,7 @@ class FullCalendar(calendar.TextCalendar):
             f_lst = [num for sublist in days for num in sublist]
             flat_lst.append(f_lst)
         return flat_lst
+        
 
     def create_month_days_dict(self, month_lst, flat_lst):
         """ Merge the month and days lists into a dictionary. key = month, value = list of days(ints)"""
@@ -77,8 +78,21 @@ class FullCalendar(calendar.TextCalendar):
                         y = y + 1
         return month_days_dict
 
+    def generate_itermonthdates(self, month):
+        month_days_lst = []
+        this_year = date.today().year
+        cal = calendar.Calendar(firstweekday=6)
+        current_month = cal.itermonthdates(this_year, month)
+        for item in current_month:
+            convert_to_str = str(item)
+            remove_year = convert_to_str[5:]
+            temp_lst = remove_year.split('-')
+            month_days_lst.append(temp_lst)
+        return month_days_lst
+
 
 custom_calendar = FullCalendar()
+
 full_month_names = custom_calendar.generate_month_lst()
 
 full_month_names_w_nums = custom_calendar.full_month_names_numbers_dict()
@@ -89,7 +103,26 @@ abbr_weekdays = custom_calendar.generate_abbr_weekday_lst()
 
 month_days = custom_calendar.generate_monthdays_lst()
 
-months_and_days = custom_calendar.create_month_days_dict(abbr_months, month_days)
+''' This gives us the month with all corresponding days, 
+including neighboring months days.  
+This LEAVES the first index, which is the month.
+'''
+complete_lst = []
+for month in range(1, 13):
+    monthdays_w_neighboring_months = custom_calendar.generate_itermonthdates(month)
+    each_month_lst = []
+    for i in monthdays_w_neighboring_months:
+        each_month_lst.append(i)
+    complete_lst.append(each_month_lst)
+
+sub_lst = []
+for mon in range(1, 13):
+    test = custom_calendar.generate_itermonthdates(mon)
+    for t in test:
+        sub_lst.append(t[1])
+print(sub_lst)
+
+months_and_days = custom_calendar.create_month_days_dict(abbr_months, complete_lst)
 
 
 with open('./frontend/full-month-names.json', 'w') as f:

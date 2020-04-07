@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import MonthView from './MonthView';
 
 import {
+  currentYear,
   allMonthsWrapper,
   highlightCurrentDay
 } from '../../../utils/calendarUtils';
@@ -30,6 +31,17 @@ const Months = () => {
 
   return (
     <Fragment>
+      <h1
+        className="year"
+        style={{
+          display: showMonths ? 'block' : 'none',
+          width: '100%',
+          color: 'red',
+          marginBottom: '3rem'
+        }}
+      >
+        {currentYear}
+      </h1>
       {allMonthsWrapper('year-view', handleMonthClick, showMonths)}
       <MonthView selectedMonth={selectedMonth} />
     </Fragment>
