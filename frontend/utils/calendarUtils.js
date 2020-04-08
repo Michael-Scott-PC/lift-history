@@ -64,6 +64,7 @@ const weekdayStyle = css`
   }
   .year-view {
     font-size: 0.55rem;
+    text-align: center;
   }
   .month-view {
     font-size: 1rem;

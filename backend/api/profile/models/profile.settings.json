@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "profiles",
+  "info": {
+    "name": "profile"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 30,
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 30
+    },
+    "birthday": {
+      "type": "date",
+      "required": true
+    },
+    "bio": {
+      "type": "richtext",
+      "maxLength": 150,
+      "minLength": 1
+    },
+    "exercises": {
+      "collection": "exercise"
+    }
+  }
+}

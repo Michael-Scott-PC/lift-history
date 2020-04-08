@@ -37,7 +37,8 @@ const Months = () => {
           display: showMonths ? 'block' : 'none',
           width: '100%',
           color: 'red',
-          marginBottom: '3rem'
+          marginBottom: '3rem',
+          marginLeft: '.5rem'
         }}
       >
         {currentYear}
