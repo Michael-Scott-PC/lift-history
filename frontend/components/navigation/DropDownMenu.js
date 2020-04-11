@@ -1,11 +1,13 @@
-import React, { Fragment } from 'react';
-import { motion, useCycle } from 'framer-motion';
+import React, { Fragment, useState } from 'react';
+import { motion } from 'framer-motion';
 
 import Hamburger from './Hamburger';
 import MenuLinks from './MenuLinks';
+import AuthModal from '../modal/AuthModal';
 
 const DropDownMenu = () => {
-  const [isOpen, toggleOpen] = useCycle(false, true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const sidebar = {
     open: {
@@ -34,7 +36,7 @@ const DropDownMenu = () => {
       <motion.nav
         initial={false}
         animate={isOpen ? 'open' : 'closed'}
-        onClick={() => toggleOpen()}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <motion.div
           className="background"
@@ -50,9 +52,17 @@ const DropDownMenu = () => {
           }}
         >
           <Hamburger isOpen={isOpen} />
-          <MenuLinks isOpen={isOpen} />
+          <MenuLinks
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            setShowAuthModal={setShowAuthModal}
+          />
         </motion.div>
       </motion.nav>
+      <AuthModal
+        showAuthModal={showAuthModal}
+        setShowAuthModal={setShowAuthModal}
+      />
     </Fragment>
   );
 };

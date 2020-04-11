@@ -2,7 +2,7 @@ import React from 'react';
 
 const SubmitButton = () => {
   return (
-    <div className="btn-container text-center">
+    <div className="btn-container text-center mt-4">
       <button className="btn btn-submit btn-primary center" type="submit">
         Submit
       </button>

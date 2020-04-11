@@ -126,7 +126,7 @@ const dayStyles = css`
 `;
 
 /**
- * Wrap each individual month in a div with weekdays and
+ * @description: Wrap each individual month in a div with weekdays and
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
@@ -216,7 +216,7 @@ const monthViewStyles = css`
 `;
 
 /**
- * Retrieve the month abbreviation.
+ * @description: Retrieve the month abbreviation.
  * Convert the string id to an integer, then get the
  * string month abbreviation.
  * @param {string} month - The selected month.
@@ -230,7 +230,7 @@ export const getMonth = (month, setMonthHeader) => {
 };
 
 /**
- * The 'month' comes in as a string argument with no zeros.
+ * @description: The 'month' comes in as a string argument with no zeros.
  * We need to add a zero for months < 10 so it matches the
  * string format in monthsAndDays (months-days-days.json).
  * @param {string} month - The selected month.
@@ -247,7 +247,7 @@ const getMonthIndex = month => {
 };
 
 /**
- * Remove any zero in the range 01-09 from the days in
+ * @description: Remove any zero in the range 01-09 from the days in
  * monthAndDays so we can compare it to the selectedDay (
  * this gets passed to getWeekRange).
  * We're doing the reverse of what I did in getMonthIndex

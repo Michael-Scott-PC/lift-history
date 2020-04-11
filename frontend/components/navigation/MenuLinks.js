@@ -1,6 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
-const MenuLinks = ({ isOpen }) => {
+import AuthModal from '../modal/AuthModal';
+
+const MenuLinks = ({ isOpen, setIsOpen, setShowAuthModal }) => {
+  const handleAuthClick = () => {
+    setIsOpen(false);
+    setShowAuthModal(true);
+  };
+
   return (
     <Fragment>
       {isOpen && (
@@ -9,7 +16,7 @@ const MenuLinks = ({ isOpen }) => {
             <li>Home</li>
             <li>About</li>
             <li>Contact</li>
-            <li>Register or Login</li>
+            <li onClick={() => handleAuthClick()}>Register or Login</li>
           </ol>
         </div>
       )}
