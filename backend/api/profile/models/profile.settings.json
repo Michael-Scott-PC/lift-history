@@ -33,6 +33,46 @@
     },
     "exercises": {
       "collection": "exercise"
+    },
+    "coach": {
+      "type": "boolean",
+      "default": false
+    },
+    "hsAthlete": {
+      "type": "boolean",
+      "default": false
+    },
+    "collegeAthlete": {
+      "type": "boolean",
+      "default": false
+    },
+    "bodybuilder": {
+      "type": "boolean",
+      "default": false
+    },
+    "powerlifter": {
+      "type": "boolean",
+      "default": false
+    },
+    "olylifter": {
+      "type": "boolean",
+      "default": false
+    },
+    "crossfitter": {
+      "type": "boolean",
+      "default": false
+    },
+    "personalTrainer": {
+      "type": "boolean",
+      "default": false
+    },
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user"
+    },
+    "noneOfTheAbove": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

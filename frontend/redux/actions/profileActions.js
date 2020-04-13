@@ -1,8 +1,12 @@
+import Router from 'next/router';
+
 import {
   CREATE_PROFILE,
   ERROR_CREATE_PROFILE,
   ATTACH_PROFILE,
-  ERROR_ATTACH_PROFILE
+  ERROR_ATTACH_PROFILE,
+  UPDATE_PROFILE,
+  ERROR_UPDATE_PROFILE
 } from './types';
 
 import strapiAPI from '../../api/strapiAPI';
@@ -64,6 +68,41 @@ export const attachProfile = (userId, profileId, jwt) => async dispatch => {
   } catch (error) {
     dispatch({
       type: ERROR_ATTACH_PROFILE,
+      payload: error
+    });
+  }
+};
+
+/**
+ * @description: Update basic profile information.
+ * @param {string} jwt - jwt from registration.
+ * @param {number} userId - User ID from 'Users' content-type.
+ * @param {number} profileId - Profile ID from 'Profiles' content-type.
+ */
+export const updateProfile = (
+  values,
+  jwt,
+  userId,
+  profileId
+) => async dispatch => {
+  try {
+    if (userId === profileId) {
+      const { data } = await strapiAPI.put(`/profiles/${profileId}`, values, {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+
+      dispatch({
+        type: UPDATE_PROFILE,
+        payload: data
+      });
+
+      Router.push('/dashboard');
+    }
+  } catch (error) {
+    dispatch({
+      type: ERROR_UPDATE_PROFILE,
       payload: error
     });
   }

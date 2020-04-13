@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Layout from '../components/layout/Layout';
+import BasicProfileInfoForm from '../components/form/BasicProfileInfoForm';
+
 import { createProfile, attachProfile } from '../redux/actions/profileActions';
 
-const profile = ({
+const BasicProfileInfo = ({
   authReducer,
   profileReducer,
   createProfile,
@@ -25,13 +28,25 @@ const profile = ({
   }, [id]);
 
   return (
-    <div>
-      <h1>PROFILE</h1>
-    </div>
+    <Layout>
+      <div
+        id="basis-profile-info"
+        style={{
+          padding: '2rem 2rem 2rem 2rem',
+          marginTop: '3rem',
+          marginBottom: '3rem'
+        }}
+      >
+        <h4 style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          Basic Profile Information
+        </h4>
+        <BasicProfileInfoForm />
+      </div>
+    </Layout>
   );
 };
 
-profile.propTypes = {
+BasicProfileInfo.propTypes = {
   authReducer: PropTypes.object.isRequired,
   profileReducer: PropTypes.object.isRequired,
   createProfile: PropTypes.func.isRequired,
@@ -44,5 +59,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { createProfile, attachProfile })(
-  profile
+  BasicProfileInfo
 );

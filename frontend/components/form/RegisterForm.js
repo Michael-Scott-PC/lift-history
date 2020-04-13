@@ -79,6 +79,9 @@ const RegisterForm = ({ showRegister, registerUser }) => {
             {errors.email && touched.email ? (
               <p style={{ color: 'red' }}>{errors.email}</p>
             ) : null}
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
           </Form.Group>
 
           <Form.Group controlId="formGroupPassword">

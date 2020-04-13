@@ -140,7 +140,7 @@ const ContactForm = ({ postContact, setShowContactModal }) => {
             ) : null}
           </Form.Group>
 
-          <SubmitButton className="mt-4 mb-5 submit-inquiry" type="submit">
+          <SubmitButton className="mt-4 mb-5" type="submit">
             Submit
           </SubmitButton>
         </Form>
