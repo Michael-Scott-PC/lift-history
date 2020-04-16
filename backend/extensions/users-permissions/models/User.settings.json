@@ -56,6 +56,10 @@
     },
     "profile": {
       "model": "profile"
+    },
+    "athletes": {
+      "via": "coachOrTrainer",
+      "model": "profile"
     }
   }
 }

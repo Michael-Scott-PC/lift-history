@@ -66,9 +66,10 @@
       "type": "boolean",
       "default": false
     },
-    "users": {
+    "coachOrTrainer": {
       "plugin": "users-permissions",
-      "collection": "user"
+      "collection": "user",
+      "via": "athletes"
     },
     "noneOfTheAbove": {
       "type": "boolean",
