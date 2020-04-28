@@ -12,7 +12,6 @@ const ContactModal = ({ showContactModal, setShowContactModal }) => {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ padding: '1rem' }}
     >
       <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
         <Modal.Title className="w-100 ml-2 text-center">Contact</Modal.Title>
@@ -31,7 +30,7 @@ const ContactModal = ({ showContactModal, setShowContactModal }) => {
 
 ContactModal.propTypes = {
   showContactModal: PropTypes.bool.isRequired,
-  setShowContactModal: PropTypes.func.isRequired
+  setShowContactModal: PropTypes.func.isRequired,
 };
 
 export default ContactModal;

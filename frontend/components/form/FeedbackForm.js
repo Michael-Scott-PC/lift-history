@@ -25,7 +25,7 @@ const FeedbackForm = ({ postFeedback }) => {
           lifthistory: false,
           dashboard: false,
           none: false,
-          feedback: ''
+          feedback: '',
         }}
       >
         {({
@@ -34,7 +34,7 @@ const FeedbackForm = ({ postFeedback }) => {
           errors,
           handleSubmit,
           handleChange,
-          handleBlur
+          handleBlur,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group>
@@ -48,8 +48,8 @@ const FeedbackForm = ({ postFeedback }) => {
                 value={values.lifthistory}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.category && !errors.category}
-                isInvalid={touched.category && errors.category}
+                isValid={touched.lifthistory && !errors.lifthistory}
+                isInvalid={touched.lifthistory && errors.lifthistory}
               />
               <Form.Check
                 type="checkbox"
@@ -58,8 +58,8 @@ const FeedbackForm = ({ postFeedback }) => {
                 value={values.dashboard}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.category && !errors.category}
-                isInvalid={touched.category && errors.category}
+                isValid={touched.dashboard && !errors.dashboard}
+                isInvalid={touched.dashboard && errors.dashboard}
               />
               <Form.Check
                 type="checkbox"
@@ -68,8 +68,8 @@ const FeedbackForm = ({ postFeedback }) => {
                 value={values.none}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.category && !errors.category}
-                isInvalid={touched.category && errors.category}
+                isValid={touched.none && !errors.none}
+                isInvalid={touched.none && errors.none}
               />
             </Form.Group>
             <Form.Group className="mb-5">
@@ -81,9 +81,12 @@ const FeedbackForm = ({ postFeedback }) => {
                 value={values.feedback}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isValid={touched.category && !errors.category}
-                isInvalid={touched.category && errors.category}
+                isValid={touched.feedback && !errors.feedback}
+                isInvalid={touched.feedback && errors.feedback}
               />
+              {errors.feedback && touched.feedback ? (
+                <p style={{ color: 'red' }}>{errors.feedback}</p>
+              ) : null}
             </Form.Group>
             <SubmitButton type="submit">Submit form</SubmitButton>
           </Form>
@@ -103,11 +106,11 @@ const FeedbackForm = ({ postFeedback }) => {
 };
 
 FeedbackForm.propTypes = {
-  postFeedback: PropTypes.func.isRequired
+  postFeedback: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  alertReducer: state.alertReducer
+  alertReducer: state.alertReducer,
 });
 
 export default connect(mapStateToProps, { postFeedback })(FeedbackForm);

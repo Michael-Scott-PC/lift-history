@@ -21,7 +21,7 @@ const abbrMonths = [
   'Sep',
   'Oct',
   'Nov',
-  'Dec'
+  'Dec',
 ];
 
 // TODO: this needs to be fixed.
@@ -39,6 +39,11 @@ export const highlightCurrentDay = () => {
   }
 };
 
+/**
+ * @description: Wrap each weekday (Mo, Tu, etc.) in a div.
+ * @param {string} classView - Adds a class depending on calendar view.
+ * @param {requestCallback} handleMonthClick - Render the selected month's data.
+ */
 export const weekdayWrapper = (classView, handleMonthClick) => {
   // wrap each individual abbreviated weekday in a div
   let weekdays = [];
@@ -72,6 +77,14 @@ const weekdayStyle = css`
   }
 `;
 
+/**
+ * @description: Wrap each individual numerical day in a div.
+ * @param {string} month - The selected month.
+ * @param {number} monthIndex - The index of the selected month.
+ * @param {Objct} monthsAndDays - Object containing the month and corresponding days in mm/dd format.
+ * @param {callbackFunction} handleMonthClick - Render the selected month's data.
+ * @param {string} classView - Adds a class depending on calendar view.
+ */
 export const dayWrapper = (
   month,
   monthIndex,
@@ -205,6 +218,7 @@ const allMonthsStyles = css`
 const monthViewStyles = css`
   .month-view {
     grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
     width: 100%;
     min-height: 50vh;
   }
@@ -298,6 +312,12 @@ export const getWeekRange = (month, selectedDay) => {
   return week;
 };
 
+/**
+ * @description: Render the corresponding weekday numbers that go with a selected weekday num.
+ * @param {string} fullMonthName -
+ * @param {Array} weekRangeArr - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
+ * @param {string} day - The selected weekday num.
+ */
 export const renderWeekHelper = (fullMonthName, weekRangeArr, day) => {
   let weekJsx = [];
   weekJsx.push(
