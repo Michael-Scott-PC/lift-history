@@ -9,20 +9,20 @@ import MonthView from './MonthView';
 import {
   currentYear,
   allMonthsWrapper,
-  highlightCurrentDay
+  highlightCurrentDay,
 } from '../../../utils/calendarUtils';
 
-const Months = () => {
+const Months = props => {
+  console.log(props);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showMonths, setShowMonths] = useState(true);
 
   const handleMonthClick = e => {
-    const el = e.target.parentNode.id;
+    const elId = e.target.parentNode.id;
 
-    // switch 'year-view' to false
     setShowMonths(false);
-    // assign month id to selectedMonth and pass to MonthView as prop
-    setSelectedMonth(el);
+
+    setSelectedMonth(elId);
   };
 
   useEffect(() => {
@@ -38,19 +38,22 @@ const Months = () => {
           width: '100%',
           color: 'red',
           marginBottom: '3rem',
-          marginLeft: '.5rem'
+          marginLeft: '.5rem',
         }}
       >
         {currentYear}
       </h1>
-      {allMonthsWrapper('year-view', handleMonthClick, showMonths)}
-      <MonthView selectedMonth={selectedMonth} />
+      {!selectedMonth &&
+        allMonthsWrapper('year-view', handleMonthClick, showMonths)}
+      {selectedMonth && (
+        <MonthView selectedMonth={selectedMonth} profile={props.profile} />
+      )}
     </Fragment>
   );
 };
 
 Months.propTypes = {
-  allMonthsWrapper: PropTypes.func.isRequired
+  allMonthsWrapper: PropTypes.func.isRequired,
 };
 
 export default connect(null, { allMonthsWrapper })(Months);

@@ -4,16 +4,28 @@ import DayView from './DayView';
 
 import fullMonthNames from '../../../full-month-names-w-nums';
 
-import { allMonthsWrapper, getMonth } from '../../../utils/calendarUtils';
+import { getMonth, monthWrapper } from '../../../utils/calendarUtils';
 
-const MonthView = ({ selectedMonth }) => {
+const MonthView = ({ selectedMonth, profile }) => {
   const [show, setShow] = useState(false);
   const [monthHeader, setMonthHeader] = useState('');
   const [fullMonthName, setFullMonthName] = useState('');
   const [day, setDay] = useState('');
 
   const handleDayClick = e => {
-    const day = e.target.innerText;
+    if (
+      parseInt(e.target.parentNode.innerText[1]) ||
+      parseInt(e.target.parentNode.innerText[1]) === 0
+    ) {
+      console.log('this shouldnt run');
+      const day =
+        e.target.parentNode.innerText[0] + e.target.parentNode.innerText[1];
+      setDay(day);
+      setShow(false);
+      return;
+    }
+    const day = e.target.parentNode.innerText[0];
+    console.log(day);
     setDay(day);
     setShow(false);
   };
@@ -34,7 +46,7 @@ const MonthView = ({ selectedMonth }) => {
       getFullMonthName(selectedMonth);
       setShow(true);
     }
-  }, [selectedMonth]);
+  }, [monthHeader]);
 
   return (
     <Fragment>
@@ -53,14 +65,23 @@ const MonthView = ({ selectedMonth }) => {
         </div>
         <div id="selected-month-view">
           {monthHeader &&
-            allMonthsWrapper('month-view', handleDayClick, show, monthHeader)}
+            monthWrapper(
+              'month-view',
+              handleDayClick,
+              show,
+              monthHeader,
+              profile
+            )}
         </div>
       </div>
-      <DayView
-        fullMonthName={fullMonthName}
-        monthHeader={monthHeader}
-        day={day}
-      />
+      {day && (
+        <DayView
+          fullMonthName={fullMonthName}
+          monthHeader={monthHeader}
+          day={day}
+          profile={profile}
+        />
+      )}
     </Fragment>
   );
 };

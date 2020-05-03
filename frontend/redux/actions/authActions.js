@@ -6,7 +6,7 @@ import {
   LOGIN_USER,
   ERROR_LOGIN_USER,
   LOAD_PROFILE,
-  ERROR_LOAD_PROFILE
+  ERROR_LOAD_PROFILE,
 } from './types';
 import strapiAPI from '../../api/strapiAPI';
 
@@ -23,13 +23,13 @@ export const registerUser = values => async dispatch => {
       user: {
         id,
         username,
-        role: { type }
-      }
+        role: { type },
+      },
     } = res.data;
 
     dispatch({
       type: REGISTER_USER,
-      payload: { jwt, id, username, type }
+      payload: { jwt, id, username, type },
     });
 
     Router.push('/basic-profile-info');
@@ -38,7 +38,7 @@ export const registerUser = values => async dispatch => {
 
     dispatch({
       type: ERROR_REGISTER_USER,
-      payload: error
+      payload: error,
     });
   }
 };
@@ -57,31 +57,33 @@ export const loginUser = values => async dispatch => {
         id,
         username,
         role: { type },
-        profile
-      }
+        profile,
+      },
     } = res.data;
     console.log(profile);
 
     dispatch({
       type: LOGIN_USER,
-      payload: { jwt, id, username, type }
+      payload: { jwt, id, username, type },
     });
 
     dispatch({
       type: LOAD_PROFILE,
-      payload: profile
+      payload: profile,
     });
+
+    Router.push('/dashboard');
   } catch (error) {
     console.log(error);
 
     dispatch({
       type: ERROR_LOGIN_USER,
-      payload: error
+      payload: error,
     });
 
     dispatch({
       type: ERROR_LOAD_PROFILE,
-      payload: error
+      payload: error,
     });
   }
 };

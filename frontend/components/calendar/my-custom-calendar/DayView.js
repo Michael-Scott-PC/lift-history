@@ -4,7 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { getWeekRange, renderWeekHelper } from '../../../utils/calendarUtils';
 
-const DayView = ({ monthHeader, fullMonthName, day }) => {
+const DayView = ({ monthHeader, fullMonthName, day, profile }) => {
+  console.log(day);
+  const { program } = profile;
+  // console.log(program);
   const [show, setShow] = useState(false);
   const [currentWeek, setCurrentWeek] = useState([]);
 

@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import abbrWeekdays from '../abbr-weekdays.json';
 import monthsAndDays from '../months-and-days.json';
 
+import { programHelper } from './scheduleUtils';
+
 const currentDate = new Date();
 export const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth() + 1;
@@ -79,38 +81,34 @@ const weekdayStyle = css`
 
 /**
  * @description: Wrap each individual numerical day in a div.
- * @param {string} month - The selected month.
+ * @param {string} monthName - The selected month name, e.g. 'Jan'.
  * @param {number} monthIndex - The index of the selected month.
  * @param {Objct} monthsAndDays - Object containing the month and corresponding days in mm/dd format.
  * @param {callbackFunction} handleMonthClick - Render the selected month's data.
  * @param {string} classView - Adds a class depending on calendar view.
+ * @param {Array} [program] - contains a schedule of days with exercises.
  */
-export const dayWrapper = (
-  month,
-  monthIndex,
-  monthsAndDays,
-  handleMonthClick,
-  classView
-) => {
+export const dayWrapper = (monthName, monthIndex, fn, classView, program) => {
   // wrap each individual day number in a div
   let days = [];
-  for (let dayNum of monthsAndDays[month]) {
+  for (let monthDay of monthsAndDays[monthName]) {
+    const [month, day] = monthDay;
+
     const dayId = uuidv4();
     days.push(
       <Fragment key={dayId}>
-        {parseInt(dayNum[0]) !== monthIndex ? (
-          <div className="neighbor-month-days">
-            {dayNum[1][0] === '0' ? dayNum[1][1] : dayNum[1]}
-          </div>
-        ) : (
-          <div
-            className={`${classView} individual-days`}
-            onClick={e => handleMonthClick(e)}
-          >
-            {dayNum[1][0] === '0' ? dayNum[1][1] : dayNum[1]}
-          </div>
-        )}
+        <div
+          className={`${classView} ${
+            parseInt(month) !== monthIndex
+              ? 'neighbor-month-days'
+              : 'individual-days'
+          }`}
+          onClick={e => fn(e)}
+        >
+          {day[0] === '0' ? day[1] : day}
 
+          {program && programHelper(program, currentYear, month, day)}
+        </div>
         <style jsx>{dayStyles}</style>
       </Fragment>
     );
@@ -120,8 +118,12 @@ export const dayWrapper = (
 
 const dayStyles = css`
   .individual-days {
-    display: flex;
+    display: grid;
+    width: 100%;
     justify-self: center;
+    justify-items: center;
+    align-content: start;
+    white-space: nowrap;
     font-size: 0.65rem;
   }
   .neighbor-month-days {
@@ -139,27 +141,25 @@ const dayStyles = css`
 `;
 
 /**
- * @description: Wrap each individual month in a div with weekdays and
+ * @description: Wrap the selected month in a div with weekdays and
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
  * @param {bool} show - controls the display property of different elements/views.
- * @param {string} [month] - contains the selected month if selected.
+ * @param {string} [selectedMonth] - contains the selected month if selected.
+ * @param {Array} [profile] - contains the authenticated user's profile.
  */
-export const allMonthsWrapper = (classView, fn, show, month) => {
+export const monthWrapper = (classView, fn, show, selectedMonth, profile) => {
+  const { program } = profile;
   let monthArr = [];
-  let monthsArr = [];
-  let monthIndex = 0;
 
-  // Generate HTML when a single month is selected
   // TODO: the Ids need to be fixed. Display 'none' only hides
   // the 'year-view', which means when the 'month-view' html
   // is generated, we have duplicate month Ids - the selected month
   // and the original from the 'year-view'. Possible solution:
   // DETACH the 'year-view' html when 'month-view' is generated.
-  // e.g. var oldChild = node.removeChild(child);
-  if (month) {
-    const monthIndex = abbrMonths.indexOf(month) + 1;
+  if (selectedMonth) {
+    const monthIndex = abbrMonths.indexOf(selectedMonth) + 1;
     monthArr.push(
       <div
         className={`month-container ${classView} `}
@@ -167,16 +167,42 @@ export const allMonthsWrapper = (classView, fn, show, month) => {
         key={uuidv4()}
         id={monthIndex}
       >
-        <h5 className="month-name text-center" onClick={e => fn(e)}>
-          {month}
-        </h5>
-        {month && weekdayWrapper(classView, fn)}
-        {month && dayWrapper(month, monthIndex, monthsAndDays, fn, classView)}
+        <h5 className="month-name text-center">{selectedMonth}</h5>
+        {selectedMonth && weekdayWrapper(classView, fn)}
+        {selectedMonth &&
+          dayWrapper(selectedMonth, monthIndex, fn, classView, program)}
         <style jsx>{monthViewStyles}</style>
       </div>
     );
     return monthArr;
   }
+};
+
+const monthViewStyles = css`
+  .month-view {
+    grid-template-columns: repeat(7, minmax(14%, 1fr));
+    grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+    width: 100%;
+    min-height: 50vh;
+  }
+  .month-name {
+    grid-column-start: 1;
+    grid-column-end: 8;
+    align-self: center;
+  }
+`;
+
+/**
+ * @description: Wrap each individual month in a div with weekdays and
+ * corresponding days.
+ * @param {string} classView - Adds a class depending on calendar view.
+ * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
+ * @param {bool} show - controls the display property of different elements/views.
+ */
+export const allMonthsWrapper = (classView, fn, show) => {
+  console.log('allMonthsWrapper called.');
+  let monthsArr = [];
+  let monthIndex = 0;
 
   // Generate HTML for all 12 months if no month is selected
   // the month name is the key
@@ -192,7 +218,7 @@ export const allMonthsWrapper = (classView, fn, show, month) => {
           {month}
         </h5>
         {weekdayWrapper(classView, fn)}
-        {dayWrapper(month, monthIndex, monthsAndDays, fn, classView)}
+        {dayWrapper(month, monthIndex, fn, classView)}
         <style jsx>{allMonthsStyles}</style>
       </div>
     );
@@ -212,20 +238,6 @@ const allMonthsStyles = css`
   .month-name {
     grid-column-start: 1;
     grid-column-end: 8;
-  }
-`;
-
-const monthViewStyles = css`
-  .month-view {
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
-    width: 100%;
-    min-height: 50vh;
-  }
-  .month-name {
-    grid-column-start: 1;
-    grid-column-end: 8;
-    align-self: center;
   }
 `;
 
@@ -315,7 +327,7 @@ export const getWeekRange = (month, selectedDay) => {
 /**
  * @description: Render the corresponding weekday numbers that go with a selected weekday num.
  * @param {string} fullMonthName -
- * @param {Array} weekRangeArr - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
+ * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
 export const renderWeekHelper = (fullMonthName, weekRangeArr, day) => {

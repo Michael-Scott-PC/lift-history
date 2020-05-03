@@ -1,0 +1,17 @@
+{
+  "connection": "default",
+  "collectionName": "components_schedule_programmings",
+  "info": {
+    "name": "Programming",
+    "icon": "calendar-alt"
+  },
+  "options": {},
+  "attributes": {
+    "scheduleExercise": {
+      "type": "datetime"
+    },
+    "exercises": {
+      "collection": "exercise"
+    }
+  }
+}

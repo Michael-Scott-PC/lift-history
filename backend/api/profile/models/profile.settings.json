@@ -31,9 +31,6 @@
       "maxLength": 150,
       "minLength": 1
     },
-    "exercises": {
-      "collection": "exercise"
-    },
     "coach": {
       "type": "boolean",
       "default": false
@@ -75,6 +72,11 @@
     "noneOfTheAbove": {
       "type": "boolean",
       "default": false
+    },
+    "program": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.programming"
     }
   }
 }
