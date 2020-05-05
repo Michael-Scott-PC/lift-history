@@ -2,6 +2,10 @@ import strapiAPI from '../../api/strapiAPI';
 
 import { setAlert } from '../actions/alertActions';
 
+/**
+ * @description: Post feature request submission.
+ * @param {object} values - Input values from feature request form.
+ */
 export const postFeatureReq = values => async dispatch => {
   try {
     const res = await strapiAPI.post('/feature-request-forms', values);

@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Layout from '../components/layout/Layout';
+import PrivateFooter from '../components/layout/PrivateFooter';
 import YearView from '../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../components/hocs/privateRoute';
 
@@ -55,6 +56,7 @@ const dashboard = props => {
           }
         `}
       </style>
+      <PrivateFooter />
     </Layout>
   );
 };

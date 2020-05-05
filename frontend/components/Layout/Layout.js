@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Head from 'next/head';
 import Header from '../navigation/Header';
-import Footer from '../layout/Footer';
+// import Footer from '../layout/Footer';
 
 const Layout = ({ children }) => {
   return (
@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
       </Head>
       <Header />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </Fragment>
   );
 };

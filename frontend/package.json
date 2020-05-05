@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "tests": "jest",
+    "testwatch": "jest --watchAll"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "babel-plugin-inline-react-svg": "^1.1.1",
+    "jest": "^25.5.4",
     "redux-devtools-extension": "^2.13.8"
   }
 }

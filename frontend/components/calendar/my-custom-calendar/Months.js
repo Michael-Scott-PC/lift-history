@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import MonthView from './MonthView';
 
 import {
-  currentYear,
   allMonthsWrapper,
   highlightCurrentDay,
 } from '../../../utils/calendarUtils';
+import { currentYear } from '../../../utils/currentDate';
 
 const Months = props => {
   console.log(props);

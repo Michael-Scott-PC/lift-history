@@ -12,7 +12,7 @@ import strapiAPI from '../../api/strapiAPI';
 
 /**
  * @description: register a new user
- * @param {object} values - input from the registration form (username,
+ * @param {object} values - Input from the registration form (username,
  * email, password)
  */
 export const registerUser = values => async dispatch => {
@@ -45,7 +45,7 @@ export const registerUser = values => async dispatch => {
 
 /**
  * @description: login user.
- * @param {object} values - input from the login form (identifier, password).
+ * @param {object} values - Input from the login form (identifier, password).
  */
 export const loginUser = values => async dispatch => {
   try {

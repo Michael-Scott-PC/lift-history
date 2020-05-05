@@ -6,13 +6,13 @@ import {
   ATTACH_PROFILE,
   ERROR_ATTACH_PROFILE,
   UPDATE_PROFILE,
-  ERROR_UPDATE_PROFILE
+  ERROR_UPDATE_PROFILE,
 } from './types';
 
 import strapiAPI from '../../api/strapiAPI';
 
 /**
- * @description: create a profile for every new user
+ * @description: Create a profile for every new user
  * @param {string} jwt - jwt from registration
  */
 export const createProfile = jwt => async dispatch => {
@@ -21,7 +21,7 @@ export const createProfile = jwt => async dispatch => {
       `/profiles`,
       {},
       {
-        headers: { Authorization: `Bearer ${jwt}` }
+        headers: { Authorization: `Bearer ${jwt}` },
       }
     );
 
@@ -30,19 +30,19 @@ export const createProfile = jwt => async dispatch => {
     // not been established.
     dispatch({
       type: CREATE_PROFILE,
-      payload: res.data
+      payload: res.data,
     });
   } catch (error) {
     console.log(error);
     dispatch({
       type: ERROR_CREATE_PROFILE,
-      payload: error
+      payload: error,
     });
   }
 };
 
 /**
- * @description: update the new user with the new profile
+ * @description: Update the new user with the new profile
  * @param {number} userId - User ID from 'Users' content-type
  * @param {number} profileId - Profile ID from 'Profiles' content-type
  * @param {string} jwt - jwt from registration.
@@ -52,10 +52,10 @@ export const attachProfile = (userId, profileId, jwt) => async dispatch => {
     const res = await strapiAPI.put(
       `/users/${userId}`,
       {
-        profile: `${profileId}`
+        profile: `${profileId}`,
       },
       {
-        headers: { Authorization: `Bearer ${jwt}` }
+        headers: { Authorization: `Bearer ${jwt}` },
       }
     );
 
@@ -63,12 +63,12 @@ export const attachProfile = (userId, profileId, jwt) => async dispatch => {
     // with their new profile attached. 'User has one Profile'
     dispatch({
       type: ATTACH_PROFILE,
-      payload: res.data
+      payload: res.data,
     });
   } catch (error) {
     dispatch({
       type: ERROR_ATTACH_PROFILE,
-      payload: error
+      payload: error,
     });
   }
 };
@@ -89,13 +89,13 @@ export const updateProfile = (
     if (userId === profileId) {
       const { data } = await strapiAPI.put(`/profiles/${profileId}`, values, {
         headers: {
-          Authorization: `Bearer ${jwt}`
-        }
+          Authorization: `Bearer ${jwt}`,
+        },
       });
 
       dispatch({
         type: UPDATE_PROFILE,
-        payload: data
+        payload: data,
       });
 
       Router.push('/dashboard');
@@ -103,7 +103,7 @@ export const updateProfile = (
   } catch (error) {
     dispatch({
       type: ERROR_UPDATE_PROFILE,
-      payload: error
+      payload: error,
     });
   }
 };

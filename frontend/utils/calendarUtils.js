@@ -6,11 +6,12 @@ import abbrWeekdays from '../abbr-weekdays.json';
 import monthsAndDays from '../months-and-days.json';
 
 import { programHelper } from './scheduleUtils';
+import { currentYear, currentMonth, currentDay } from './currentDate';
 
-const currentDate = new Date();
-export const currentYear = currentDate.getFullYear();
-const currentMonth = currentDate.getMonth() + 1;
-const currentDay = currentDate.getDate();
+// const currentDate = new Date();
+// export const currentYear = currentDate.getFullYear();
+// const currentMonth = currentDate.getMonth() + 1;
+// const currentDay = currentDate.getDate();
 const abbrMonths = [
   'Jan',
   'Feb',
@@ -86,7 +87,7 @@ const weekdayStyle = css`
  * @param {Objct} monthsAndDays - Object containing the month and corresponding days in mm/dd format.
  * @param {callbackFunction} handleMonthClick - Render the selected month's data.
  * @param {string} classView - Adds a class depending on calendar view.
- * @param {Array} [program] - contains a schedule of days with exercises.
+ * @param {Array} [program] - Contains a schedule of days with exercises.
  */
 export const dayWrapper = (monthName, monthIndex, fn, classView, program) => {
   // wrap each individual day number in a div
@@ -145,9 +146,9 @@ const dayStyles = css`
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
- * @param {bool} show - controls the display property of different elements/views.
- * @param {string} [selectedMonth] - contains the selected month if selected.
- * @param {Array} [profile] - contains the authenticated user's profile.
+ * @param {bool} show - Controls the display property of different elements/views.
+ * @param {string} [selectedMonth] - Contains the selected month if selected.
+ * @param {Array} [profile] - Contains the authenticated user's profile.
  */
 export const monthWrapper = (classView, fn, show, selectedMonth, profile) => {
   const { program } = profile;
@@ -197,7 +198,7 @@ const monthViewStyles = css`
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
- * @param {bool} show - controls the display property of different elements/views.
+ * @param {bool} show - Controls the display property of different elements/views.
  */
 export const allMonthsWrapper = (classView, fn, show) => {
   console.log('allMonthsWrapper called.');
@@ -326,7 +327,7 @@ export const getWeekRange = (month, selectedDay) => {
 
 /**
  * @description: Render the corresponding weekday numbers that go with a selected weekday num.
- * @param {string} fullMonthName -
+ * @param {string} fullMonthName - The full month name.
  * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */

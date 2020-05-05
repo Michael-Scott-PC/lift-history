@@ -1,6 +1,10 @@
 import strapiAPI from '../../api/strapiAPI';
 import { setAlert } from './alertActions';
 
+/**
+ * @description: Post contact form submission.
+ * @param {object} values - Input values submitted from contact form.
+ */
 export const postContact = values => async dispatch => {
   try {
     const res = await strapiAPI.post('/contact-forms', values);

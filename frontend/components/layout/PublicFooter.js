@@ -5,7 +5,7 @@ import FeedbackModal from '../modal/FeedbackModal';
 import ContactModal from '../modal/ContactModal';
 import FeatureReqModal from '../modal/FeatureReqModal';
 
-const Footer = () => {
+const PublicFooter = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showFeatureReqModal, setShowFeatureReqModal] = useState(false);
@@ -42,7 +42,7 @@ const Footer = () => {
             style={{
               color: '#898888',
               marginLeft: '.4rem',
-              marginRight: '.2rem'
+              marginRight: '.2rem',
             }}
           />
           2020 Lift History
@@ -86,4 +86,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default PublicFooter;

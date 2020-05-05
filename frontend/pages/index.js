@@ -3,16 +3,14 @@ import { motion } from 'framer-motion';
 import { FaArrowCircleDown, FaRegCopyright } from 'react-icons/fa';
 
 import Alert from '../components/form/Alert';
+import PublicFooter from '../components/layout/PublicFooter';
 import Layout from '../components/layout/Layout';
 import LiftAnimation from '../components/background/LiftAnimation';
 
 const Home = () => {
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  // console.log(showFeedbackModal);
-
   return (
     <Layout>
-      <Alert />
+      {/* <Alert /> */}
       <div className="parent-container">
         <main id="main">
           <LiftAnimation />
@@ -24,7 +22,7 @@ const Home = () => {
               transition={{
                 type: 'inertia',
                 velocity: 300,
-                delay: 3
+                delay: 3,
               }}
             >
               Logging made...
@@ -139,6 +137,7 @@ const Home = () => {
           }
         `}</style>
       </div>
+      <PublicFooter />
     </Layout>
   );
 };

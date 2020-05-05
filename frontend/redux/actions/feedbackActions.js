@@ -2,6 +2,10 @@ import { SUCCESS_POST_FEEDBACK, ERROR_POST_FEEDBACK } from './types';
 import strapiAPI from '../../api/strapiAPI';
 import { setAlert } from './alertActions';
 
+/**
+ * @description: Post feedback form submission.
+ * @param {object} values - Input values submitted from feedback form.
+ */
 export const postFeedback = values => async dispatch => {
   console.log('feedbackACTIONS: ', values);
 
@@ -11,7 +15,7 @@ export const postFeedback = values => async dispatch => {
 
     dispatch({
       type: SUCCESS_POST_FEEDBACK,
-      payload: res.data
+      payload: res.data,
     });
 
     console.log('test');
@@ -28,7 +32,7 @@ export const postFeedback = values => async dispatch => {
 
     dispatch({
       type: ERROR_POST_FEEDBACK,
-      payload: error
+      payload: error,
     });
 
     dispatch(
