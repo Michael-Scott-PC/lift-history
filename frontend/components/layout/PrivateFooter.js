@@ -4,27 +4,30 @@ import PropTypes from 'prop-types';
 
 const PrivateFooter = props => {
   return (
-    <Nav
-      variant="pills"
-      defaultActiveKey="home"
-      style={{ background: 'black' }}
-    >
-      <Nav.Item>
-        <Nav.Link eventKey="home">Icon 1</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link eventKey="feed">Icon 2</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link eventKey="add">Icon 3</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link eventKey="search">Icon 4</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link eventKey="calendar">Icon 5</Nav.Link>
-      </Nav.Item>
-    </Nav>
+    <nav>
+      <div id="footer-nav">
+        <img src="/homeIcon.svg" id="home" />
+        <img src="/profileIcon.svg" id="profile" />
+        <img src="/addIcon.svg" id="add" />
+        <img src="/searchExerciseIcon.svg" id="search" />
+        <img src="/calendarIcon.svg" id="calendar" />
+      </div>
+      <style jsx>
+        {`
+          nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+          }
+          #footer-nav {
+            display: flex;
+            justify-content: space-between;
+            background-color: #0d0c0c;
+            height: 10vh;
+          }
+        `}
+      </style>
+    </nav>
   );
 };
 

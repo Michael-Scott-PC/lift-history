@@ -1,0 +1,29 @@
+{
+  "connection": "default",
+  "collectionName": "components_category_muscle_groups",
+  "info": {
+    "name": "muscle-group",
+    "icon": "align-justify"
+  },
+  "options": {},
+  "attributes": {
+    "muscles": {
+      "type": "enumeration",
+      "enum": [
+        "Trapezius",
+        "Pectorals",
+        "Biceps",
+        "Deltoids",
+        "LatissimusDorsi",
+        "RectusAbdominus",
+        "Obliques",
+        "Adductors",
+        "Quadriceps",
+        "Gastrocnemius",
+        "Gluteals",
+        "Triceps",
+        "Rhomboids"
+      ]
+    }
+  }
+}

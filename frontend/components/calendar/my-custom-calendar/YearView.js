@@ -27,7 +27,7 @@ const YearView = props => {
           display: flex;
           flex-wrap: wrap;
           margin-top: 3rem;
-          margin-bottom: 3rem;
+          margin-bottom: 5rem;
         }
       `}</style>
     </Fragment>
