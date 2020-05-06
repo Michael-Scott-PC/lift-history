@@ -76,6 +76,7 @@ const MonthView = ({ selectedMonth, profile }) => {
       </div>
       {day && (
         <DayView
+          selectedMonth={selectedMonth}
           fullMonthName={fullMonthName}
           monthHeader={monthHeader}
           day={day}

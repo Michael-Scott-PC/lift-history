@@ -5,13 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import abbrWeekdays from '../abbr-weekdays.json';
 import monthsAndDays from '../months-and-days.json';
 
-import { programHelper } from './scheduleUtils';
+import { renderSelectedMonthProgram } from './scheduleUtils';
 import { currentYear, currentMonth, currentDay } from './currentDate';
 
-// const currentDate = new Date();
-// export const currentYear = currentDate.getFullYear();
-// const currentMonth = currentDate.getMonth() + 1;
-// const currentDay = currentDate.getDate();
 const abbrMonths = [
   'Jan',
   'Feb',
@@ -48,7 +44,6 @@ export const highlightCurrentDay = () => {
  * @param {requestCallback} handleMonthClick - Render the selected month's data.
  */
 export const weekdayWrapper = (classView, handleMonthClick) => {
-  // wrap each individual abbreviated weekday in a div
   let weekdays = [];
 
   weekdays.push(
@@ -90,7 +85,6 @@ const weekdayStyle = css`
  * @param {Array} [program] - Contains a schedule of days with exercises.
  */
 export const dayWrapper = (monthName, monthIndex, fn, classView, program) => {
-  // wrap each individual day number in a div
   let days = [];
   for (let monthDay of monthsAndDays[monthName]) {
     const [month, day] = monthDay;
@@ -108,7 +102,7 @@ export const dayWrapper = (monthName, monthIndex, fn, classView, program) => {
         >
           {day[0] === '0' ? day[1] : day}
 
-          {program && programHelper(program, currentYear, month, day)}
+          {program && renderSelectedMonthProgram(program, month, day)}
         </div>
         <style jsx>{dayStyles}</style>
       </Fragment>
@@ -205,8 +199,8 @@ export const allMonthsWrapper = (classView, fn, show) => {
   let monthsArr = [];
   let monthIndex = 0;
 
-  // Generate HTML for all 12 months if no month is selected
-  // the month name is the key
+  // Generate HTML for all 12 months if no month is selected.
+  // The month name is the key
   for (let month in monthsAndDays) {
     monthsArr.push(
       <div
@@ -331,17 +325,18 @@ export const getWeekRange = (month, selectedDay) => {
  * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
-export const renderWeekHelper = (fullMonthName, weekRangeArr, day) => {
+export const renderWeekHelper = (weekRangeArr, day) => {
+  console.log(day);
   let weekJsx = [];
-  weekJsx.push(
-    <h5 className="day-view-month-header" key={uuidv4()}>
-      {fullMonthName}
-      <div className="day-header">
-        {day}, {currentYear}
-      </div>
-      <style jsx>{monthHeaderStyles}</style>
-    </h5>
-  );
+  // weekJsx.push(
+  //   <h5 className="day-view-month-header" key={uuidv4()}>
+  //     {fullMonthName}
+  //     <div className="day-header">
+  //       {day}, {currentYear}
+  //     </div>
+  //     <style jsx>{monthHeaderStyles}</style>
+  //   </h5>
+  // );
   for (let item of weekRangeArr) {
     for (let i of item) {
       if (i[1] === day) {
@@ -365,17 +360,17 @@ export const renderWeekHelper = (fullMonthName, weekRangeArr, day) => {
   return weekJsx;
 };
 
-const monthHeaderStyles = css`
-  .day-view-month-header {
-    grid-column-start: 1;
-    grid-column-end: 8;
-    text-align: center;
-  }
-  .day-header {
-    display: inline;
-    margin-left: 0.5rem;
-  }
-`;
+// const monthHeaderStyles = css`
+//   .day-view-month-header {
+//     grid-column-start: 1;
+//     grid-column-end: 8;
+//     text-align: center;
+//   }
+//   .day-header {
+//     display: inline;
+//     margin-left: 0.5rem;
+//   }
+// `;
 
 const selectedDayStyles = css`
   .selected-day {
