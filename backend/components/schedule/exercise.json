@@ -1,0 +1,19 @@
+{
+  "connection": "default",
+  "collectionName": "components_schedule_exercises",
+  "info": {
+    "name": "exercise",
+    "icon": "ad"
+  },
+  "options": {},
+  "attributes": {
+    "exercises": {
+      "collection": "exercise"
+    },
+    "thisSetsAndReps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.sets-and-reps"
+    }
+  }
+}

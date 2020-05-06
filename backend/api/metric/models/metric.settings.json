@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "metrics",
+  "info": {
+    "name": "metric"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "kg": {
+      "type": "boolean"
+    },
+    "lbs": {
+      "type": "boolean"
+    }
+  }
+}

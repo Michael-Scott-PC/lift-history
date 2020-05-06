@@ -81,6 +81,7 @@ const MonthView = ({ selectedMonth, profile }) => {
           monthHeader={monthHeader}
           day={day}
           profile={profile}
+          setDay={setDay}
         />
       )}
     </Fragment>

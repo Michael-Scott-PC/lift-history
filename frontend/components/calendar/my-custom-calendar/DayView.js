@@ -14,10 +14,9 @@ const DayView = ({
   fullMonthName,
   day,
   profile,
+  setDay,
 }) => {
-  console.log(day);
   const { program } = profile;
-  // console.log(program);
   const [show, setShow] = useState(false);
   const [currentWeek, setCurrentWeek] = useState([]);
 
@@ -42,6 +41,7 @@ const DayView = ({
         currentYear={currentYear}
         currentWeek={currentWeek}
         day={day}
+        setDay={setDay}
       />
       <ExercisesForDay
         day={day}

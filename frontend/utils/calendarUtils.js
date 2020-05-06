@@ -325,30 +325,29 @@ export const getWeekRange = (month, selectedDay) => {
  * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
-export const renderWeekHelper = (weekRangeArr, day) => {
-  console.log(day);
+export const renderWeekHelper = (weekRangeArr, day, setDay) => {
+  console.log(setDay);
   let weekJsx = [];
-  // weekJsx.push(
-  //   <h5 className="day-view-month-header" key={uuidv4()}>
-  //     {fullMonthName}
-  //     <div className="day-header">
-  //       {day}, {currentYear}
-  //     </div>
-  //     <style jsx>{monthHeaderStyles}</style>
-  //   </h5>
-  // );
   for (let item of weekRangeArr) {
     for (let i of item) {
       if (i[1] === day) {
         weekJsx.push(
-          <div className="day-view-weekdays selected-day" key={uuidv4()}>
+          <div
+            className="day-view-weekdays selected-day"
+            key={uuidv4()}
+            onClick={() => setDay(i[1])}
+          >
             {i[1]}
             <style jsx>{selectedDayStyles}</style>
           </div>
         );
       } else {
         weekJsx.push(
-          <div className="day-view-weekdays" key={uuidv4()}>
+          <div
+            className="day-view-weekdays"
+            key={uuidv4()}
+            onClick={() => setDay(i[1])}
+          >
             {i[1]}
             <style jsx>{dayViewStyles}</style>
           </div>
@@ -360,21 +359,12 @@ export const renderWeekHelper = (weekRangeArr, day) => {
   return weekJsx;
 };
 
-// const monthHeaderStyles = css`
-//   .day-view-month-header {
-//     grid-column-start: 1;
-//     grid-column-end: 8;
-//     text-align: center;
-//   }
-//   .day-header {
-//     display: inline;
-//     margin-left: 0.5rem;
-//   }
-// `;
-
 const selectedDayStyles = css`
   .selected-day {
-    background-color: yellow;
+    background-color: #00dcff;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
   }
   .day-view-weekdays {
     text-align: center;

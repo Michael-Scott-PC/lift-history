@@ -1,0 +1,43 @@
+{
+  "connection": "default",
+  "collectionName": "components_schedule_sets_and_reps",
+  "info": {
+    "name": "setsAndReps",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "sets": {
+      "type": "integer",
+      "max": 999
+    },
+    "reps": {
+      "type": "decimal",
+      "max": 1000
+    },
+    "weight": {
+      "type": "decimal",
+      "max": 3999
+    },
+    "rpe": {
+      "type": "decimal",
+      "max": 99
+    },
+    "pct": {
+      "type": "decimal",
+      "max": 199
+    },
+    "toFailure": {
+      "type": "boolean"
+    },
+    "isSuperSet": {
+      "type": "boolean"
+    },
+    "isTripleSet": {
+      "type": "boolean"
+    },
+    "isWarmUp": {
+      "type": "boolean"
+    }
+  }
+}

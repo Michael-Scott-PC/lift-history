@@ -5,10 +5,10 @@ import ExercisesForDay from '../exercise/ExercisesForDay';
 
 import { renderWeekHelper } from '../../utils/calendarUtils';
 
-const CurrentWeekNav = ({ currentWeek, day }) => {
+const CurrentWeekNav = ({ currentWeek, day, setDay }) => {
   return (
     <Fragment>
-      {renderWeekHelper(currentWeek, day)}
+      {renderWeekHelper(currentWeek, day, setDay)}
       {/* <ExercisesForDay /> */}
     </Fragment>
   );

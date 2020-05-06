@@ -90,10 +90,12 @@ const programStyles = css`
     font-size: calc(1vw);
     min-height: 10px;
     color: #fff;
+    align-self: center;
   }
   .program-day-view {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     border-radius: 8px;
-    padding-top: 1.1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 `;

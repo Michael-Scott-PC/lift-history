@@ -106,19 +106,6 @@ const Home = () => {
             :global(#down) {
               align-self: center;
             }
-             {
-              /* :global(#youtube) {
-            font-size: 3.5rem;
-          }
-          :global(#instagram) {
-            border: 1px solid;
-            border-radius: 32px;
-            font-size: 1.6rem;
-            padding: 10px;
-            background-color: #000;
-            color: #fff;
-          } */
-            }
           `}
         </style>
 
@@ -127,11 +114,15 @@ const Home = () => {
           body {
             padding: 0;
             margin: 0;
+            height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
               Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
               sans-serif;
+            background-color: #f0f8ff;
           }
-
+          div#__next {
+            height: 100%;
+          }
           * {
             box-sizing: border-box;
           }
