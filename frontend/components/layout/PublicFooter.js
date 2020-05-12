@@ -49,10 +49,10 @@ const PublicFooter = () => {
         </p>
       </div>
       <div id="socials">
-        <img src="/twitter.svg" id="twitter" />
-        <img src="/facebook.svg" id="facebook" />
-        <img src="/instagram.svg" id="instagram" />
-        <img src="/youtube.svg" id="youtube" />
+        <img src="/twitter.svg" id="twitter" alt="twitter icon" />
+        <img src="/facebook.svg" id="facebook" alt="facebook icon" />
+        <img src="/instagram.svg" id="instagram" alt="instagram icon" />
+        <img src="/youtube.svg" id="youtube" alt="youtube icon" />
       </div>
 
       <style jsx>

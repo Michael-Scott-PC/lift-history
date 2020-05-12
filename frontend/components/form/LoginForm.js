@@ -13,7 +13,6 @@ const LoginForm = ({ showLogin, loginUser }) => {
   return (
     <Formik
       validationSchema={loginSchema}
-      onSubmit={console.log}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         setTimeout(() => {
           loginUser(values);
@@ -23,7 +22,7 @@ const LoginForm = ({ showLogin, loginUser }) => {
       }}
       initialValues={{
         identifier: '',
-        password: ''
+        password: '',
       }}
     >
       {({
@@ -33,7 +32,7 @@ const LoginForm = ({ showLogin, loginUser }) => {
         values,
         touched,
         isValid,
-        errors
+        errors,
       }) => (
         <Form
           noValidate
@@ -87,7 +86,7 @@ const LoginForm = ({ showLogin, loginUser }) => {
 LoginForm.propTypes = {};
 
 const mapStateToProps = state => ({
-  authReducer: state.authReducer
+  authReducer: state.authReducer,
 });
 
 export default connect(mapStateToProps, { loginUser })(LoginForm);

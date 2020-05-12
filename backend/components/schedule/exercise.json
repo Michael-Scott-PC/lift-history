@@ -2,7 +2,7 @@
   "connection": "default",
   "collectionName": "components_schedule_exercises",
   "info": {
-    "name": "exercise",
+    "name": "thisDaysExercises",
     "icon": "ad"
   },
   "options": {},

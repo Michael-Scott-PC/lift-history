@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import PropTypes from 'prop-types';
 
+import AddExerciseModal from '../modal/AddExerciseModal';
+
 const PrivateFooter = props => {
+  const [show, setShow] = useState(false);
+
   return (
     <nav>
       <div id="footer-nav">
-        <img src="/homeIcon.svg" id="home" />
-        <img src="/profileIcon.svg" id="profile" />
-        <img src="/addIcon.svg" id="add" />
-        <img src="/searchExerciseIcon.svg" id="search" />
-        <img src="/calendarIcon.svg" id="calendar" />
+        <img src="/homeIcon.svg" id="home" alt="home icon" />
+        <img src="/profileIcon.svg" id="profile" alt="profile icon" />
+        <img
+          src="/addIcon.svg"
+          id="add"
+          alt="add exercise icon"
+          onClick={() => setShow(true)}
+        />
+        <img
+          src="/searchExerciseIcon.svg"
+          id="search"
+          alt="search exercises icon"
+        />
+        <img src="/calendarIcon.svg" id="calendar" alt="calendar icon" />
       </div>
+      <AddExerciseModal show={show} setShow={setShow} />
       <style jsx>
         {`
           nav {

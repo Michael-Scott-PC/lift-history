@@ -86,16 +86,19 @@ const programStyles = css`
   .nameOfExercise {
     width: 100%;
     text-align: center;
-    border: 1px solid;
+    /* border: 1px solid; */
     font-size: calc(1vw);
     min-height: 10px;
     color: #fff;
     align-self: center;
+    margin-bottom: 1.5px;
+    border-radius: 2px;
   }
   .program-day-view {
     font-size: 1.25rem;
     border-radius: 8px;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    box-shadow: 0px 2px 2px 2px #00000026;
   }
 `;
