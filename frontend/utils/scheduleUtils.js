@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import Form from 'react-bootstrap/Form';
 import css from 'styled-jsx/css';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -102,3 +103,16 @@ const programStyles = css`
     box-shadow: 0px 2px 2px 2px #00000026;
   }
 `;
+
+export const handleAddExercise = (
+  exercise,
+  setValues,
+  setExercise,
+  setShowExerciseForm,
+  resetForm
+) => {
+  setValues({ searchTerm: `${exercise}` });
+  setExercise(exercise);
+  setShowExerciseForm(true);
+  resetForm(true);
+};

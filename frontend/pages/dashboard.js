@@ -7,7 +7,7 @@ import YearView from '../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../components/hocs/privateRoute';
 
 const dashboard = props => {
-  console.log(props);
+  // console.log(props);
   const [show, setShow] = useState(true);
 
   // TODO: create a callback to check if DayView is true
@@ -20,7 +20,7 @@ const dashboard = props => {
 
   return (
     <Layout>
-      <div id="dashboard-container">
+      {/* <div id="dashboard-container">
         <a href="#" className="dashboard-buttons">
           <button className="btn">Dashboard</button>
         </a>
@@ -30,7 +30,7 @@ const dashboard = props => {
         <a href="#" className={`${show} dashboard-buttons`}>
           <button className="btn">This Week</button>
         </a>
-      </div>
+      </div> */}
       <YearView checkForDayView={checkForDayView} profile={props.profile} />
 
       <style jsx>

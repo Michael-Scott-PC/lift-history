@@ -13,7 +13,7 @@ import {
 import { currentYear } from '../../../utils/currentDate';
 
 const Months = props => {
-  console.log(props);
+  // console.log(props);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showMonths, setShowMonths] = useState(true);
 

@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import Head from 'next/head';
+
 import Header from '../navigation/Header';
+import AuthenticatedNav from '../navigation/AuthenticatedNav';
 // import Footer from '../layout/Footer';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, authReducer: { jwt } }) => {
   return (
     <Fragment>
       <Head>
@@ -20,11 +23,16 @@ const Layout = ({ children }) => {
           crossOrigin="anonymous"
         />
       </Head>
-      <Header />
+      {!jwt && <Header />}
+      {jwt && <AuthenticatedNav />}
       {children}
       {/* <Footer /> */}
     </Fragment>
   );
 };
 
-export default Layout;
+const mapStateToProps = state => ({
+  authReducer: state.authReducer,
+});
+
+export default connect(mapStateToProps)(Layout);

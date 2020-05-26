@@ -13,6 +13,7 @@ const ExercisesForDay = ({ selectedMonth, day, program }) => {
             grid-column-start: 1;
             grid-column-end: 8;
             height: 30vh;
+            margin-top: 1rem;
           }
         `}
       </style>

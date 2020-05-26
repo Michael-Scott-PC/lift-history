@@ -6,7 +6,7 @@ import Months from './Months';
 import { highlightCurrentDay } from '../../../utils/calendarUtils';
 
 const YearView = props => {
-  console.log(props);
+  // console.log(props);
   useEffect(() => {
     highlightCurrentDay();
   }, []);

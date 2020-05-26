@@ -25,7 +25,7 @@ const MonthView = ({ selectedMonth, profile }) => {
       return;
     }
     const day = e.target.parentNode.innerText[0];
-    console.log(day);
+    // console.log(day);
     setDay(day);
     setShow(false);
   };
@@ -53,7 +53,12 @@ const MonthView = ({ selectedMonth, profile }) => {
       <div style={{ display: show ? 'block' : 'none', width: '100%' }}>
         <div
           className="button-container"
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)' }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            marginLeft: '1rem',
+            marginRight: '1rem',
+          }}
         >
           <h5 style={{ fontSize: '1rem', alignSelf: 'end' }}>Week: </h5>
 

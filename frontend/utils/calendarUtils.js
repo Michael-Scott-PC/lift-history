@@ -195,7 +195,6 @@ const monthViewStyles = css`
  * @param {bool} show - Controls the display property of different elements/views.
  */
 export const allMonthsWrapper = (classView, fn, show) => {
-  console.log('allMonthsWrapper called.');
   let monthsArr = [];
   let monthIndex = 0;
 
