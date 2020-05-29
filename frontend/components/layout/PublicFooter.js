@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { FaRegCopyright } from 'react-icons/fa';
-import FeedbackModal from '../modal/FeedbackModal';
-import ContactModal from '../modal/ContactModal';
-import FeatureReqModal from '../modal/FeatureReqModal';
 
-const PublicFooter = () => {
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [showFeatureReqModal, setShowFeatureReqModal] = useState(false);
-
+const PublicFooter = ({
+  setShowContactModal,
+  setShowFeatureReqModal,
+  setShowFeedbackModal,
+  showContactModal,
+  showFeatureReqModal,
+  showFeedbackModal,
+}) => {
   return (
     <footer>
-      <FeedbackModal
-        showFeedbackModal={showFeedbackModal}
-        setShowFeedbackModal={setShowFeedbackModal}
-      />
-      <ContactModal
-        showContactModal={showContactModal}
-        setShowContactModal={setShowContactModal}
-      />
-      <FeatureReqModal
-        showFeatureReqModal={showFeatureReqModal}
-        setShowFeatureReqModal={setShowFeatureReqModal}
-      />
       <div id="footer-links">
         <Link href="/about">
           <a>About</a>

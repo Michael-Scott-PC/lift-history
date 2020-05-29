@@ -1,12 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Head from 'next/head';
 
+import ContactModal from '../modal/ContactModal';
+import FeedbackModal from '../modal/FeedbackModal';
+import FeatureReqModal from '../modal/FeatureReqModal';
+
 import Header from '../navigation/Header';
 import AuthenticatedNav from '../navigation/AuthenticatedNav';
-// import Footer from '../layout/Footer';
+import PublicFooter from '../layout/PublicFooter';
+import PrivateFooter from './PrivateFooter';
 
 const Layout = ({ children, authReducer: { jwt } }) => {
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showFeatureReqModal, setShowFeatureReqModal] = useState(false);
+
   return (
     <Fragment>
       <Head>
@@ -23,10 +32,37 @@ const Layout = ({ children, authReducer: { jwt } }) => {
           crossOrigin="anonymous"
         />
       </Head>
-      {!jwt && <Header />}
+      {!jwt && (
+        <Header
+          setShowContactModal={setShowContactModal}
+          showContactModal={showContactModal}
+        />
+      )}
       {jwt && <AuthenticatedNav />}
       {children}
-      {/* <Footer /> */}
+      {!jwt && (
+        <PublicFooter
+          setShowContactModal={setShowContactModal}
+          showContactModal={showContactModal}
+          setShowFeatureReqModal={setShowFeatureReqModal}
+          showFeatureReqModal={showFeatureReqModal}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showFeedbackModal={showFeedbackModal}
+        />
+      )}
+      {jwt && <PrivateFooter />}
+      <FeedbackModal
+        showFeedbackModal={showFeedbackModal}
+        setShowFeedbackModal={setShowFeedbackModal}
+      />
+      <ContactModal
+        showContactModal={showContactModal}
+        setShowContactModal={setShowContactModal}
+      />
+      <FeatureReqModal
+        showFeatureReqModal={showFeatureReqModal}
+        setShowFeatureReqModal={setShowFeatureReqModal}
+      />
     </Fragment>
   );
 };

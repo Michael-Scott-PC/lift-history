@@ -6,11 +6,14 @@ import DropDownMenu from './DropDownMenu';
 import SquatLogo from './SquatLogo';
 import LH from './LH';
 
-const Header = () => {
+const Header = ({ setShowContactModal, showContactModal }) => {
   return (
     <Fragment>
       <nav>
-        <DropDownMenu />
+        <DropDownMenu
+          setShowContactModal={setShowContactModal}
+          showContactModal={showContactModal}
+        />
         <Link href="/">
           <a>
             <SquatLogo />

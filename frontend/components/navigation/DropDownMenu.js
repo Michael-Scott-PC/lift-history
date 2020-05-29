@@ -5,7 +5,7 @@ import Hamburger from './Hamburger';
 import MenuLinks from './MenuLinks';
 import AuthModal from '../modal/AuthModal';
 
-const DropDownMenu = () => {
+const DropDownMenu = ({ setShowContactModal, showContactModal }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
@@ -16,8 +16,8 @@ const DropDownMenu = () => {
       transition: {
         type: 'spring',
         stiffness: 20,
-        restDelta: 2
-      }
+        restDelta: 2,
+      },
     },
     closed: {
       clipPath: 'circle(25px at 40px 40px)',
@@ -26,9 +26,9 @@ const DropDownMenu = () => {
         delay: 0.2,
         type: 'spring',
         stiffness: 400,
-        damping: 40
-      }
-    }
+        damping: 40,
+      },
+    },
   };
 
   return (
@@ -48,7 +48,7 @@ const DropDownMenu = () => {
             bottom: 0,
             zIndex: 100,
             width: '100vw',
-            height: '50vh'
+            height: '50vh',
           }}
         >
           <Hamburger isOpen={isOpen} />
@@ -56,6 +56,8 @@ const DropDownMenu = () => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             setShowAuthModal={setShowAuthModal}
+            setShowContactModal={setShowContactModal}
+            showContactModal={showContactModal}
           />
         </motion.div>
       </motion.nav>

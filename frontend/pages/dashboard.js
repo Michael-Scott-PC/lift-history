@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Layout from '../components/layout/Layout';
-import PrivateFooter from '../components/layout/PrivateFooter';
+// import PrivateFooter from '../components/layout/PrivateFooter';
 import YearView from '../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../components/hocs/privateRoute';
 
@@ -20,17 +20,6 @@ const dashboard = props => {
 
   return (
     <Layout>
-      {/* <div id="dashboard-container">
-        <a href="#" className="dashboard-buttons">
-          <button className="btn">Dashboard</button>
-        </a>
-        <a href="#" className={`${show} dashboard-buttons`}>
-          <button className="btn">Today</button>
-        </a>
-        <a href="#" className={`${show} dashboard-buttons`}>
-          <button className="btn">This Week</button>
-        </a>
-      </div> */}
       <YearView checkForDayView={checkForDayView} profile={props.profile} />
 
       <style jsx>
@@ -56,7 +45,7 @@ const dashboard = props => {
           }
         `}
       </style>
-      <PrivateFooter />
+      {/* <PrivateFooter /> */}
     </Layout>
   );
 };

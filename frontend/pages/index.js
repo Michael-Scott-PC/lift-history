@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaArrowCircleDown, FaRegCopyright } from 'react-icons/fa';
 
 import Alert from '../components/form/Alert';
-import PublicFooter from '../components/layout/PublicFooter';
+// import PublicFooter from '../components/layout/PublicFooter';
 import Layout from '../components/layout/Layout';
 import LiftAnimation from '../components/background/LiftAnimation';
 
@@ -130,7 +130,7 @@ const Home = () => {
           }
         `}</style>
       </div>
-      <PublicFooter />
+      {/* <PublicFooter /> */}
     </Layout>
   );
 };

@@ -1,8 +1,15 @@
 import React, { Fragment, useState } from 'react';
+import Link from 'next/link';
 
 import AuthModal from '../modal/AuthModal';
 
-const MenuLinks = ({ isOpen, setIsOpen, setShowAuthModal }) => {
+const MenuLinks = ({
+  isOpen,
+  setIsOpen,
+  setShowAuthModal,
+  setShowContactModal,
+  showContactModal,
+}) => {
   const handleAuthClick = () => {
     setIsOpen(false);
     setShowAuthModal(true);
@@ -13,9 +20,19 @@ const MenuLinks = ({ isOpen, setIsOpen, setShowAuthModal }) => {
       {isOpen && (
         <div id="menu-links">
           <ol>
-            <li>Home</li>
-            <li>About</li>
-            <li>Contact</li>
+            <li>
+              <Link href="/">
+                <a>Home</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/about">
+                <a>About</a>
+              </Link>
+            </li>
+            <li onClick={() => setShowContactModal(!showContactModal)}>
+              Contact
+            </li>
             <li onClick={() => handleAuthClick()}>Register or Login</li>
           </ol>
         </div>
@@ -26,6 +43,9 @@ const MenuLinks = ({ isOpen, setIsOpen, setShowAuthModal }) => {
           height: 85%;
           display: flex;
           flex-direction: column;
+        }
+        li > a {
+          color: #fff;
         }
         ol {
           list-style: none;

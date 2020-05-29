@@ -1,9 +1,8 @@
-import css from 'styled-jsx/css';
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
+import CloseButton from '../button/CloseButton';
 import SearchBar from '../form/SearchBar';
 
 const AddExerciseModal = ({ show, setShow }) => {
@@ -18,9 +17,7 @@ const AddExerciseModal = ({ show, setShow }) => {
         <Modal.Title style={{ width: '100%', textAlign: 'center' }}>
           Add Exercise
         </Modal.Title>
-        <button style={{ color: '#fff' }} onClick={() => setShow(false)}>
-          X
-        </button>
+        <CloseButton handleOnClick={setShow} />
       </Modal.Header>
       <Modal.Body>
         <SearchBar />
@@ -29,6 +26,9 @@ const AddExerciseModal = ({ show, setShow }) => {
   );
 };
 
-AddExerciseModal.propTypes = {};
+AddExerciseModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired,
+};
 
 export default AddExerciseModal;
