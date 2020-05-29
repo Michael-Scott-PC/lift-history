@@ -9,7 +9,7 @@ import SubmitButton from '../button/SubmitButton';
 
 import { loginUser } from '../../redux/actions/authActions';
 
-const LoginForm = ({ showLogin, loginUser }) => {
+const LoginForm = ({ showLogin, loginUser, alertReducer }) => {
   return (
     <Formik
       validationSchema={loginSchema}
@@ -40,6 +40,15 @@ const LoginForm = ({ showLogin, loginUser }) => {
           className="login-modal-component py-4 px-4"
           style={{ display: showLogin ? 'block' : 'none' }}
         >
+          {alertReducer &&
+            alertReducer.map(error => (
+              <p
+                style={{ color: `${error.alertType}` === 'danger' && 'red' }}
+                key={error.id}
+              >
+                {error.msg}
+              </p>
+            ))}
           <Form.Group controlId="formGroupEmailLogin">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -87,6 +96,7 @@ LoginForm.propTypes = {};
 
 const mapStateToProps = state => ({
   authReducer: state.authReducer,
+  alertReducer: state.alertReducer,
 });
 
 export default connect(mapStateToProps, { loginUser })(LoginForm);

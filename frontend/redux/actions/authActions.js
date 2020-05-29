@@ -10,6 +10,8 @@ import {
 } from './types';
 import strapiAPI from '../../api/strapiAPI';
 
+import { setAlert } from './alertActions';
+
 /**
  * @description: register a new user
  * @param {object} values - Input from the registration form (username,
@@ -75,6 +77,8 @@ export const loginUser = values => async dispatch => {
     Router.push('/dashboard');
   } catch (error) {
     console.log(error);
+
+    dispatch(setAlert('Incorrect username or password.', 'danger'));
 
     dispatch({
       type: ERROR_LOGIN_USER,

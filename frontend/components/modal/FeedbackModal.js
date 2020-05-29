@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+
+import CloseButton from '../button/CloseButton';
 import FeedbackForm from '../form/FeedbackForm';
 
 const FeedbackModal = ({ showFeedbackModal, setShowFeedbackModal }) => {
@@ -14,13 +16,7 @@ const FeedbackModal = ({ showFeedbackModal, setShowFeedbackModal }) => {
     >
       <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
         <Modal.Title className="w-100 text-center">Site Feedback</Modal.Title>
-        <button
-          className="customClose"
-          style={{ color: '#fff' }}
-          onClick={() => setShowFeedbackModal(false)}
-        >
-          X
-        </button>
+        <CloseButton handleOnClick={setShowFeedbackModal} />
       </Modal.Header>
       <FeedbackForm />
     </Modal>
@@ -29,7 +25,7 @@ const FeedbackModal = ({ showFeedbackModal, setShowFeedbackModal }) => {
 
 FeedbackModal.propTypes = {
   showFeedbackModal: PropTypes.bool.isRequired,
-  setShowFeedbackModal: PropTypes.func.isRequired
+  setShowFeedbackModal: PropTypes.func.isRequired,
 };
 
 export default FeedbackModal;

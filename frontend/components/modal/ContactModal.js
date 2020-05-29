@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 
+import CloseButton from '../button/CloseButton';
 import ContactForm from '../form/ContactForm';
 
 const ContactModal = ({ showContactModal, setShowContactModal }) => {
@@ -15,13 +16,7 @@ const ContactModal = ({ showContactModal, setShowContactModal }) => {
     >
       <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
         <Modal.Title className="w-100 ml-2 text-center">Contact</Modal.Title>
-        <button
-          className="customClose"
-          style={{ color: '#fff' }}
-          onClick={() => setShowContactModal(false)}
-        >
-          X
-        </button>
+        <CloseButton handleOnClick={setShowContactModal} />
       </Modal.Header>
       <ContactForm setShowContactModal={setShowContactModal} />
     </Modal>

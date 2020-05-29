@@ -7,6 +7,7 @@ import Alert from '../components/form/Alert';
 import PublicFooter from '../components/layout/PublicFooter';
 import BasicProfileInfoForm from '../components/form/BasicProfileInfoForm';
 
+import privateRoute from '../components/hocs/privateRoute';
 import { createProfile, attachProfile } from '../redux/actions/profileActions';
 
 const BasicProfileInfo = ({
@@ -61,6 +62,8 @@ const mapStateToProps = state => ({
   profileReducer: state.profileReducer,
 });
 
+const PrivateBasicProfileInfo = privateRoute(BasicProfileInfo);
+
 export default connect(mapStateToProps, { createProfile, attachProfile })(
-  BasicProfileInfo
+  PrivateBasicProfileInfo
 );

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 
 import FeatureReqForm from '../form/FeatureReqForm';
+import CloseButton from '../button/CloseButton';
 
 const FeatureReqModal = ({ showFeatureReqModal, setShowFeatureReqModal }) => {
   return (
@@ -18,13 +19,7 @@ const FeatureReqModal = ({ showFeatureReqModal, setShowFeatureReqModal }) => {
         <Modal.Title className="w-100 ml-2 text-center">
           Feature Request
         </Modal.Title>
-        <button
-          className="customClose"
-          style={{ color: '#fff' }}
-          onClick={() => setShowFeatureReqModal(false)}
-        >
-          X
-        </button>
+        <CloseButton handleOnClick={setShowFeatureReqModal} />
       </Modal.Header>
       <FeatureReqForm setShowFeatureReqModal={setShowFeatureReqModal} />
     </Modal>
@@ -33,7 +28,7 @@ const FeatureReqModal = ({ showFeatureReqModal, setShowFeatureReqModal }) => {
 
 FeatureReqModal.propTypes = {
   setShowFeatureReqModal: PropTypes.func.isRequired,
-  showFeatureReqModal: PropTypes.bool.isRequired
+  showFeatureReqModal: PropTypes.bool.isRequired,
 };
 
 export default FeatureReqModal;

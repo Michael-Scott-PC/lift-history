@@ -16,7 +16,7 @@ const AddExerciseModal = ({ show, setShow }) => {
     >
       <Modal.Header style={{ backgroundColor: '#000', color: '#fff' }}>
         <Modal.Title style={{ width: '100%', textAlign: 'center' }}>
-          Add an Exercise
+          Add Exercise
         </Modal.Title>
         <button style={{ color: '#fff' }} onClick={() => setShow(false)}>
           X

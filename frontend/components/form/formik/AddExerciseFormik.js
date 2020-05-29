@@ -17,7 +17,9 @@ const AddExerciseFormik = ({
   autoComplete,
   showExerciseForm,
   exerciseSelected,
+  setExercise,
   setValues,
+  setFieldValue,
   resetForm,
   setShowExerciseForm,
 }) => {
@@ -43,6 +45,11 @@ const AddExerciseFormik = ({
     setThirdEx('');
     setSecondaryEx('');
     resetForm();
+  };
+
+  const handleClearExercise = () => {
+    setExercise('');
+    setFieldValue('primaryExercise', '');
   };
 
   useEffect(() => {
@@ -143,123 +150,141 @@ const AddExerciseFormik = ({
 
       {/* Displays primary exercise name */}
       {exerciseSelected && (
-        <Field
-          name="primaryExercise"
-          value={(values.primaryExercise = exerciseSelected)}
-          readOnly
-          style={{
-            gridColumn: '1 / 13',
-            marginTop: '1.5rem',
-            marginBottom: '1rem',
-            fontSize: '1.5rem',
-          }}
-        />
+        <Fragment>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => handleClearExercise()}
+            style={{
+              gridColumn: '1 / 2',
+              paddingLeft: '0',
+              paddingRight: '0',
+              paddingBottom: '0',
+            }}
+          >
+            <img src="removeIcon.svg" alt="remove exercise icon" />
+          </button>
+          <Field
+            name="primaryExercise"
+            value={(values.primaryExercise = exerciseSelected)}
+            readOnly
+            style={{
+              gridColumn: '2 / 13',
+              marginTop: '1.5rem',
+              marginBottom: '1rem',
+              fontSize: '1.5rem',
+              marginLeft: '.5rem',
+            }}
+          />
+        </Fragment>
       )}
 
       {/* Displays primary exercise sets and reps */}
-      <FieldArray name="primarySetsAndReps">
-        {({ push, remove, insert }) => (
-          <div id="sets-container" style={{ gridColumn: '1 / 13' }}>
-            {values.primarySetsAndReps.map((obj, index) => {
-              const setsName = `primarySetsAndReps.${index}.sets`;
-              const repsName = `primarySetsAndReps.${index}.reps`;
-              const weightName = `primarySetsAndReps.${index}.weight`;
-              const rpeName = `primarySetsAndReps.${index}.rpe`;
-              const pctName = `primarySetsAndReps.${index}.pct`;
-              return (
-                <div
-                  key={index}
-                  style={{
-                    display: 'grid',
-                    gridGap: '.5rem',
-                    gridTemplateColumns:
-                      values.rpe || values.pct
-                        ? '.5fr 1fr 1fr 1.2fr 1fr .5fr'
-                        : '.5fr 1.5fr 1.5fr 2fr .5fr',
-                    marginBottom: '1rem',
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() =>
-                      values.primarySetsAndReps.length > 1 && remove(index)
-                    }
-                    disabled={values.isSuperSet || values.isTripleSet}
+      {exerciseSelected && (
+        <FieldArray name="primarySetsAndReps">
+          {({ push, remove, insert }) => (
+            <div id="sets-container" style={{ gridColumn: '1 / 13' }}>
+              {values.primarySetsAndReps.map((obj, index) => {
+                const setsName = `primarySetsAndReps.${index}.sets`;
+                const repsName = `primarySetsAndReps.${index}.reps`;
+                const weightName = `primarySetsAndReps.${index}.weight`;
+                const rpeName = `primarySetsAndReps.${index}.rpe`;
+                const pctName = `primarySetsAndReps.${index}.pct`;
+                return (
+                  <div
+                    key={index}
                     style={{
-                      paddingLeft: values.rpe || values.pct ? '0' : '6px',
-                      paddingRight: values.rpe || values.pct ? '0' : '6px',
+                      display: 'grid',
+                      gridGap: '.5rem',
+                      gridTemplateColumns:
+                        values.rpe || values.pct
+                          ? '.5fr 1fr 1fr 1.2fr 1fr .5fr'
+                          : '.5fr 1.5fr 1.5fr 2fr .5fr',
+                      marginBottom: '1rem',
                     }}
                   >
-                    <img src="removeIcon.svg" alt="remove exercise icon" />
-                  </button>
-                  <Field
-                    type="input"
-                    as={TextField}
-                    name={setsName}
-                    variant="outlined"
-                    label="sets"
-                  />
-                  <Field
-                    type="input"
-                    as={TextField}
-                    name={repsName}
-                    variant="outlined"
-                    label="reps"
-                  />
-                  <Field
-                    type="input"
-                    as={TextField}
-                    name={weightName}
-                    variant="outlined"
-                    label="lbs/kg"
-                  />
-                  {values.rpe && (
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() =>
+                        values.primarySetsAndReps.length > 1 && remove(index)
+                      }
+                      disabled={values.isSuperSet || values.isTripleSet}
+                      style={{
+                        paddingLeft: values.rpe || values.pct ? '0' : '6px',
+                        paddingRight: values.rpe || values.pct ? '0' : '6px',
+                      }}
+                    >
+                      <img src="removeIcon.svg" alt="remove exercise icon" />
+                    </button>
                     <Field
                       type="input"
                       as={TextField}
-                      name={rpeName}
+                      name={setsName}
                       variant="outlined"
-                      label="RPE"
+                      label="sets"
                     />
-                  )}
-                  {values.pct && (
                     <Field
                       type="input"
                       as={TextField}
-                      name={pctName}
+                      name={repsName}
                       variant="outlined"
-                      label="%"
+                      label="reps"
                     />
-                  )}
-                  <button
-                    className="btn"
-                    type="button"
-                    onClick={() =>
-                      insert(index + 1, {
-                        sets: '',
-                        reps: '',
-                        weight: '',
-                      })
-                    }
-                    disabled={values.isSuperSet || values.isTripleSet}
-                    style={{
-                      paddingLeft: values.rpe || values.pct ? '0' : '6px',
-                      paddingRight: values.rpe || values.pct ? '0' : '6px',
-                    }}
-                  >
-                    <img
-                      src="./greenAddIcon.svg"
-                      alt="add exercise icon"
-                      style={{ paddingBottom: '2px' }}
+                    <Field
+                      type="input"
+                      as={TextField}
+                      name={weightName}
+                      variant="outlined"
+                      label="lbs/kg"
                     />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </FieldArray>
+                    {values.rpe && (
+                      <Field
+                        type="input"
+                        as={TextField}
+                        name={rpeName}
+                        variant="outlined"
+                        label="RPE"
+                      />
+                    )}
+                    {values.pct && (
+                      <Field
+                        type="input"
+                        as={TextField}
+                        name={pctName}
+                        variant="outlined"
+                        label="%"
+                      />
+                    )}
+                    <button
+                      className="btn"
+                      type="button"
+                      onClick={() =>
+                        insert(index + 1, {
+                          sets: '',
+                          reps: '',
+                          weight: '',
+                        })
+                      }
+                      disabled={values.isSuperSet || values.isTripleSet}
+                      style={{
+                        paddingLeft: values.rpe || values.pct ? '0' : '6px',
+                        paddingRight: values.rpe || values.pct ? '0' : '6px',
+                      }}
+                    >
+                      <img
+                        src="./greenAddIcon.svg"
+                        alt="add exercise icon"
+                        style={{ paddingBottom: '2px' }}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </FieldArray>
+      )}
 
       {/* Displays search bar for secondary exercise */}
       {(localIsSuperSet || localIsTripleSet) && !secondaryEx && (
@@ -271,7 +296,7 @@ const AddExerciseFormik = ({
               border: '1px solid grey',
               marginBottom: '1rem',
             }}
-            placeholder="select second exercise"
+            placeholder=" select second exercise"
           />
         </Fragment>
       )}
@@ -282,7 +307,9 @@ const AddExerciseFormik = ({
           {results.map(exercise => (
             <Fragment key={exercise}>
               <li
-                onClick={() => setValues({ secondaryExercise: `${exercise}` })}
+                onClick={() =>
+                  setFieldValue('secondaryExercise', `${exercise}`)
+                }
               >
                 {exercise}
               </li>
@@ -304,7 +331,9 @@ const AddExerciseFormik = ({
                 src="./autoCompleteArrow.svg"
                 alt="autocomplete arrow"
                 id="auto-complete-arrow"
-                onClick={() => setValues({ secondaryExercise: `${exercise}` })}
+                onClick={() =>
+                  setFieldValue('secondaryExercise', `${exercise}`)
+                }
               />
             </Fragment>
           ))}
@@ -462,7 +491,7 @@ const AddExerciseFormik = ({
               border: '1px solid grey',
               marginBottom: '1rem',
             }}
-            placeholder="select third exercise"
+            placeholder=" select third exercise"
           />
         </Fragment>
       )}
@@ -472,7 +501,10 @@ const AddExerciseFormik = ({
         <ul>
           {results.map(exercise => (
             <Fragment key={exercise}>
-              <li onClick={() => setValues({ thirdExercise: `${exercise}` })}>
+              <li
+                onClick={() => setFieldValue('thirdExercise', `${exercise}`)}
+                // onClick={() => console.log(exercise)}
+              >
                 {exercise}
               </li>
               <img
@@ -493,7 +525,7 @@ const AddExerciseFormik = ({
                 src="./autoCompleteArrow.svg"
                 alt="autocomplete arrow"
                 id="auto-complete-arrow"
-                onClick={() => setValues({ thirdExercise: `${exercise}` })}
+                onClick={() => setFieldValue('thirdExercise', `${exercise}`)}
               />
             </Fragment>
           ))}
