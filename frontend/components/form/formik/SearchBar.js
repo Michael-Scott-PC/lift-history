@@ -4,11 +4,10 @@ import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
-import AddExerciseForm from './AddExerciseForm';
-import AddExerciseFormik from './formik/AddExerciseFormik';
+import AddExerciseFormik from './AddExerciseFormik';
 
-import { autoComplete } from '../../redux/actions/searchActions';
-import { handleAddExercise } from '../../utils/scheduleUtils';
+import { autoComplete } from '../../../redux/actions/searchActions';
+import { handleAddExercise } from '../../../utils/scheduleUtils';
 
 const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
   const [showExerciseForm, setShowExerciseForm] = useState(false);
@@ -20,7 +19,6 @@ const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
         onSubmit={console.log}
         //   onSubmit={(values, { setSubmitting, resetForm }) => {
         //     setTimeout(() => {
-        //       searchTerm(values);
         //       setSubmitting(false);
         //       resetForm(true);
         //     }, 400);
@@ -53,16 +51,6 @@ const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
           //   }
           // }
 
-          // console.log(values.searchTerm);
-          // console.log(exerciseSelected);
-
-          // const handleAddExercise = exercise => {
-          //   setValues({ searchTerm: `${exercise}` });
-          //   setExercise(exercise);
-          //   setShowExerciseForm(true);
-          //   resetForm(true);
-          // };
-
           return (
             <>
               <Form noValidate onSubmit={handleSubmit}>
@@ -77,6 +65,7 @@ const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
                   <Form.Control
                     type="text"
                     name="searchTerm"
+                    autoComplete="off"
                     placeholder="search exercises..."
                     value={values.searchTerm}
                     onChange={handleChange}
@@ -156,10 +145,6 @@ const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
           );
         }}
       </Formik>
-      {/* <AddExerciseForm
-        showExerciseForm={showExerciseForm}
-        exerciseSelected={exerciseSelected}
-      /> */}
       <AddExerciseFormik
         showExerciseForm={showExerciseForm}
         setShowExerciseForm={setShowExerciseForm}

@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 
-import AuthModal from '../modal/AuthModal';
-
 const MenuLinks = ({
   isOpen,
   setIsOpen,

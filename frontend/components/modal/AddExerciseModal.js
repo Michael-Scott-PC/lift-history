@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
 import CloseButton from '../button/CloseButton';
-import SearchBar from '../form/SearchBar';
+import SearchBar from '../form/formik/SearchBar';
 
 const AddExerciseModal = ({ show, setShow }) => {
   return (
