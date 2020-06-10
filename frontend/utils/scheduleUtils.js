@@ -24,7 +24,6 @@ const colors = [
 ];
 
 const programHelper = (program, month, day, classView) => {
-  console.log(program);
   const exerciseSchedule = [];
 
   const monthNum = parseInt(month - 1);

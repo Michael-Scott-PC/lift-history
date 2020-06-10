@@ -30,12 +30,6 @@
     "toFailure": {
       "type": "boolean"
     },
-    "isSuperSet": {
-      "type": "boolean"
-    },
-    "isTripleSet": {
-      "type": "boolean"
-    },
     "isWarmUp": {
       "type": "boolean"
     }

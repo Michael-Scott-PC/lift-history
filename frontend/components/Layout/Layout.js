@@ -11,10 +11,13 @@ import AuthenticatedNav from '../navigation/AuthenticatedNav';
 import PublicFooter from '../layout/PublicFooter';
 import PrivateFooter from './PrivateFooter';
 
-const Layout = ({ children, authReducer: { jwt } }) => {
+const Layout = ({ children, authReducer }) => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showFeatureReqModal, setShowFeatureReqModal] = useState(false);
+
+  // console.log(authReducer);
+  const { jwt } = authReducer;
 
   return (
     <Fragment>

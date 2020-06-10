@@ -16,12 +16,9 @@ const SecondaryAutoCompleteList = ({
 }) => {
   useEffect(() => {
     if (secondaryExercise.length > 0) {
-      console.log('secondaryExercise autocomplete ran.');
-      console.log(secondaryExercise);
       autoComplete(secondaryExercise);
     }
   }, [secondaryExercise]);
-  console.log(results);
 
   return (
     <ul>

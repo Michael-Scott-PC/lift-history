@@ -9,10 +9,12 @@ import AddExerciseFormik from './AddExerciseFormik';
 import { autoComplete } from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';
 
-const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
-  const [showExerciseForm, setShowExerciseForm] = useState(false);
-  const [exerciseSelected, setExercise] = useState('');
-
+const SearchBar = ({
+  autoComplete,
+  searchReducer: { results },
+  setShowExerciseForm,
+  setExercise,
+}) => {
   return (
     <Fragment>
       <Formik
@@ -145,12 +147,12 @@ const SearchBar = ({ autoComplete, searchReducer: { results } }) => {
           );
         }}
       </Formik>
-      <AddExerciseFormik
+      {/* <AddExerciseFormik
         showExerciseForm={showExerciseForm}
         setShowExerciseForm={setShowExerciseForm}
         exerciseSelected={exerciseSelected}
         setExercise={setExercise}
-      />
+      /> */}
     </Fragment>
   );
 };

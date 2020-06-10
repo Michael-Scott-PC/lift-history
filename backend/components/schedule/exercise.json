@@ -7,8 +7,8 @@
   },
   "options": {},
   "attributes": {
-    "exercises": {
-      "collection": "exercise"
+    "exercise": {
+      "model": "exercise"
     },
     "thisSetsAndReps": {
       "type": "component",

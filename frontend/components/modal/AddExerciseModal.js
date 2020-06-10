@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
+import AddExerciseFormik from '../form/formik/AddExerciseFormik';
 import CloseButton from '../button/CloseButton';
 import SearchBar from '../form/formik/SearchBar';
 
 const AddExerciseModal = ({ show, setShow }) => {
+  const [showExerciseForm, setShowExerciseForm] = useState(false);
+  const [exerciseSelected, setExercise] = useState('');
+  const [localPickDate, setLocalPickDate] = useState('');
+  console.log(localPickDate);
+
   return (
     <Modal
       show={show}
@@ -20,7 +26,18 @@ const AddExerciseModal = ({ show, setShow }) => {
         <CloseButton handleOnClick={setShow} />
       </Modal.Header>
       <Modal.Body>
-        <SearchBar />
+        <SearchBar
+          setShowExerciseForm={setShowExerciseForm}
+          setExercise={setExercise}
+        />
+        <AddExerciseFormik
+          showExerciseForm={showExerciseForm}
+          setShowExerciseForm={setShowExerciseForm}
+          exerciseSelected={exerciseSelected}
+          setExercise={setExercise}
+          localPickDate={localPickDate}
+          setLocalPickDate={setLocalPickDate}
+        />
       </Modal.Body>
     </Modal>
   );

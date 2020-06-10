@@ -6,15 +6,16 @@ import {
   LOAD_PROFILE,
   ERROR_LOAD_PROFILE,
   UPDATE_PROFILE,
-  ERROR_UPDATE_PROFILE
+  ERROR_UPDATE_PROFILE,
+  CREATE_USER_PROGRAM,
 } from '../actions/types';
 
 const initialState = {
   profile: {},
-  error: ''
+  error: '',
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -22,9 +23,10 @@ export default function(state = initialState, action) {
     case ATTACH_PROFILE:
     case LOAD_PROFILE:
     case UPDATE_PROFILE:
+    case CREATE_USER_PROGRAM:
       return {
         ...state,
-        profile: payload
+        profile: payload,
       };
     case ERROR_CREATE_PROFILE:
     case ERROR_LOAD_PROFILE:
@@ -32,7 +34,7 @@ export default function(state = initialState, action) {
     case ERROR_UPDATE_PROFILE:
       return {
         ...state,
-        error: payload
+        error: payload,
       };
     default:
       return state;

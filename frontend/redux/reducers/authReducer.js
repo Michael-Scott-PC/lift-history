@@ -2,7 +2,8 @@ import {
   REGISTER_USER,
   ERROR_REGISTER_USER,
   LOGIN_USER,
-  ERROR_LOGIN_USER
+  ERROR_LOGIN_USER,
+  LOGOUT_USER,
 } from '../actions/types';
 
 const initialState = {
@@ -10,10 +11,10 @@ const initialState = {
   id: null,
   username: '',
   type: '',
-  error: ''
+  error: '',
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -23,12 +24,12 @@ export default function(state = initialState, action) {
         jwt: payload.jwt,
         id: payload.id,
         username: payload.username,
-        type: payload.type
+        type: payload.type,
       };
     case ERROR_REGISTER_USER:
       return {
         ...state,
-        error: payload.error
+        error: payload.error,
       };
     case LOGIN_USER:
       return {
@@ -36,12 +37,16 @@ export default function(state = initialState, action) {
         jwt: payload.jwt,
         id: payload.id,
         username: payload.username,
-        type: payload.type
+        type: payload.type,
       };
     case ERROR_LOGIN_USER:
       return {
         ...state,
-        error: payload
+        error: payload,
+      };
+    case LOGOUT_USER:
+      return {
+        state: {},
       };
     default:
       return state;

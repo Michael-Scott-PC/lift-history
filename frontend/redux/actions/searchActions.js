@@ -7,13 +7,11 @@ import strapiAPI from '../../api/strapiAPI';
  * @param {object} values - Contains the 'searchTerm' property.
  */
 export const autoComplete = values => async dispatch => {
-  console.log('values: ', values);
   try {
     // Utilize Strapi filters
     const { data } = await strapiAPI.get(
       `/exercises?nameOfExercise_contains=${values}&_limit=5`
     );
-    console.log('date: ', data);
 
     const possibleExercises = [];
     for (let obj of data) {

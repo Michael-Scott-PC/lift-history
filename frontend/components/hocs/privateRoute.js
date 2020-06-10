@@ -3,12 +3,33 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 // import PropTypes from 'prop-types';
 
-export default function privateRoute(WrappedComponent) {
-  const AuthenticatedComponent = ({ authReducer, profileReducer }) => {
+export default function privateRoute(
+  WrappedComponent,
+  createProfile,
+  attachProfile
+) {
+  const AuthenticatedComponent = ({
+    authReducer,
+    profileReducer,
+    createProfile,
+    attachProfile,
+  }) => {
+    // console.log(profileReducer);
+    // console.log(authReducer);
     const { profile, error } = profileReducer;
 
+    // console.log(profile);
+
     if (authReducer.jwt) {
-      return <WrappedComponent profile={profile} />;
+      // console.log('WrappedComponenet gets returned.');
+      return (
+        <WrappedComponent
+          profile={profile}
+          attachProfile={attachProfile}
+          createProfile={createProfile}
+          authReducer={authReducer}
+        />
+      );
     }
     return (
       <div>

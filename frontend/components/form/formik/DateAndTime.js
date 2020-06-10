@@ -1,10 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Field } from 'formik';
 import FormCheck from 'react-bootstrap/FormCheck';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-const DateAndTime = ({ time }) => {
+const DateAndTime = ({ time, values, setLocalPickDate }) => {
+  useEffect(() => {
+    setLocalPickDate(values.pickDate);
+  }, [values.pickDate]);
+
   return (
     <Fragment>
       <Field

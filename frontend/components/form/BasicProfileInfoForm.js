@@ -13,10 +13,10 @@ import { updateProfile } from '../../redux/actions/profileActions';
 const BasicProfileInfoForm = ({
   authReducer,
   profileReducer: { profile },
-  updateProfile
+  updateProfile,
 }) => {
-  console.log(authReducer);
-  console.log(profile);
+  // console.log(authReducer);
+  // console.log(profile);
 
   return (
     <Formik
@@ -42,7 +42,7 @@ const BasicProfileInfoForm = ({
         powerlifter: false,
         olylifter: false,
         crossfitter: false,
-        noneOfTheAbove: false
+        noneOfTheAbove: false,
       }}
     >
       {({
@@ -51,7 +51,7 @@ const BasicProfileInfoForm = ({
         errors,
         handleSubmit,
         handleChange,
-        handleBlur
+        handleBlur,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group
@@ -59,7 +59,7 @@ const BasicProfileInfoForm = ({
             style={{
               display: 'grid',
               marginTop: '1rem',
-              marginBottom: '1.5rem'
+              marginBottom: '1.5rem',
             }}
           >
             <Form.Label style={{ fontFamily: "'Cantarell', sans-serif" }}>
@@ -73,7 +73,7 @@ const BasicProfileInfoForm = ({
                 width: '75%',
                 margin: 'auto',
                 border: '1px solid rgb(208, 208, 208)',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               value={values.firstName}
               onBlur={handleBlur}
@@ -94,7 +94,7 @@ const BasicProfileInfoForm = ({
             style={{
               display: 'grid',
               marginTop: '1rem',
-              marginBottom: '1.5rem'
+              marginBottom: '1.5rem',
             }}
           >
             <Form.Label style={{ fontFamily: "'Cantarell', sans-serif" }}>
@@ -108,7 +108,7 @@ const BasicProfileInfoForm = ({
                 width: '75%',
                 margin: 'auto',
                 border: '1px solid rgb(208, 208, 208)',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               value={values.lastName}
               onBlur={handleBlur}
@@ -127,7 +127,7 @@ const BasicProfileInfoForm = ({
             style={{
               display: 'grid',
               marginTop: '1rem',
-              marginBottom: '1.5rem'
+              marginBottom: '1.5rem',
             }}
           >
             <Form.Label style={{ fontFamily: "'Cantarell', sans-serif" }}>
@@ -141,7 +141,7 @@ const BasicProfileInfoForm = ({
                 margin: 'auto',
                 border: '1px solid rgb(208, 208, 208)',
                 textAlign: 'center',
-                color: '#808080'
+                color: '#808080',
               }}
               value={values.birthday}
               onBlur={handleBlur}
@@ -167,7 +167,7 @@ const BasicProfileInfoForm = ({
             style={{
               display: 'grid',
               marginTop: '1rem',
-              marginBottom: '1.5rem'
+              marginBottom: '1.5rem',
             }}
           >
             <Form.Label style={{ fontFamily: "'Cantarell', sans-serif" }}>
@@ -181,7 +181,7 @@ const BasicProfileInfoForm = ({
               style={{
                 width: '75%',
                 margin: 'auto',
-                border: '1px solid rgb(208, 208, 208)'
+                border: '1px solid rgb(208, 208, 208)',
               }}
               value={values.bio}
               onBlur={handleBlur}
@@ -288,12 +288,12 @@ const BasicProfileInfoForm = ({
 BasicProfileInfoForm.propTypes = {
   authReducer: PropTypes.object.isRequired,
   profileReducer: PropTypes.object.isRequired,
-  updateProfile: PropTypes.func.isRequired
+  updateProfile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   authReducer: state.authReducer,
-  profileReducer: state.profileReducer
+  profileReducer: state.profileReducer,
 });
 
 export default connect(mapStateToProps, { updateProfile })(

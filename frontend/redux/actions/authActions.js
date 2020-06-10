@@ -7,6 +7,7 @@ import {
   ERROR_LOGIN_USER,
   LOAD_PROFILE,
   ERROR_LOAD_PROFILE,
+  LOGOUT_USER,
 } from './types';
 import strapiAPI from '../../api/strapiAPI';
 
@@ -90,4 +91,11 @@ export const loginUser = values => async dispatch => {
       payload: error,
     });
   }
+};
+
+export const logoutUser = () => async dispatch => {
+  console.log('logoutUser ran.');
+  dispatch({
+    type: LOGOUT_USER,
+  });
 };

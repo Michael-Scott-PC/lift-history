@@ -17,10 +17,12 @@ import ThirdAutoComplete from './ThirdAutoComplete';
 import ThirdExName from './ThirdExName';
 
 import { autoComplete } from '../../../redux/actions/searchActions';
+import { createUserProgram } from '../../../redux/actions/profileActions';
 import ThirdSetsAndReps from './ThirdSetsAndReps';
 
 const AddExerciseFormik = ({
   searchReducer: { results },
+  authReducer: { id, jwt },
   values,
   autoComplete,
   showExerciseForm,
@@ -28,8 +30,13 @@ const AddExerciseFormik = ({
   setExercise,
   setValues,
   setFieldValue,
+  handleSubmit,
+  handleChange,
   resetForm,
   setShowExerciseForm,
+  createUserProgram,
+  setLocalPickDate,
+  localPickDate,
 }) => {
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
@@ -38,6 +45,8 @@ const AddExerciseFormik = ({
   const [localIsSuperSet, setLocalIsSuperSet] = useState(false);
   const [thirdEx, setThirdEx] = useState('');
   const [localIsTripleSet, setLocalIsTripleSet] = useState(false);
+
+  console.log(values);
 
   const {
     primaryExercise,
@@ -60,20 +69,25 @@ const AddExerciseFormik = ({
     <Fragment>
       {exerciseSelected && (
         <Form
+          noValidate
+          onSubmit={handleSubmit}
           style={{
             display: showExerciseForm ? 'grid' : 'none',
             gridTemplateColumns: 'repeat(12, minmax(0px, 1fr))',
           }}
         >
           {/* Date & Time section */}
-          <DateAndTime time={time} />
+          <DateAndTime
+            time={time}
+            values={values}
+            setLocalPickDate={setLocalPickDate}
+          />
 
           {/* Optional form check boxes: RPE, pct, super set, triple set */}
           <Options
             pct={pct}
             rpe={rpe}
-            isSuperSet={isSuperSet}
-            isTripleSet={isTripleSet}
+            values={values}
             setLocalIsSuperSet={setLocalIsSuperSet}
             setLocalIsTripleSet={setLocalIsTripleSet}
             localIsSuperSet={localIsSuperSet}
@@ -175,12 +189,12 @@ const AddExerciseFormik = ({
 };
 
 const FormikComp = withFormik({
-  mapPropsToValues() {
+  mapPropsToValues({ localPickDate }) {
     return {
       primaryExercise: '',
       secondaryExercise: '',
       thirdExercise: '',
-      pickDate: '',
+      pickDate: localPickDate,
       time: false,
       isSuperSet: false,
       isTripleSet: false,
@@ -196,6 +210,21 @@ const FormikComp = withFormik({
       ],
       thirdSetsAndReps: [{ sets: '', reps: '', weight: '', rpe: '', pct: '' }],
     };
+  },
+  handleSubmit: (
+    values,
+    {
+      setSubmitting,
+      props: {
+        authReducer: { id, jwt },
+        createUserProgram,
+      },
+    }
+  ) => {
+    setTimeout(() => {
+      createUserProgram(jwt, id, values);
+      setSubmitting(false);
+    }, 1000);
   },
 })(AddExerciseFormik);
 
@@ -214,6 +243,10 @@ AddExerciseFormik.propTypes = {
 
 const mapStateToProps = state => ({
   searchReducer: state.searchReducer,
+  authReducer: state.authReducer,
+  profileReducer: state.profileReducer,
 });
 
-export default connect(mapStateToProps, { autoComplete })(FormikComp);
+export default connect(mapStateToProps, { autoComplete, createUserProgram })(
+  FormikComp
+);

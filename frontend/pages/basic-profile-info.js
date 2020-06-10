@@ -3,22 +3,25 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Layout from '../components/layout/Layout';
-import Alert from '../components/form/Alert';
-import PublicFooter from '../components/layout/PublicFooter';
+// import Alert from '../components/form/Alert';
 import BasicProfileInfoForm from '../components/form/BasicProfileInfoForm';
 
 import privateRoute from '../components/hocs/privateRoute';
 import { createProfile, attachProfile } from '../redux/actions/profileActions';
 
 const BasicProfileInfo = ({
-  authReducer,
-  profileReducer,
   createProfile,
   attachProfile,
+  authReducer,
+  profile,
 }) => {
-  const { id } = profileReducer.profile;
+  console.log(createProfile);
+  console.log(attachProfile);
+  console.log('BasicProfileInfo component.');
+  const { id } = profile;
 
   const profileHelper = id => {
+    console.log(id);
     if (id) {
       attachProfile(authReducer.id, id, authReducer.jwt);
     } else {
@@ -45,25 +48,27 @@ const BasicProfileInfo = ({
         </h4>
         <BasicProfileInfoForm />
       </div>
-      <PublicFooter />
     </Layout>
   );
 };
 
 BasicProfileInfo.propTypes = {
   authReducer: PropTypes.object.isRequired,
-  profileReducer: PropTypes.object.isRequired,
   createProfile: PropTypes.func.isRequired,
   attachProfile: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  authReducer: state.authReducer,
-  profileReducer: state.profileReducer,
-});
+// const mapStateToProps = state => ({
+//   authReducer: state.authReducer,
+//   profileReducer: state.profileReducer,
+// });
 
-const PrivateBasicProfileInfo = privateRoute(BasicProfileInfo);
+const PrivateBasicProfileInfo = privateRoute(
+  BasicProfileInfo,
+  createProfile,
+  attachProfile
+);
 
-export default connect(mapStateToProps, { createProfile, attachProfile })(
+export default connect(null, { createProfile, attachProfile })(
   PrivateBasicProfileInfo
 );

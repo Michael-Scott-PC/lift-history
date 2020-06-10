@@ -64,19 +64,14 @@
       "default": false
     },
     "coach_or_trainers": {
+      "via": "athletes",
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "athletes",
       "dominant": true
     },
     "noneOfTheAbove": {
       "type": "boolean",
       "default": false
-    },
-    "program": {
-      "type": "component",
-      "repeatable": true,
-      "component": "schedule.programming"
     },
     "metric": {
       "model": "metric"

@@ -10,9 +10,6 @@
     "scheduleExercise": {
       "type": "datetime"
     },
-    "exercises": {
-      "collection": "exercise"
-    },
     "exercise": {
       "type": "component",
       "repeatable": true,

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "my_programs",
+  "info": {
+    "name": "myProgram"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "scheduleExercise": {
+      "type": "datetime",
+      "required": true
+    },
+    "thisDaysExercises": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.exercise",
+      "required": true
+    },
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "myPrograms"
+    },
+    "isSuperSet": {
+      "type": "boolean",
+      "default": false
+    },
+    "isTripleSet": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -7,9 +7,7 @@ import PropTypes from 'prop-types';
 const Options = ({
   pct,
   rpe,
-  isSuperSet,
-  isTripleSet,
-  resetForm,
+  values,
   setLocalIsSuperSet,
   setLocalIsTripleSet,
   localIsSuperSet,
@@ -20,14 +18,12 @@ const Options = ({
   const handleSuperSet = resetForm => {
     setLocalIsSuperSet(!localIsSuperSet);
     setSecondaryEx('');
-    resetForm();
   };
 
   const handleTripleSet = resetForm => {
     setLocalIsTripleSet(!localIsTripleSet);
     setThirdEx('');
     setSecondaryEx('');
-    resetForm();
   };
 
   return (
@@ -44,28 +40,24 @@ const Options = ({
       {/* Might not need this FieldArray element if I'm not going to pass push and remove
             helpers to handlers
       */}
-      <FieldArray name="secondarySetsAndReps">
-        {({ push, remove }) => (
-          <Fragment>
-            <Field
-              name="isSuperSet"
-              as={FormCheck}
-              label="Super Set?"
-              onClick={() => handleSuperSet(resetForm)}
-              disabled={isTripleSet}
-              style={{ gridColumn: '4 / 8' }}
-            />
-            <Field
-              name="isTripleSet"
-              as={FormCheck}
-              label="Triple Set?"
-              onClick={() => handleTripleSet(resetForm)}
-              disabled={isSuperSet}
-              style={{ gridColumn: '9 / 13' }}
-            />
-          </Fragment>
-        )}
-      </FieldArray>
+      <Field
+        name="isSuperSet"
+        value={(values.isSuperSet = localIsSuperSet)}
+        as={FormCheck}
+        label="Super Set?"
+        onClick={() => handleSuperSet()}
+        disabled={localIsTripleSet}
+        style={{ gridColumn: '4 / 8' }}
+      />
+      <Field
+        name="isTripleSet"
+        value={(values.isTripleSet = localIsTripleSet)}
+        as={FormCheck}
+        label="Triple Set?"
+        onClick={() => handleTripleSet()}
+        disabled={localIsSuperSet}
+        style={{ gridColumn: '9 / 13' }}
+      />
     </Fragment>
   );
 };
@@ -73,8 +65,6 @@ const Options = ({
 Options.propTypes = {
   pct: PropTypes.bool.isRequired,
   rpe: PropTypes.bool.isRequired,
-  isSuperSet: PropTypes.bool.isRequired,
-  isTripleSet: PropTypes.bool.isRequired,
   resetForm: PropTypes.func.isRequired,
   setLocalIsSuperSet: PropTypes.func.isRequired,
   setLocalIsTripleSet: PropTypes.func.isRequired,
