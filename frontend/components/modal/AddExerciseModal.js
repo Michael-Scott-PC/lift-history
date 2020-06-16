@@ -6,16 +6,15 @@ import AddExerciseFormik from '../form/formik/AddExerciseFormik';
 import CloseButton from '../button/CloseButton';
 import SearchBar from '../form/formik/SearchBar';
 
-const AddExerciseModal = ({ show, setShow }) => {
+const AddExerciseModal = ({ showAddExModal, setShowAddExModal }) => {
   const [showExerciseForm, setShowExerciseForm] = useState(false);
   const [exerciseSelected, setExercise] = useState('');
   const [localPickDate, setLocalPickDate] = useState('');
-  console.log(localPickDate);
 
   return (
     <Modal
-      show={show}
-      onHide={() => setShow(false)}
+      show={showAddExModal}
+      onHide={() => setShowAddExModal(false)}
       style={{ position: 'fixed', top: '5%' }}
       scrollable
     >
@@ -23,7 +22,7 @@ const AddExerciseModal = ({ show, setShow }) => {
         <Modal.Title style={{ width: '100%', textAlign: 'center' }}>
           Add Exercise
         </Modal.Title>
-        <CloseButton handleOnClick={setShow} />
+        <CloseButton handleOnClick={setShowAddExModal} />
       </Modal.Header>
       <Modal.Body>
         <SearchBar
@@ -37,6 +36,7 @@ const AddExerciseModal = ({ show, setShow }) => {
           setExercise={setExercise}
           localPickDate={localPickDate}
           setLocalPickDate={setLocalPickDate}
+          setShowAddExModal={setShowAddExModal}
         />
       </Modal.Body>
     </Modal>
@@ -44,8 +44,8 @@ const AddExerciseModal = ({ show, setShow }) => {
 };
 
 AddExerciseModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  setShow: PropTypes.func.isRequired,
+  showAddExModal: PropTypes.bool.isRequired,
+  setShowAddExModal: PropTypes.func.isRequired,
 };
 
 export default AddExerciseModal;

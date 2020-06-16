@@ -17,12 +17,13 @@ import ThirdAutoComplete from './ThirdAutoComplete';
 import ThirdExName from './ThirdExName';
 
 import { autoComplete } from '../../../redux/actions/searchActions';
-import { createUserProgram } from '../../../redux/actions/profileActions';
+import { createUserProgram } from '../../../redux/actions/programActions';
 import ThirdSetsAndReps from './ThirdSetsAndReps';
 
 const AddExerciseFormik = ({
   searchReducer: { results },
   authReducer: { id, jwt },
+  programReducer,
   values,
   autoComplete,
   showExerciseForm,
@@ -37,6 +38,7 @@ const AddExerciseFormik = ({
   createUserProgram,
   setLocalPickDate,
   localPickDate,
+  setShowAddExModal,
 }) => {
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
@@ -45,8 +47,6 @@ const AddExerciseFormik = ({
   const [localIsSuperSet, setLocalIsSuperSet] = useState(false);
   const [thirdEx, setThirdEx] = useState('');
   const [localIsTripleSet, setLocalIsTripleSet] = useState(false);
-
-  console.log(values);
 
   const {
     primaryExercise,
@@ -190,6 +190,9 @@ const AddExerciseFormik = ({
 
 const FormikComp = withFormik({
   mapPropsToValues({ localPickDate }) {
+    // TODO: in order to persist the form state, these are all going to be stored locally
+    // via useState (like localPickDate). Formik does not seem to have their own solution
+    // for this.
     return {
       primaryExercise: '',
       secondaryExercise: '',
@@ -218,12 +221,18 @@ const FormikComp = withFormik({
       props: {
         authReducer: { id, jwt },
         createUserProgram,
+        programReducer,
+        setShowAddExModal,
       },
     }
   ) => {
     setTimeout(() => {
       createUserProgram(jwt, id, values);
       setSubmitting(false);
+      if (programReducer.statusCode === 200) {
+        setShowAddExModal(false);
+      }
+      // TODO: handle error (display error message on the form)
     }, 1000);
   },
 })(AddExerciseFormik);
@@ -245,6 +254,7 @@ const mapStateToProps = state => ({
   searchReducer: state.searchReducer,
   authReducer: state.authReducer,
   profileReducer: state.profileReducer,
+  programReducer: state.programReducer,
 });
 
 export default connect(mapStateToProps, { autoComplete, createUserProgram })(

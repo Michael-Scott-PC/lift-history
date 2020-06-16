@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
-import AddExerciseFormik from './AddExerciseFormik';
+// import AddExerciseFormik from './AddExerciseFormik';
 
 import { autoComplete } from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';

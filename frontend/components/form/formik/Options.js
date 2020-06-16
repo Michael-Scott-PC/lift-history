@@ -15,12 +15,12 @@ const Options = ({
   setSecondaryEx,
   setThirdEx,
 }) => {
-  const handleSuperSet = resetForm => {
+  const handleSuperSet = () => {
     setLocalIsSuperSet(!localIsSuperSet);
     setSecondaryEx('');
   };
 
-  const handleTripleSet = resetForm => {
+  const handleTripleSet = () => {
     setLocalIsTripleSet(!localIsTripleSet);
     setThirdEx('');
     setSecondaryEx('');
@@ -37,9 +37,6 @@ const Options = ({
         disabled={rpe}
         style={{ gridColumn: ' 9/ 13 ' }}
       />
-      {/* Might not need this FieldArray element if I'm not going to pass push and remove
-            helpers to handlers
-      */}
       <Field
         name="isSuperSet"
         value={(values.isSuperSet = localIsSuperSet)}

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import AddExerciseModal from '../modal/AddExerciseModal';
 
 const PrivateFooter = props => {
-  const [show, setShow] = useState(false);
+  const [showAddExModal, setShowAddExModal] = useState(false);
 
   return (
     <nav>
@@ -16,7 +16,7 @@ const PrivateFooter = props => {
           src="/addIcon.svg"
           id="add"
           alt="add exercise icon"
-          onClick={() => setShow(true)}
+          onClick={() => setShowAddExModal(true)}
         />
         <img
           src="/searchExerciseIcon.svg"
@@ -25,7 +25,10 @@ const PrivateFooter = props => {
         />
         <img src="/calendarIcon.svg" id="calendar" alt="calendar icon" />
       </div>
-      <AddExerciseModal show={show} setShow={setShow} />
+      <AddExerciseModal
+        showAddExModal={showAddExModal}
+        setShowAddExModal={setShowAddExModal}
+      />
       <style jsx>
         {`
           nav {

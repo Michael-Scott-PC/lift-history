@@ -23,6 +23,12 @@ const colors = [
   '#b75d00',
 ];
 
+/**
+ * @param {Array.<object>} program - A list of exercise objects, grouped by exercises on the same date.
+ * @param {string} month - The selected month, & neighboring months.
+ * @param {string} day - The current day. programHelper gets called for every day in a selected month.
+ * @param {string} classView - The view depending on calendar view.
+ */
 const programHelper = (program, month, day, classView) => {
   const exerciseSchedule = [];
 
@@ -74,6 +80,12 @@ export const renderSelectedMonthProgram = (program, month, day) => {
   return <Fragment>{programHelper(program, month, day)}</Fragment>;
 };
 
+/**
+ *
+ * @param {Array.<object>} program - A list of exercise objects, grouped by exercises on the same date.
+ * @param {string} selectedMonth - The user selected month.
+ * @param {string} day - The current day. programHelper gets called for every day in a selected month.
+ */
 export const renderSelectedDayProgram = (program, selectedMonth, day) => {
   return (
     <Fragment>

@@ -40,7 +40,6 @@ const PrimarySetsAndReps = ({
                     onClick={() =>
                       primarySetsAndReps.length > 1 && remove(index)
                     }
-                    disabled={isSuperSet || isTripleSet}
                     style={{
                       paddingLeft: rpe || pct ? '0' : '6px',
                       paddingRight: rpe || pct ? '0' : '6px',
@@ -97,7 +96,6 @@ const PrimarySetsAndReps = ({
                         weight: '',
                       })
                     }
-                    disabled={isSuperSet || isTripleSet}
                     style={{
                       paddingLeft: rpe || pct ? '0' : '6px',
                       paddingRight: rpe || pct ? '0' : '6px',

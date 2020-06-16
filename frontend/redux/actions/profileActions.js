@@ -7,7 +7,6 @@ import {
   ERROR_ATTACH_PROFILE,
   UPDATE_PROFILE,
   ERROR_UPDATE_PROFILE,
-  CREATE_USER_PROGRAM,
 } from './types';
 
 import strapiAPI from '../../api/strapiAPI';
@@ -108,56 +107,5 @@ export const updateProfile = (
       type: ERROR_UPDATE_PROFILE,
       payload: error,
     });
-  }
-};
-
-// update program for user
-export const createUserProgram = (jwt, id, values) => async dispatch => {
-  console.log(jwt);
-  console.log(values);
-
-  const userId = id;
-  const { data } = await strapiAPI.get(
-    `/exercises?nameOfExercise=${values.primaryExercise}`
-  );
-
-  const primaryExerciseId = data[0].id;
-
-  const mapValues = {
-    scheduleExercise: values.pickDate,
-    isSuperSet: values.isSuperSet,
-    isTripleSet: values.isTripleSet,
-    thisDaysExercises: [
-      {
-        exercise: { id: primaryExerciseId },
-        thisSetsAndReps: values.primarySetsAndReps.map(exercise => ({
-          sets: exercise.sets,
-          reps: exercise.reps,
-          weight: exercise.weight,
-          rpe: values.rpe ? exercise.rpe : null,
-          pct: values.pct ? exercise.pct : null,
-        })),
-      },
-    ],
-    users: [{ id: userId }],
-  };
-
-  console.log(mapValues);
-
-  try {
-    const res = await strapiAPI.post(`/my-programs`, mapValues, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-    console.log(res);
-    const { data } = res;
-
-    dispatch({
-      type: CREATE_USER_PROGRAM,
-      payload: data,
-    });
-  } catch (error) {
-    console.log(error);
   }
 };

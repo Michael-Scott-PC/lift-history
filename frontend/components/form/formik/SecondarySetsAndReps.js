@@ -37,7 +37,6 @@ const SecondarySetsAndReps = ({
                   type="button"
                   className="btn"
                   onClick={() => remove(index)}
-                  disabled={isSuperSet || isTripleSet}
                   style={{
                     paddingLeft: rpe || pct ? '0' : '6px',
                     paddingRight: rpe || pct ? '0' : '6px',
@@ -94,7 +93,6 @@ const SecondarySetsAndReps = ({
                       weight: '',
                     })
                   }
-                  disabled={isSuperSet || isTripleSet}
                   style={{
                     paddingLeft: rpe || pct ? '0' : '6px',
                     paddingRight: rpe || pct ? '0' : '6px',
