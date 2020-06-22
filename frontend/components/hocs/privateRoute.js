@@ -14,11 +14,10 @@ export default function privateRoute(
     createProfile,
     attachProfile,
   }) => {
-    // console.log(profileReducer);
-    // console.log(authReducer);
     const { profile, error } = profileReducer;
+    // console.log('authReducer from privateRoute: ', authReducer);
 
-    // console.log(profile);
+    // console.log('profile variable from privateRoute: ', profile);
 
     if (authReducer.jwt) {
       // console.log('WrappedComponenet gets returned.');

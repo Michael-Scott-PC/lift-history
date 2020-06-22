@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -15,23 +15,24 @@ const BasicProfileInfo = ({
   authReducer,
   profile,
 }) => {
-  console.log(createProfile);
-  console.log(attachProfile);
-  console.log('BasicProfileInfo component.');
-  const { id } = profile;
+  const [count, setCount] = useState(0);
 
-  const profileHelper = id => {
-    console.log(id);
-    if (id) {
-      attachProfile(authReducer.id, id, authReducer.jwt);
-    } else {
-      createProfile(authReducer.jwt);
+  const { id: profileId } = profile;
+  const { id: userId, jwt } = authReducer;
+
+  const profileHelper = () => {
+    if (profileId) {
+      attachProfile(userId, profileId, jwt);
     }
   };
 
   useEffect(() => {
-    profileHelper(id);
-  }, [id]);
+    if (count < 1) {
+      createProfile(jwt);
+      setCount(count + 1);
+    }
+    profileHelper(profileId);
+  }, [profileId]);
 
   return (
     <Layout>
@@ -57,11 +58,6 @@ BasicProfileInfo.propTypes = {
   createProfile: PropTypes.func.isRequired,
   attachProfile: PropTypes.func.isRequired,
 };
-
-// const mapStateToProps = state => ({
-//   authReducer: state.authReducer,
-//   profileReducer: state.profileReducer,
-// });
 
 const PrivateBasicProfileInfo = privateRoute(
   BasicProfileInfo,

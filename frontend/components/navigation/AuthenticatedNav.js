@@ -10,8 +10,8 @@ const AuthenticatedNav = props => {
   const [show, setShow] = useState(false);
   return (
     <nav>
-      <button onClick={() => setShow(!show)}>
-        <img src="./settingsIcon.svg" alt="settings icon" className="ml-2" />
+      <button onClick={() => setShow(!show)} className="settingsBtn">
+        <img src="./settingsIcon.svg" alt="settings icon" />
       </button>
       <SettingsModal show={show} setShow={setShow} />
       <Link href="/">
@@ -29,6 +29,10 @@ const AuthenticatedNav = props => {
           justify-content: space-between;
           padding: 1rem;
           align-items: center;
+        }
+        .settingsBtn {
+          border: none;
+          background-color: #000;
         }
       `}</style>
     </nav>

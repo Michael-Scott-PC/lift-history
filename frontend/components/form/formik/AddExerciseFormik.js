@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, withFormik } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 
 import DateAndTime from './DateAndTime';
 import Options from './Options';
@@ -15,10 +16,11 @@ import SubmitButton from '../../button/SubmitButton';
 import ThirdExSearchBar from './ThirdExSearchBar';
 import ThirdAutoComplete from './ThirdAutoComplete';
 import ThirdExName from './ThirdExName';
+import ThirdSetsAndReps from './ThirdSetsAndReps';
 
 import { autoComplete } from '../../../redux/actions/searchActions';
 import { createUserProgram } from '../../../redux/actions/programActions';
-import ThirdSetsAndReps from './ThirdSetsAndReps';
+import exerciseSchema from '../schema/exerciseSchema';
 
 const AddExerciseFormik = ({
   searchReducer: { results },
@@ -39,6 +41,8 @@ const AddExerciseFormik = ({
   setLocalPickDate,
   localPickDate,
   setShowAddExModal,
+  errors,
+  touched,
 }) => {
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
@@ -65,6 +69,15 @@ const AddExerciseFormik = ({
     thirdSetsAndReps,
   } = values;
 
+  console.log(errors);
+  const {
+    pickDate: pickDateErrors,
+    primarySetsAndReps: primarySetsAndRepsErrors,
+  } = errors;
+
+  console.log(pickDateErrors);
+  console.log(primarySetsAndRepsErrors);
+
   return (
     <Fragment>
       {exerciseSelected && (
@@ -81,7 +94,13 @@ const AddExerciseFormik = ({
             time={time}
             values={values}
             setLocalPickDate={setLocalPickDate}
+            errors={pickDateErrors}
           />
+          {pickDateErrors && (
+            <p style={{ color: 'red', gridColumn: '1 / 13' }}>
+              {pickDateErrors}
+            </p>
+          )}
 
           {/* Optional form check boxes: RPE, pct, super set, triple set */}
           <Options
@@ -112,7 +131,32 @@ const AddExerciseFormik = ({
             primarySetsAndReps={primarySetsAndReps}
             isSuperSet={isSuperSet}
             isTripleSet={isTripleSet}
+            touched={touched}
           />
+          {/* {primarySetsAndRepsErrors &&
+            touched.primarySetsAndReps &&
+            primarySetsAndRepsErrors.map(errorMsg => (
+              <Fragment>
+                <p
+                  key={uuidv4()}
+                  style={{ color: 'red', gridColumn: '1 / 13' }}
+                >
+                  {errorMsg.sets}
+                </p>
+                <p
+                  key={uuidv4()}
+                  style={{ color: 'red', gridColumn: '1 / 13' }}
+                >
+                  {errorMsg.reps}
+                </p>
+                <p
+                  key={uuidv4()}
+                  style={{ color: 'red', gridColumn: '1 / 13' }}
+                >
+                  {errorMsg.weight}
+                </p>
+              </Fragment>
+            ))} */}
 
           {/* Displays search bar for secondary exercise */}
           {(localIsSuperSet || localIsTripleSet) && !secondaryEx && (
@@ -214,6 +258,7 @@ const FormikComp = withFormik({
       thirdSetsAndReps: [{ sets: '', reps: '', weight: '', rpe: '', pct: '' }],
     };
   },
+  validationSchema: props => exerciseSchema,
   handleSubmit: (
     values,
     {

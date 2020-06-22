@@ -53,7 +53,11 @@ const BasicProfileInfoForm = ({
         handleChange,
         handleBlur,
       }) => (
-        <Form noValidate onSubmit={handleSubmit}>
+        <Form
+          noValidate
+          onSubmit={handleSubmit}
+          style={{ marginBottom: '4rem' }}
+        >
           <Form.Group
             controlId="formGroupFirstName"
             style={{

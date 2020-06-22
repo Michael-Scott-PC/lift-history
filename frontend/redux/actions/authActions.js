@@ -21,6 +21,7 @@ import { setAlert } from './alertActions';
 export const registerUser = values => async dispatch => {
   try {
     const res = await strapiAPI.post('/auth/local/register', values);
+    console.log(res);
     const {
       jwt,
       user: {
