@@ -4,7 +4,13 @@ import FormCheck from 'react-bootstrap/FormCheck';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-const DateAndTime = ({ time, values, setLocalPickDate, errors }) => {
+const DateAndTime = ({
+  time,
+  values,
+  setLocalPickDate,
+  pickDateErrors,
+  touched,
+}) => {
   useEffect(() => {
     setLocalPickDate(values.pickDate);
   }, [values.pickDate]);
@@ -24,7 +30,7 @@ const DateAndTime = ({ time, values, setLocalPickDate, errors }) => {
         name="pickDate"
         style={{
           marginTop: '1rem',
-          marginBottom: errors ? '0' : '2rem',
+          marginBottom: pickDateErrors && touched.pickDate ? '0' : '2rem',
           gridColumn: time ? '1 / 7' : '1 / 13',
         }}
         label="Pick a date:"

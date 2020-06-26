@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
@@ -11,10 +11,17 @@ const AddExerciseModal = ({ showAddExModal, setShowAddExModal }) => {
   const [exerciseSelected, setExercise] = useState('');
   const [localPickDate, setLocalPickDate] = useState('');
 
+  const clearFormCloseModal = () => {
+    console.log('clearFormCloseModal ran.');
+    setExercise('');
+    setShowExerciseForm(false);
+    setShowAddExModal(false);
+  };
+
   return (
     <Modal
       show={showAddExModal}
-      onHide={() => setShowAddExModal(false)}
+      onHide={() => clearFormCloseModal()}
       style={{ position: 'fixed', top: '5%' }}
       scrollable
     >
@@ -22,7 +29,7 @@ const AddExerciseModal = ({ showAddExModal, setShowAddExModal }) => {
         <Modal.Title style={{ width: '100%', textAlign: 'center' }}>
           Add Exercise
         </Modal.Title>
-        <CloseButton handleOnClick={setShowAddExModal} />
+        <CloseButton handleOnClick={clearFormCloseModal} />
       </Modal.Header>
       <Modal.Body>
         <SearchBar

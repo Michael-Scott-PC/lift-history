@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, withFormik } from 'formik';
@@ -44,6 +44,9 @@ const AddExerciseFormik = ({
   errors,
   touched,
 }) => {
+  console.log(touched);
+  console.log(touched.pickDate);
+  console.log(programReducer);
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
   // to their defaults, which is not what I want.
@@ -69,14 +72,20 @@ const AddExerciseFormik = ({
     thirdSetsAndReps,
   } = values;
 
-  console.log(errors);
+  console.log('errors: ', errors);
   const {
     pickDate: pickDateErrors,
     primarySetsAndReps: primarySetsAndRepsErrors,
   } = errors;
 
-  console.log(pickDateErrors);
-  console.log(primarySetsAndRepsErrors);
+  console.log('pickDateErrors: ', pickDateErrors);
+  console.log('primarySetsAndRepsErrors: ', primarySetsAndRepsErrors);
+
+  useEffect(() => {
+    if (!showExerciseForm) {
+      resetForm();
+    }
+  }, [showExerciseForm]);
 
   return (
     <Fragment>
@@ -94,9 +103,10 @@ const AddExerciseFormik = ({
             time={time}
             values={values}
             setLocalPickDate={setLocalPickDate}
-            errors={pickDateErrors}
+            pickDateErrors={pickDateErrors}
+            touched={touched}
           />
-          {pickDateErrors && (
+          {touched.pickDate && pickDateErrors && (
             <p style={{ color: 'red', gridColumn: '1 / 13' }}>
               {pickDateErrors}
             </p>
@@ -133,8 +143,12 @@ const AddExerciseFormik = ({
             isTripleSet={isTripleSet}
             touched={touched}
           />
-          {/* {primarySetsAndRepsErrors &&
-            touched.primarySetsAndReps &&
+
+          {/* We only want to render the error messages if all 3 required fields have been touched */}
+          {primarySetsAndRepsErrors &&
+            touched.primarySetsAndReps[0].sets &&
+            touched.primarySetsAndReps[0].reps &&
+            touched.primarySetsAndReps[0].weight &&
             primarySetsAndRepsErrors.map(errorMsg => (
               <Fragment>
                 <p
@@ -156,7 +170,7 @@ const AddExerciseFormik = ({
                   {errorMsg.weight}
                 </p>
               </Fragment>
-            ))} */}
+            ))}
 
           {/* Displays search bar for secondary exercise */}
           {(localIsSuperSet || localIsTripleSet) && !secondaryEx && (
@@ -259,6 +273,7 @@ const FormikComp = withFormik({
     };
   },
   validationSchema: props => exerciseSchema,
+  mapPropsToTouched: props => console.log(props),
   handleSubmit: (
     values,
     {
@@ -268,13 +283,18 @@ const FormikComp = withFormik({
         createUserProgram,
         programReducer,
         setShowAddExModal,
+        setExercise,
+        setLocalPickDate,
       },
     }
   ) => {
     setTimeout(() => {
       createUserProgram(jwt, id, values);
       setSubmitting(false);
-      if (programReducer.statusCode === 200) {
+      // If successful POST, we want to clear the form and close modal
+      if (programReducer.statusCode === 200 || programReducer.program) {
+        setExercise('');
+        setLocalPickDate('');
         setShowAddExModal(false);
       }
       // TODO: handle error (display error message on the form)
