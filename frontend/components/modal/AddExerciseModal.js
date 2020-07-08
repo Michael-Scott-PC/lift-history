@@ -6,7 +6,7 @@ import AddExerciseFormik from '../form/formik/AddExerciseFormik';
 import CloseButton from '../button/CloseButton';
 import SearchBar from '../form/formik/SearchBar';
 
-const AddExerciseModal = ({ showAddExModal, setShowAddExModal }) => {
+const AddExerciseModal = ({ showAddExModal, setShowAddExModal, dataSWR }) => {
   const [showExerciseForm, setShowExerciseForm] = useState(false);
   const [exerciseSelected, setExercise] = useState('');
   const [localPickDate, setLocalPickDate] = useState('');
@@ -44,6 +44,7 @@ const AddExerciseModal = ({ showAddExModal, setShowAddExModal }) => {
           localPickDate={localPickDate}
           setLocalPickDate={setLocalPickDate}
           setShowAddExModal={setShowAddExModal}
+          dataSWR={dataSWR}
         />
       </Modal.Body>
     </Modal>

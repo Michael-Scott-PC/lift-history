@@ -42,7 +42,7 @@ const SecondarySetsAndReps = ({
                     paddingRight: rpe || pct ? '0' : '6px',
                   }}
                 >
-                  <img src="removeIcon.svg" alt="remove exercise icon" />
+                  <img src="/removeIcon.svg" alt="remove exercise icon" />
                 </button>
                 <Field
                   type="input"
@@ -99,7 +99,7 @@ const SecondarySetsAndReps = ({
                   }}
                 >
                   <img
-                    src="./greenAddIcon.svg"
+                    src="/greenAddIcon.svg"
                     alt="add exercise icon"
                     style={{ paddingBottom: '2px' }}
                   />

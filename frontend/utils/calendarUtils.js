@@ -1,5 +1,6 @@
 import css from 'styled-jsx/css';
 import { Fragment } from 'react';
+import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 
 import abbrWeekdays from '../abbr-weekdays.json';
@@ -43,16 +44,12 @@ export const highlightCurrentDay = () => {
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {requestCallback} handleMonthClick - Render the selected month's data.
  */
-export const weekdayWrapper = (classView, handleMonthClick) => {
+export const weekdayWrapper = classView => {
   let weekdays = [];
 
   weekdays.push(
     abbrWeekdays.map(day => (
-      <div
-        className={`${classView}`}
-        key={uuidv4()}
-        onClick={e => handleMonthClick(e)}
-      >
+      <div className={`${classView}`} key={uuidv4()}>
         {day}
         <style jsx>{weekdayStyle}</style>
       </div>
@@ -84,30 +81,63 @@ const weekdayStyle = css`
  * @param {string} classView - Adds a class depending on calendar view.
  * @param {Array} [program] - Contains a schedule of days with exercises.
  */
-export const dayWrapper = (monthName, monthIndex, fn, classView, program) => {
+export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
+  console.log('monthName: ', monthName);
+  console.log('monthIndex: ', monthIndex);
+  console.log('classView: ', classView);
+  console.log('allPrograms: ', allPrograms);
+
   let days = [];
   for (let monthDay of monthsAndDays[monthName]) {
     const [month, day] = monthDay;
+    // console.log(day);
 
     const dayId = uuidv4();
-    days.push(
-      <Fragment key={dayId}>
-        <div
-          className={`${classView} ${
-            parseInt(month) !== monthIndex
-              ? 'neighbor-month-days'
-              : 'individual-days'
-          }`}
-          onClick={e => fn(e)}
-        >
-          {day[0] === '0' ? day[1] : day}
+    if (classView === 'year-view') {
+      days.push(
+        <Fragment key={dayId}>
+          <div
+            className={`${classView} ${
+              parseInt(month) !== monthIndex
+                ? 'neighbor-month-days'
+                : 'individual-days'
+            }`}
+          >
+            {day[0] === '0' ? day[1] : day}
 
-          {program && renderSelectedMonthProgram(program, month, day)}
-        </div>
-        <style jsx>{dayStyles}</style>
-      </Fragment>
-    );
+            {allPrograms && renderSelectedMonthProgram(allPrograms, month, day)}
+          </div>
+          <style jsx>{dayStyles}</style>
+        </Fragment>
+      );
+    }
+    if (classView === 'month-view') {
+      days.push(
+        <Link
+          href="/dashboard/[year]/[month]/[day]"
+          as={`/dashboard/${currentYear}/${monthName}/${day}`}
+          key={dayId}
+        >
+          <div>
+            <div
+              className={`${classView} ${
+                parseInt(month) !== monthIndex
+                  ? 'neighbor-month-days'
+                  : 'individual-days'
+              }`}
+            >
+              {day[0] === '0' ? day[1] : day}
+
+              {allPrograms &&
+                renderSelectedMonthProgram(allPrograms, month, day)}
+            </div>
+            <style jsx>{dayStyles}</style>
+          </div>
+        </Link>
+      );
+    }
   }
+  // const finalDays = [<Fragment>{days}</Fragment>];
   return days;
 };
 
@@ -121,11 +151,24 @@ const dayStyles = css`
     white-space: nowrap;
     font-size: 0.65rem;
   }
+  .year-view.neighbor-month-days {
+    font-size: 0.55rem;
+  }
   .neighbor-month-days {
+    display: grid;
+    width: 100%;
+    justify-self: center;
+    justify-items: center;
+    align-content: start;
+    white-space: nowrap;
+    font-size: 0.65rem;
+    color: #808080;
+  }
+  /* .neighbor-month-days {
     font-size: 0.55rem;
     color: #808080;
     justify-self: center;
-  }
+  } */
   .current-day {
     color: #fff;
     background-color: rgb(38, 191, 81);
@@ -144,8 +187,11 @@ const dayStyles = css`
  * @param {string} [selectedMonth] - Contains the selected month if selected.
  * @param {Array} [profile] - Contains the authenticated user's profile.
  */
-export const monthWrapper = (classView, fn, show, selectedMonth, profile) => {
-  const { program } = profile;
+export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
+  // console.log('classView: ', classView);
+  // console.log('fn: ', fn);
+  // console.log('selectedMonth: ', selectedMonth);
+  // console.log('program: ', program);
   let monthArr = [];
 
   // TODO: the Ids need to be fixed. Display 'none' only hides
@@ -158,14 +204,15 @@ export const monthWrapper = (classView, fn, show, selectedMonth, profile) => {
     monthArr.push(
       <div
         className={`month-container ${classView} `}
-        style={{ display: show ? 'grid' : 'none' }}
         key={uuidv4()}
         id={monthIndex}
       >
+        <button className="previous-btn">Previous Month</button>
         <h5 className="month-name text-center">{selectedMonth}</h5>
+        <button className="next-btn">Next Month</button>
         {selectedMonth && weekdayWrapper(classView, fn)}
         {selectedMonth &&
-          dayWrapper(selectedMonth, monthIndex, fn, classView, program)}
+          dayWrapper(selectedMonth, monthIndex, classView, allPrograms)}
         <style jsx>{monthViewStyles}</style>
       </div>
     );
@@ -175,15 +222,26 @@ export const monthWrapper = (classView, fn, show, selectedMonth, profile) => {
 
 const monthViewStyles = css`
   .month-view {
+    display: grid;
     grid-template-columns: repeat(7, minmax(14%, 1fr));
     grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
     width: 100%;
     min-height: 50vh;
   }
-  .month-name {
+  .previous-btn {
     grid-column-start: 1;
-    grid-column-end: 8;
+    grid-column-end: 3;
+  }
+  .month-name {
+    /* grid-column-start: 1;
+    grid-column-end: 8; */
+    grid-column-start: 3;
+    grid-column-end: 6;
     align-self: center;
+  }
+  .next-btn {
+    grid-column-start: 6;
+    grid-column-end: 8;
   }
 `;
 
@@ -194,27 +252,32 @@ const monthViewStyles = css`
  * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
  * @param {bool} show - Controls the display property of different elements/views.
  */
-export const allMonthsWrapper = (classView, fn, show) => {
+export const allMonthsWrapper = classView => {
   let monthsArr = [];
   let monthIndex = 0;
 
   // Generate HTML for all 12 months if no month is selected.
   // The month name is the key
   for (let month in monthsAndDays) {
+    monthIndex += 1;
     monthsArr.push(
-      <div
-        className="month-container col-4"
-        style={{ display: show ? 'grid' : 'none' }}
+      <Link
+        href="/dashboard/[year]/[month]"
+        as={`/dashboard/${currentYear}/${month}`}
         key={uuidv4()}
-        id={(monthIndex += 1)}
       >
-        <h5 className="month-name text-center" onClick={e => fn(e)}>
-          {month}
-        </h5>
-        {weekdayWrapper(classView, fn)}
-        {dayWrapper(month, monthIndex, fn, classView)}
-        <style jsx>{allMonthsStyles}</style>
-      </div>
+        <div
+          className="month-container col-4"
+          style={{ display: 'grid' }}
+          id={monthIndex}
+          key={uuidv4()}
+        >
+          <h5 className="month-name text-center">{month}</h5>
+          <>{weekdayWrapper(classView)}</>
+          <>{dayWrapper(month, monthIndex, classView)}</>
+          <style jsx>{allMonthsStyles}</style>
+        </div>
+      </Link>
     );
   }
   return monthsArr;
@@ -246,7 +309,11 @@ const allMonthsStyles = css`
 export const getMonth = (month, setMonthHeader) => {
   const num = parseInt(month);
   const monthHeader = abbrMonths[num - 1];
-  setMonthHeader(monthHeader);
+  if (setMonthHeader) {
+    setMonthHeader(monthHeader);
+  } else {
+    return monthHeader;
+  }
 };
 
 /**
@@ -255,7 +322,7 @@ export const getMonth = (month, setMonthHeader) => {
  * string format in monthsAndDays (months-days-days.json).
  * @param {string} month - The selected month.
  */
-const getMonthIndex = month => {
+export const getMonthIndex = month => {
   const monthIndex = abbrMonths.indexOf(month) + 1;
   let monthIndexStr = '';
   if (monthIndex < 10) {
@@ -324,32 +391,44 @@ export const getWeekRange = (month, selectedDay) => {
  * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
-export const renderWeekHelper = (weekRangeArr, day, setDay) => {
-  console.log(setDay);
+export const renderWeekHelper = (weekRangeArr, day, month) => {
   let weekJsx = [];
   for (let item of weekRangeArr) {
     for (let i of item) {
+      const abbrMonth = getMonth(i[0]);
       if (i[1] === day) {
         weekJsx.push(
-          <div
-            className="day-view-weekdays selected-day"
+          <Link
+            href="/dashboard/[year]/[month]/[day]"
+            as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
             key={uuidv4()}
-            onClick={() => setDay(i[1])}
           >
-            {i[1]}
-            <style jsx>{selectedDayStyles}</style>
-          </div>
+            <div
+              className="day-view-weekdays selected-day"
+              key={uuidv4()}
+              // onClick={() => setDay(i[1])}
+            >
+              {i[1]}
+              <style jsx>{selectedDayStyles}</style>
+            </div>
+          </Link>
         );
       } else {
         weekJsx.push(
-          <div
-            className="day-view-weekdays"
+          <Link
+            href="/dashboard/[year]/[month]/[day]"
+            as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
             key={uuidv4()}
-            onClick={() => setDay(i[1])}
           >
-            {i[1]}
-            <style jsx>{dayViewStyles}</style>
-          </div>
+            <div
+              className="day-view-weekdays"
+              key={uuidv4()}
+              // onClick={() => setDay(i[1])}
+            >
+              {i[1]}
+              <style jsx>{dayViewStyles}</style>
+            </div>
+          </Link>
         );
       }
     }

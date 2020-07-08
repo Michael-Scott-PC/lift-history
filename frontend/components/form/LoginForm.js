@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
+import Router from 'next/router';
 
 import loginSchema from './schema/loginSchema';
 import SubmitButton from '../button/SubmitButton';
 
 import { loginUser } from '../../redux/actions/authActions';
+import { currentYear } from '../../utils/currentDate';
 
 const LoginForm = ({ showLogin, loginUser, alertReducer }) => {
+  useEffect(() => {
+    Router.prefetch('/dashboard/[year]', `/dashboard/${currentYear}`);
+  }, []);
+
   return (
     <Formik
       validationSchema={loginSchema}

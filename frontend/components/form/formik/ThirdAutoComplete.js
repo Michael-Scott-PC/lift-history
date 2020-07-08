@@ -29,7 +29,7 @@ const ThirdAutoComplete = ({
             {exercise}
           </li>
           <img
-            src="./greenAddIcon.svg"
+            src="/greenAddIcon.svg"
             alt="green add icon"
             id="add-exercise-icon"
             onClick={() =>
@@ -43,7 +43,7 @@ const ThirdAutoComplete = ({
             }
           />
           <img
-            src="./autoCompleteArrow.svg"
+            src="/autoCompleteArrow.svg"
             alt="autocomplete arrow"
             id="auto-complete-arrow"
             onClick={() => setFieldValue('thirdExercise', `${exercise}`)}

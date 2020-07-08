@@ -5,7 +5,7 @@ import Months from './Months';
 
 import { highlightCurrentDay } from '../../../utils/calendarUtils';
 
-const YearView = props => {
+const YearView = ({ profile, program }) => {
   // console.log(props);
   useEffect(() => {
     highlightCurrentDay();
@@ -14,7 +14,7 @@ const YearView = props => {
   return (
     <Fragment>
       <div id="custom-year-container">
-        <Months profile={props.profile} />
+        <Months profile={profile} program={program} />
       </div>
 
       <style jsx>{`

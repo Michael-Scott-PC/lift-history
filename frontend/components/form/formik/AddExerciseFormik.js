@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, withFormik } from 'formik';
+import { request } from 'graphql-request';
+import useSWR, { mutate, trigger } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
 import DateAndTime from './DateAndTime';
@@ -19,8 +21,12 @@ import ThirdExName from './ThirdExName';
 import ThirdSetsAndReps from './ThirdSetsAndReps';
 
 import { autoComplete } from '../../../redux/actions/searchActions';
-import { createUserProgram } from '../../../redux/actions/programActions';
+import {
+  createUserProgram,
+  setsAndRepsHelper,
+} from '../../../redux/actions/programActions';
 import exerciseSchema from '../schema/exerciseSchema';
+import strapiAPI from '../../../api/strapiAPI';
 
 const AddExerciseFormik = ({
   searchReducer: { results },
@@ -43,10 +49,9 @@ const AddExerciseFormik = ({
   setShowAddExModal,
   errors,
   touched,
+  dataSWR,
+  mutate,
 }) => {
-  console.log(touched);
-  console.log(touched.pickDate);
-  console.log(programReducer);
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
   // to their defaults, which is not what I want.
@@ -71,15 +76,16 @@ const AddExerciseFormik = ({
     secondarySetsAndReps,
     thirdSetsAndReps,
   } = values;
+  // console.log('primarySetsAndReps: ', primarySetsAndReps);
 
-  console.log('errors: ', errors);
+  // console.log('errors: ', errors);
   const {
     pickDate: pickDateErrors,
     primarySetsAndReps: primarySetsAndRepsErrors,
   } = errors;
 
-  console.log('pickDateErrors: ', pickDateErrors);
-  console.log('primarySetsAndRepsErrors: ', primarySetsAndRepsErrors);
+  // console.log('pickDateErrors: ', pickDateErrors);
+  // console.log('primarySetsAndRepsErrors: ', primarySetsAndRepsErrors);
 
   useEffect(() => {
     if (!showExerciseForm) {
@@ -146,27 +152,19 @@ const AddExerciseFormik = ({
 
           {/* We only want to render the error messages if all 3 required fields have been touched */}
           {primarySetsAndRepsErrors &&
+            touched.primarySetsAndReps &&
             touched.primarySetsAndReps[0].sets &&
             touched.primarySetsAndReps[0].reps &&
             touched.primarySetsAndReps[0].weight &&
             primarySetsAndRepsErrors.map(errorMsg => (
-              <Fragment>
-                <p
-                  key={uuidv4()}
-                  style={{ color: 'red', gridColumn: '1 / 13' }}
-                >
+              <Fragment key={uuidv4()}>
+                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
                   {errorMsg.sets}
                 </p>
-                <p
-                  key={uuidv4()}
-                  style={{ color: 'red', gridColumn: '1 / 13' }}
-                >
+                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
                   {errorMsg.reps}
                 </p>
-                <p
-                  key={uuidv4()}
-                  style={{ color: 'red', gridColumn: '1 / 13' }}
-                >
+                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
                   {errorMsg.weight}
                 </p>
               </Fragment>
@@ -273,8 +271,7 @@ const FormikComp = withFormik({
     };
   },
   validationSchema: props => exerciseSchema,
-  mapPropsToTouched: props => console.log(props),
-  handleSubmit: (
+  handleSubmit: async (
     values,
     {
       setSubmitting,
@@ -285,20 +282,41 @@ const FormikComp = withFormik({
         setShowAddExModal,
         setExercise,
         setLocalPickDate,
+        dataSWR,
+        // mutate,
       },
     }
   ) => {
-    setTimeout(() => {
-      createUserProgram(jwt, id, values);
-      setSubmitting(false);
-      // If successful POST, we want to clear the form and close modal
-      if (programReducer.statusCode === 200 || programReducer.program) {
-        setExercise('');
-        setLocalPickDate('');
-        setShowAddExModal(false);
-      }
-      // TODO: handle error (display error message on the form)
-    }, 1000);
+    const updateUI = async () => {
+      const mapValues = {
+        scheduleExercise: values.pickDate,
+        isSuperSet: values.isSuperSet,
+        isTripleSet: values.isTripleSet,
+        thisDaysExercises: await setsAndRepsHelper(values),
+        // users: [id],
+      };
+      console.log('mapValues: ', mapValues);
+      return mapValues;
+    };
+
+    const result = await updateUI();
+    console.log('result: ', result);
+
+    mutate(
+      [`${process.env.strapiAPI}/graphql`, jwt, id],
+      { ...dataSWR, result },
+      false
+    );
+    console.log('dataSWR: ', dataSWR);
+    createUserProgram(jwt, id, values);
+    setSubmitting(false);
+    // If successful POST, we want to clear the form and close modal
+    if (programReducer.statusCode === 200 || programReducer.program) {
+      setExercise('');
+      setLocalPickDate('');
+      setShowAddExModal(false);
+    }
+    // TODO: handle error (display error message on the form)
   },
 })(AddExerciseFormik);
 
@@ -322,6 +340,9 @@ const mapStateToProps = state => ({
   programReducer: state.programReducer,
 });
 
-export default connect(mapStateToProps, { autoComplete, createUserProgram })(
-  FormikComp
-);
+export default connect(mapStateToProps, {
+  autoComplete,
+  createUserProgram,
+  setsAndRepsHelper,
+  mutate,
+})(FormikComp);

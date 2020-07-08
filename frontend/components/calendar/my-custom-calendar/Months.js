@@ -1,33 +1,34 @@
 import css from 'styled-jsx/css';
 import React, { Fragment, useState, useEffect } from 'react';
+import Router from 'next/router';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import MonthView from './MonthView';
+// import NewMonthView from '../../../pages/dashboard/[month]';
 
-import {
-  allMonthsWrapper,
-  highlightCurrentDay,
-} from '../../../utils/calendarUtils';
+import { allMonthsWrapper } from '../../../utils/calendarUtils';
 import { currentYear } from '../../../utils/currentDate';
 
-const Months = props => {
-  // console.log(props);
+const Months = ({ profile, program }) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showMonths, setShowMonths] = useState(true);
 
-  const handleMonthClick = e => {
-    const elId = e.target.parentNode.id;
+  // const handleMonthClick = e => {
+  //   const elId = e.target.parentNode.id;
 
-    setShowMonths(false);
+  //   setShowMonths(false);
 
-    setSelectedMonth(elId);
-  };
+  //   setSelectedMonth(elId);
+  // };
 
-  useEffect(() => {
-    highlightCurrentDay();
-  }, []);
+  // useEffect(() => {
+  //   // highlightCurrentDay();
+  //   if (selectedMonth) {
+  //     Router.push(`/dashboard/${selectedMonth}`);
+  //   }
+  // }, [selectedMonth]);
 
   return (
     <Fragment>
@@ -43,11 +44,16 @@ const Months = props => {
       >
         {currentYear}
       </h1>
-      {!selectedMonth &&
-        allMonthsWrapper('year-view', handleMonthClick, showMonths)}
-      {selectedMonth && (
-        <MonthView selectedMonth={selectedMonth} profile={props.profile} />
-      )}
+      {/* {!selectedMonth &&
+        allMonthsWrapper('year-view', handleMonthClick, showMonths)} */}
+      {!selectedMonth && allMonthsWrapper('year-view', showMonths)}
+      {/* {selectedMonth && (
+        <MonthView
+          selectedMonth={selectedMonth}
+          profile={profile}
+          program={program}
+        />
+      )} */}
     </Fragment>
   );
 };

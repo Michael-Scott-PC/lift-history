@@ -10,6 +10,8 @@ import {
   currentSecond,
 } from './currentDate';
 
+import { getMonthIndex } from './calendarUtils';
+
 // This is just for temporary simulation. Users will be able to color code their exercises
 // from a list of color choices.
 const colors = [
@@ -30,14 +32,23 @@ const colors = [
  * @param {string} classView - The view depending on calendar view.
  */
 const programHelper = (program, month, day, classView) => {
+  // console.log(day);
+  // console.log(program);
   const exerciseSchedule = [];
 
   const monthNum = parseInt(month - 1);
+
+  let monthId;
+  if (isNaN(monthNum)) {
+    const monthIndex = getMonthIndex(month);
+    monthId = parseInt(monthIndex - 1);
+  }
+
   const dayNum = parseInt(day);
 
   const createDateObj = new Date(
     currentYear,
-    monthNum,
+    monthNum ? monthNum : monthId,
     dayNum,
     currentHour,
     currentMinute,
@@ -45,10 +56,11 @@ const programHelper = (program, month, day, classView) => {
   );
 
   if (program) {
-    for (let exerciseObj of program) {
-      const convertToDate = new Date(exerciseObj.scheduleExercise);
+    // console.log('program from scheduleUtils.js: ', program);
+    for (let programObj of program) {
+      const convertToDate = new Date(programObj.scheduleExercise);
       if (convertToDate.toDateString() === createDateObj.toDateString()) {
-        exerciseObj.exercises.map(exercise =>
+        programObj.thisDaysExercises.map(exerciseObj =>
           exerciseSchedule.push(
             <div
               className={`${classView} nameOfExercise`}
@@ -59,7 +71,7 @@ const programHelper = (program, month, day, classView) => {
               }}
               key={uuidv4()}
             >
-              {exercise.nameOfExercise}
+              {exerciseObj.exercise.nameOfExercise}
               <style jsx>{programStyles}</style>
             </div>
           )
@@ -77,6 +89,7 @@ const programHelper = (program, month, day, classView) => {
  * @param {string} day - The current day. programHelper gets called for every day in a selected month.
  */
 export const renderSelectedMonthProgram = (program, month, day) => {
+  // console.log(program);
   return <Fragment>{programHelper(program, month, day)}</Fragment>;
 };
 

@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import { Nav } from 'react-bootstrap';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 import RegisterForm from '../form/RegisterForm';
 import LoginForm from '../form/LoginForm';
+import { connect } from 'react-redux';
 
-const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
+const AuthModal = ({
+  showAuthModal,
+  setShowAuthModal,
+  authReducer: { loading },
+}) => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(true);
 
@@ -18,6 +24,19 @@ const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+      {loading && (
+        <BounceLoader
+          color={'rgb(54, 215, 183)'}
+          css="
+          position: absolute;
+                  width: 60px;
+                  height: 60px;
+                  align-self: center;
+                  bottom: 50%;
+                  top: 50%;
+                  z-index: 10000;"
+        />
+      )}
       <Nav className="auth-nav-tabs" variant="tabs" defaultActiveKey="#!">
         <Nav.Item
           className="auth-nav-item col-6"
@@ -25,7 +44,7 @@ const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
             backgroundColor: showLogin ? '#fff' : '#000',
             boxShadow: showLogin ? null : '-5px -5px 0px 0px inset #2b2b2b',
             paddingLeft: '0',
-            paddingRight: '0'
+            paddingRight: '0',
           }}
         >
           <Nav.Link
@@ -46,7 +65,7 @@ const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
             backgroundColor: showRegister ? '#fff' : '#000',
             boxShadow: showRegister ? null : '5px -5px 0px 0px inset #2b2b2b',
             paddingLeft: '0',
-            paddingRight: '0'
+            paddingRight: '0',
           }}
         >
           <Nav.Link
@@ -57,7 +76,7 @@ const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
             }}
             style={{
               color: showRegister ? '#000' : '#fff',
-              fontSize: '1.25rem'
+              fontSize: '1.25rem',
             }}
             className="auth-text"
           >
@@ -85,7 +104,11 @@ const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
 
 AuthModal.propTypes = {
   showAuthModal: PropTypes.bool.isRequired,
-  setShowAuthModal: PropTypes.func.isRequired
+  setShowAuthModal: PropTypes.func.isRequired,
 };
 
-export default AuthModal;
+const mapStateToProps = state => ({
+  authReducer: state.authReducer,
+});
+
+export default connect(mapStateToProps, {})(AuthModal);

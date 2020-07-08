@@ -1,5 +1,7 @@
 import Router from 'next/router';
 
+import { currentYear } from '../../utils/currentDate';
+
 import {
   REGISTER_USER,
   ERROR_REGISTER_USER,
@@ -8,6 +10,8 @@ import {
   LOAD_PROFILE,
   ERROR_LOAD_PROFILE,
   LOGOUT_USER,
+  LOAD_USER_PROGRAMS,
+  TOGGLE_LOADING,
 } from './types';
 import strapiAPI from '../../api/strapiAPI';
 
@@ -52,19 +56,21 @@ export const registerUser = values => async dispatch => {
  * @param {object} values - Input from the login form (identifier, password).
  */
 export const loginUser = values => async dispatch => {
+  dispatch({
+    type: TOGGLE_LOADING,
+  });
   try {
     const res = await strapiAPI.post('/auth/local', values);
-    console.log(res);
     const {
       jwt,
       user: {
         id,
-        username,
-        role: { type },
+        myPrograms,
         profile,
+        role: { type },
+        username,
       },
     } = res.data;
-    console.log(profile);
 
     dispatch({
       type: LOGIN_USER,
@@ -76,7 +82,12 @@ export const loginUser = values => async dispatch => {
       payload: profile,
     });
 
-    Router.push('/dashboard');
+    dispatch({
+      type: LOAD_USER_PROGRAMS,
+      payload: myPrograms,
+    });
+
+    Router.push('/dashboard/[year]', `/dashboard/${currentYear}`);
   } catch (error) {
     console.log(error);
 

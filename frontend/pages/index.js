@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowCircleDown, FaRegCopyright } from 'react-icons/fa';
 
 import Alert from '../components/form/Alert';
-// import PublicFooter from '../components/layout/PublicFooter';
 import Layout from '../components/layout/Layout';
 import LiftAnimation from '../components/background/LiftAnimation';
 
 const Home = () => {
   return (
     <Layout>
-      {/* <Alert /> */}
       <div className="parent-container">
         <main id="main">
           <LiftAnimation />
@@ -108,27 +106,6 @@ const Home = () => {
             }
           `}
         </style>
-
-        <style jsx global>{`
-          html,
-          body {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-              sans-serif;
-             {
-              /* background-color: #f0f8ff; */
-            }
-          }
-          div#__next {
-            height: 100%;
-          }
-          * {
-            box-sizing: border-box;
-          }
-        `}</style>
       </div>
       {/* <PublicFooter /> */}
     </Layout>

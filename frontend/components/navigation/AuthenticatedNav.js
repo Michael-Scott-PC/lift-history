@@ -11,7 +11,7 @@ const AuthenticatedNav = props => {
   return (
     <nav>
       <button onClick={() => setShow(!show)} className="settingsBtn">
-        <img src="./settingsIcon.svg" alt="settings icon" />
+        <img src="/settingsIcon.svg" alt="settings icon" />
       </button>
       <SettingsModal show={show} setShow={setShow} />
       <Link href="/">
@@ -19,7 +19,7 @@ const AuthenticatedNav = props => {
           <SquatLogo />
         </a>
       </Link>
-      <img src="./messageIcon.svg" alt="message icon" className="mr-2" />
+      <img src="/messageIcon.svg" alt="message icon" className="mr-2" />
 
       <style jsx>{`
         nav {

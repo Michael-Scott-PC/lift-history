@@ -1,9 +1,12 @@
+import { HYDRATE } from 'next-redux-wrapper';
+
 import {
   REGISTER_USER,
   ERROR_REGISTER_USER,
   LOGIN_USER,
   ERROR_LOGIN_USER,
   LOGOUT_USER,
+  TOGGLE_LOADING,
 } from '../actions/types';
 
 const initialState = {
@@ -12,12 +15,23 @@ const initialState = {
   username: '',
   type: '',
   error: '',
+  loading: false,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    // case HYDRATE:
+    //   return {
+    //     ...state,
+    //     ...payload,
+    //   };
+    case TOGGLE_LOADING:
+      return {
+        ...state,
+        loading: !state.loading,
+      };
     case REGISTER_USER:
       // localStorage.setItem('jwt', state.jwt);
       return {
@@ -38,6 +52,7 @@ export default function (state = initialState, action) {
         id: payload.id,
         username: payload.username,
         type: payload.type,
+        loading: false,
       };
     case ERROR_LOGIN_USER:
       return {

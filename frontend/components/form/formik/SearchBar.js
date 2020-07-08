@@ -4,8 +4,6 @@ import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
-// import AddExerciseFormik from './AddExerciseFormik';
-
 import { autoComplete } from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';
 
@@ -78,7 +76,7 @@ const SearchBar = ({
                     }}
                   />
                   <img
-                    src="./exitIcon.svg"
+                    src="/exitIcon.svg"
                     id="clear"
                     alt="clear text icon"
                     style={{
@@ -100,7 +98,7 @@ const SearchBar = ({
                         {exercise}
                       </li>
                       <img
-                        src="./greenAddIcon.svg"
+                        src="/greenAddIcon.svg"
                         alt="green add icon"
                         id="add-exercise-icon"
                         onClick={() =>
@@ -114,7 +112,7 @@ const SearchBar = ({
                         }
                       />
                       <img
-                        src="./autoCompleteArrow.svg"
+                        src="/autoCompleteArrow.svg"
                         alt="autocomplete arrow"
                         id="auto-complete-arrow"
                         onClick={() => setValues({ searchTerm: `${exercise}` })}
@@ -147,12 +145,6 @@ const SearchBar = ({
           );
         }}
       </Formik>
-      {/* <AddExerciseFormik
-        showExerciseForm={showExerciseForm}
-        setShowExerciseForm={setShowExerciseForm}
-        exerciseSelected={exerciseSelected}
-        setExercise={setExercise}
-      /> */}
     </Fragment>
   );
 };

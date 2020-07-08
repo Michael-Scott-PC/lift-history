@@ -1,13 +1,12 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import Layout from '../components/layout/Layout';
+import Layout from '../../../components/layout/Layout';
 // import PrivateFooter from '../components/layout/PrivateFooter';
-import YearView from '../components/calendar/my-custom-calendar/YearView';
-import privateRoute from '../components/hocs/privateRoute';
+import YearView from '../../../components/calendar/my-custom-calendar/YearView';
+import privateRoute from '../../../components/hocs/privateRoute';
 
-const dashboard = props => {
-  // console.log(props);
+const dashboard = ({ profile, allPrograms }) => {
   const [show, setShow] = useState(true);
 
   // TODO: create a callback to check if DayView is true
@@ -20,7 +19,11 @@ const dashboard = props => {
 
   return (
     <Layout>
-      <YearView checkForDayView={checkForDayView} profile={props.profile} />
+      <YearView
+        checkForDayView={checkForDayView}
+        profile={profile}
+        allPrograms={allPrograms}
+      />
 
       <style jsx>
         {`

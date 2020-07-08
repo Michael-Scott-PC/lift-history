@@ -26,7 +26,7 @@ const PrimaryExercise = ({
           paddingBottom: '0',
         }}
       >
-        <img src="removeIcon.svg" alt="remove exercise icon" />
+        <img src="/removeIcon.svg" alt="remove exercise icon" />
       </button>
       <Field
         name="primaryExercise"

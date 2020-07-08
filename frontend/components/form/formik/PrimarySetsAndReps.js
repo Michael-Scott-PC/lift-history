@@ -3,13 +3,12 @@ import { Field, FieldArray } from 'formik';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-const PrimarySetsAndReps = ({
-  pct,
-  rpe,
-  primarySetsAndReps,
-  isSuperSet,
-  isTripleSet,
-}) => {
+const PrimarySetsAndReps = ({ pct, rpe, primarySetsAndReps }) => {
+  // console.log(
+  //   'primarySetsAndReps from PrimarySetsAndReps.js: ',
+  //   primarySetsAndReps
+  // );
+  // console.log('check if undefined: ', primarySetsAndReps === 'undefined');
   return (
     <Fragment>
       <FieldArray name="primarySetsAndReps">
@@ -45,7 +44,7 @@ const PrimarySetsAndReps = ({
                       paddingRight: rpe || pct ? '0' : '6px',
                     }}
                   >
-                    <img src="removeIcon.svg" alt="remove exercise icon" />
+                    <img src="/removeIcon.svg" alt="remove exercise icon" />
                   </button>
                   <Field
                     type="input"
@@ -102,7 +101,7 @@ const PrimarySetsAndReps = ({
                     }}
                   >
                     <img
-                      src="./greenAddIcon.svg"
+                      src="/greenAddIcon.svg"
                       alt="add exercise icon"
                       style={{ paddingBottom: '2px' }}
                     />

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { renderSelectedDayProgram } from '../../utils/scheduleUtils';
 
-const ExercisesForDay = ({ selectedMonth, day, program }) => {
+const ExercisesForDay = ({ program, selectedMonth, day }) => {
   return (
     <div id="exercises-for-day">
       {renderSelectedDayProgram(program, selectedMonth, day)}

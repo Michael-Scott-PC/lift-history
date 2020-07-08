@@ -1,5 +1,7 @@
+import { request, GraphQLClient } from 'graphql-request';
+
 import strapiAPI from '../../api/strapiAPI';
-import { CREATE_USER_PROGRAM } from './types';
+import { CREATE_USER_PROGRAM, REVALIDATE_MYPROGRAM } from './types';
 
 /**
  * @description: Retrieves the exercise Id from database and returns them to be used
@@ -42,7 +44,7 @@ const getExerciseIds = async values => {
  * mapValues object in createUserProgram function.
  * @param {Object} values - Values from the AddExerciseFormik form.
  */
-const setsAndRepsHelper = async values => {
+export const setsAndRepsHelper = async values => {
   const [
     primaryExerciseId,
     secondaryExerciseId,
@@ -86,9 +88,35 @@ const setsAndRepsHelper = async values => {
       })),
     });
   }
-  console.log(fullWorkout);
+  // console.log(fullWorkout);
   return fullWorkout;
 };
+
+// const revalidateMyProgram = (url, jwt) => async dispatch => {
+//   console.log('revalidateMyProgram ran.');
+//   // console.log('url: ', url);
+//   // console.log('jwt: ', jwt);
+//   try {
+//     const res = await strapiAPI.get(url, {
+//       headers: {
+//         Authorization: `Bearer ${jwt}`,
+//       },
+//     });
+//     console.log('revalidateMyProgram res: ', res);
+
+//     const {
+//       data: { myPrograms },
+//     } = res;
+//     // console.log('myProgram: ', myPrograms);
+
+//     dispatch({
+//       type: REVALIDATE_MYPROGRAM,
+//       payload: myPrograms,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 /**
  * @description: Update user's weightlifting program.
@@ -107,7 +135,7 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
     users: [{ id: userId }],
   };
 
-  console.log(mapValues);
+  // console.log(mapValues);
 
   try {
     const res = await strapiAPI.post(`/my-programs`, mapValues, {
@@ -115,13 +143,70 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(res);
+    // console.log('res from createUserProgram: ', res);
     const { status, data } = res;
+
+    // if (data) {
+    //   // dispatch(revalidateMyProgram(`/users/${userId}`, jwt));
+    //   dispatch(revalidateMyProgram(jwt, userId));
+    // }
 
     dispatch({
       type: CREATE_USER_PROGRAM,
       payload: [status, data],
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
+  const query = `{
+    user(id: ${userId}) {
+      id
+      myPrograms{
+        scheduleExercise
+        thisDaysExercises {
+          exercise {
+            nameOfExercise
+          }
+          thisSetsAndReps {
+            sets
+            reps
+            weight
+            rpe
+            pct
+            toFailure
+            isWarmUp
+          }
+        }
+        isSuperSet
+        isTripleSet
+        
+      }
+    }
+  }`;
+
+  const graphqlClient = new GraphQLClient(url, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  try {
+    const res = await graphqlClient.request(query);
+    console.log('revalidateMyProgram res: ', res);
+
+    const {
+      user: { myPrograms },
+    } = res;
+
+    dispatch({
+      type: REVALIDATE_MYPROGRAM,
+      payload: myPrograms,
+    });
+
+    return myPrograms;
   } catch (error) {
     console.log(error);
   }
