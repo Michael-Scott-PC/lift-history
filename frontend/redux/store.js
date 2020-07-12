@@ -10,10 +10,12 @@ const initialState = {};
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ || compose;
 
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
+
 const store = createStore(
   rootReducer,
   initialState,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;

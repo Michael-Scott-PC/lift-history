@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import { Nav } from 'react-bootstrap';
-import BounceLoader from 'react-spinners/BounceLoader';
+import GridLoader from 'react-spinners/GridLoader';
 
 import RegisterForm from '../form/RegisterForm';
 import LoginForm from '../form/LoginForm';
@@ -25,7 +25,7 @@ const AuthModal = ({
       centered
     >
       {loading && (
-        <BounceLoader
+        <GridLoader
           color={'rgb(54, 215, 183)'}
           css="
           position: absolute;

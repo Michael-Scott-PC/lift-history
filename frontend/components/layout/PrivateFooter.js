@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
 
 import AddExerciseModal from '../modal/AddExerciseModal';
 import privateRoute from '../hocs/privateRoute';
@@ -18,6 +17,11 @@ const PrivateFooter = props => {
   const [showAddExModal, setShowAddExModal] = useState(false);
   const abbrMonth = getMonth(currentMonth);
   const abbrWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // current day comes back as a number, we need to convert it to a string &
+  // add a 0 before numbers 1-9 to match our routing params.
+  const currentDayStr = currentDay.toString();
+  const sanitizedCurrentDayStr =
+    currentDayStr.length < 2 ? `0${currentDayStr}` : currentDayStr;
 
   const getWeekdayAbbr = () => {
     let result;
@@ -51,7 +55,7 @@ const PrivateFooter = props => {
         />
         <Link
           href="/dashboard/[year]/[month]/[day]"
-          as={`/dashboard/${currentYear}/${abbrMonth}/${currentDay}`}
+          as={`/dashboard/${currentYear}/${abbrMonth}/${sanitizedCurrentDayStr}`}
         >
           <button className="currentDayBtn">
             <h5 className="currentDay">{currentWeekday}</h5>

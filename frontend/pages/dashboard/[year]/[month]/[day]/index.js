@@ -1,20 +1,30 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
-import Layout from '../../../../../components/layout/Layout';
 import CurrentWeekNav from '../../../../../components/navigation/CurrentWeekNav';
 import ExercisesForDay from '../../../../../components/exercise/ExercisesForDay';
 import privateRoute from '../../../../../components/hocs/privateRoute';
 
-import { getWeekRange } from '../../../../../utils/calendarUtils';
+import {
+  getWeekRange,
+  sanitizeDay,
+  weekdayWrapper,
+  getMonth,
+} from '../../../../../utils/calendarUtils';
 import { currentYear } from '../../../../../utils/currentDate';
 
+import abbrMonths from '../../../../../abbr-months.json';
+
 const DayView = props => {
-  // console.log('DayView props: ', props);
   const [currentWeek, setCurrentWeek] = useState([]);
-  // console.log('currentWeek: ', currentWeek);
+  const [currentMonth, setCurrentMonth] = useState('');
 
   useEffect(() => {
+    const abbrMonthIndex = abbrMonths.indexOf(props.remainingProps.month) + 1;
+    console.log('abbrMonthIndex: ', abbrMonthIndex);
+    const abbrMonthLink = getMonth(abbrMonthIndex);
+    setCurrentMonth(abbrMonthLink);
     if (props.remainingProps.day) {
       const weekRange = getWeekRange(
         props.remainingProps.month,
@@ -25,77 +35,70 @@ const DayView = props => {
   }, [props.remainingProps.day]);
 
   return (
-    <Layout>
-      <div id="day-view-container" style={{ display: 'grid' }}>
-        <h5 className="day-view-month-header" key={uuidv4()}>
-          {props.remainingProps.month}
-          <div className="day-header">
-            {props.remainingProps.day}, {currentYear}
-          </div>
-        </h5>
-        <CurrentWeekNav
-          currentYear={currentYear}
-          currentWeek={currentWeek}
-          day={props.remainingProps.day}
-          month={props.remainingProps.month}
-        />
-        <ExercisesForDay
-          day={props.remainingProps.day}
-          program={props.allPrograms}
-          selectedMonth={props.remainingProps.month}
-        />
-        <style jsx>
-          {`
-            #day-view-container {
-              width: 100%;
-              grid-template-columns: repeat(7, 1fr);
-            }
-            .day-view-month-header {
-              grid-column-start: 1;
-              grid-column-end: 8;
-              text-align: center;
-            }
-            .day-header {
-              display: inline;
-              margin-left: 0.5rem;
-            }
-          `}
-        </style>
-      </div>
-    </Layout>
+    <div id="day-view-container">
+      <Link
+        href="/dashboard/[year]/[month]"
+        as={`/dashboard/${currentYear}/${currentMonth}`}
+      >
+        <a className="back-to-month-view">&lt;&lt; {currentMonth}</a>
+      </Link>
+      <h5 className="day-view-month-header" key={uuidv4()}>
+        {props.remainingProps.month}
+        <div className="day-header">
+          {sanitizeDay(props.remainingProps.day)}, {currentYear}
+        </div>
+      </h5>
+      {props.remainingProps.day && weekdayWrapper('day-view')}
+      <CurrentWeekNav
+        currentYear={currentYear}
+        currentWeek={currentWeek}
+        day={props.remainingProps.day}
+        month={props.remainingProps.month}
+      />
+      <ExercisesForDay
+        day={props.remainingProps.day}
+        program={props.allPrograms}
+        selectedMonth={props.remainingProps.month}
+      />
+      <style jsx>
+        {`
+          #day-view-container {
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(7, 1fr);
+            margin-top: 2rem;
+          }
+          .back-to-month-view {
+            position: absolute;
+            width: 25%;
+            text-align: center;
+          }
+           {
+            /* .back-to-month-view {
+            grid-column-start: 1;
+            grid-column-end: 3;
+            text-align: center;
+          }
+          .day-view-month-header {
+            grid-column-start: 3;
+            grid-column-end: 8;
+            margin-left: 1.5rem;
+          } */
+          }
+          .day-view-month-header {
+            grid-column-start: 1;
+            grid-column-end: 8;
+            text-align: center;
+          }
+          .day-header {
+            display: inline;
+            margin-left: 0.5rem;
+          }
+        `}
+      </style>
+    </div>
   );
 };
-
-// const getAllDayIds = () => {
-//   const listOfDayIds = [
-//     '1',
-//     '2',
-//     '3',
-//     '4',
-//     '5',
-//     '6',
-//     '7',
-//     '8',
-//     '9',
-//     '10',
-//     '11',
-//     '12',
-//   ];
-//   return listOfDayIds.map(dayId => {
-//     return {
-//       params: {
-//         month: '10',
-//         day: dayId,
-//       },
-//     };
-//   });
-// };
-
-// export async function getStaticPaths() {
-//   const paths = getAllDayIds();
-//   console.log('pathsss from [day]: ', paths);
-//   return { paths, fallback: false };
-// }
 
 export async function getStaticPaths() {
   const paths = [];

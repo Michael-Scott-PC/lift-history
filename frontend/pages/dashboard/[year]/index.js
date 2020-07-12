@@ -1,8 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import Layout from '../../../components/layout/Layout';
-// import PrivateFooter from '../components/layout/PrivateFooter';
 import YearView from '../../../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../../../components/hocs/privateRoute';
 
@@ -18,7 +16,7 @@ const dashboard = ({ profile, allPrograms }) => {
   };
 
   return (
-    <Layout>
+    <>
       <YearView
         checkForDayView={checkForDayView}
         profile={profile}
@@ -48,8 +46,7 @@ const dashboard = ({ profile, allPrograms }) => {
           }
         `}
       </style>
-      {/* <PrivateFooter /> */}
-    </Layout>
+    </>
   );
 };
 

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Layout from '../components/layout/Layout';
-// import Alert from '../components/form/Alert';
 import BasicProfileInfoForm from '../components/form/BasicProfileInfoForm';
 
 import privateRoute from '../components/hocs/privateRoute';
@@ -35,7 +33,7 @@ const BasicProfileInfo = ({
   }, [profileId]);
 
   return (
-    <Layout>
+    <>
       <div
         id="basis-profile-info"
         style={{
@@ -49,7 +47,7 @@ const BasicProfileInfo = ({
         </h4>
         <BasicProfileInfoForm />
       </div>
-    </Layout>
+    </>
   );
 };
 

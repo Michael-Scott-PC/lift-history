@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
+import Button from '@material-ui/core/Button';
+import Link from 'next/link';
 import useSWR from 'swr';
 // import { request } from 'graphql-request';
-
-import Layout from '../../../../components/layout/Layout';
 
 import monthsAndDays from '../../../../months-and-days.json';
 import { getMonth, monthWrapper } from '../../../../utils/calendarUtils';
@@ -12,23 +11,6 @@ import { currentYear } from '../../../../utils/currentDate';
 import privateRoute from '../../../../components/hocs/privateRoute';
 
 const MonthView = props => {
-  // console.log('MonthView props: ', props);
-  // const fetcher = (url, query) => request(url, query);
-  // const { data, error } = useSWR(
-  //   [
-  //     'http://localhost:1337/graphql',
-  //     `{
-  //     exercises {
-  //       nameOfExercise
-  //     }
-  //   }`,
-  //   ],
-  //   fetcher
-  // );
-
-  // console.log(data);
-  // console.log(error);
-  // console.log('props line 10: ', props);
   const [monthHeader, setMonthHeader] = useState('');
   const [day, setDay] = useState('');
   const { allPrograms } = props;
@@ -56,30 +38,33 @@ const MonthView = props => {
     }
   }, []);
 
+  const backBtnStyle2 = {
+    backgroundColor: '#4a4949',
+    color: '#fff',
+    marginTop: '1rem',
+    marginLeft: '2rem',
+    marginBottom: '2rem',
+    fontSize: '0.75rem',
+    textTransform: 'capitalize',
+  };
+
   return (
-    <Layout>
-      <button onClick={() => Router.back()}>BACK</button>
-      <h1
-        className="year"
-        style={{
-          display: 'block',
-          width: '100%',
-          color: 'red',
-          marginTop: '2rem',
-          marginBottom: '3rem',
-          marginLeft: '.5rem',
-        }}
-      >
-        {currentYear}
-      </h1>
-      <div style={{ display: 'block', width: '100%' }}>
-        <div
+    <>
+      <div className="back-to-year-view-container">
+        <Link href="/dashboard/[year]" as={`/dashboard/${currentYear}`}>
+          <a className="back-to-year-view">&lt;&lt; {currentYear}</a>
+        </Link>
+        <h1 className="year">{currentYear}</h1>
+      </div>
+      <div style={{ display: 'block', width: '100%', marginTop: '1rem' }}>
+        {/* <div
           className="button-container"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(6, 1fr)',
             marginLeft: '1rem',
             marginRight: '1rem',
+            marginBottom: '1rem',
           }}
         >
           <h5 style={{ fontSize: '1rem', alignSelf: 'end' }}>Week: </h5>
@@ -89,15 +74,8 @@ const MonthView = props => {
           <button className="btn btn-primary m-1">3</button>
           <button className="btn btn-primary m-1">4</button>
           <button className="btn btn-primary m-1">5</button>
-        </div>
+        </div> */}
         <div id="selected-month-view">
-          {/* {monthHeader &&
-            monthWrapper(
-              'month-view',
-              handleDayClick,
-              monthHeader,
-              allPrograms
-            )} */}
           {props.remainingProps.month &&
             monthWrapper(
               'month-view',
@@ -108,13 +86,31 @@ const MonthView = props => {
         </div>
       </div>
       <style jsx>{`
+        .back-to-year-view-container {
+          display: grid;
+          width: 100%;
+          grid-template-columns: repeat(7, 1fr);
+          margin-top: 2rem;
+        }
+        .back-to-year-view {
+          position: absolute;
+          width: 25%;
+          text-align: center;
+          margin-top: 0.55rem;
+        }
+        .year {
+          color: red;
+          grid-column-start: 1;
+          grid-column-end: 8;
+          text-align: center;
+        }
         #selected-month-view {
           padding-left: 0.5rem;
           padding-right: 0.5rem;
           margin-bottom: 5rem;
         }
       `}</style>
-    </Layout>
+    </>
   );
 };
 
@@ -132,28 +128,6 @@ const getAllMonthIds = () => {
     }
   }
   return finalList;
-  // const listOfMonthIds = [
-  //   '1',
-  //   '2',
-  //   '3',
-  //   '4',
-  //   '5',
-  //   '6',
-  //   '7',
-  //   '8',
-  //   '9',
-  //   '10',
-  //   '11',
-  //   '12',
-  // ];
-
-  // return listOfMonthIds.map(monthId => {
-  //   return {
-  //     params: {
-  //       month: monthId,
-  //     },
-  //   };
-  // });
 };
 
 export async function getStaticPaths() {

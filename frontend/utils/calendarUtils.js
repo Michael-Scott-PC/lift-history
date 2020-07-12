@@ -1,5 +1,7 @@
 import css from 'styled-jsx/css';
 import { Fragment } from 'react';
+import Button from '@material-ui/core/Button';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -49,7 +51,7 @@ export const weekdayWrapper = classView => {
 
   weekdays.push(
     abbrWeekdays.map(day => (
-      <div className={`${classView}`} key={uuidv4()}>
+      <div className={`${classView} weekday`} key={uuidv4()}>
         {day}
         <style jsx>{weekdayStyle}</style>
       </div>
@@ -70,6 +72,15 @@ const weekdayStyle = css`
     font-size: 1rem;
     text-align: center;
   }
+  .month-view.weekday {
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .day-view {
+    text-align: center;
+    color: #576777;
+    margin-top: 1.5rem;
+  }
 `;
 
 /**
@@ -82,15 +93,17 @@ const weekdayStyle = css`
  * @param {Array} [program] - Contains a schedule of days with exercises.
  */
 export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
-  console.log('monthName: ', monthName);
-  console.log('monthIndex: ', monthIndex);
-  console.log('classView: ', classView);
-  console.log('allPrograms: ', allPrograms);
+  // console.log('monthName: ', monthName);
+  // console.log('monthIndex: ', monthIndex);
+  // console.log('classView: ', classView);
+  // console.log('allPrograms: ', allPrograms);
 
   let days = [];
   for (let monthDay of monthsAndDays[monthName]) {
     const [month, day] = monthDay;
-    // console.log(day);
+    // Even though the monthName argument is the abbreviated month, we need to account
+    // for days that belong to neighboring months.
+    const abbrMonth = getMonth(month);
 
     const dayId = uuidv4();
     if (classView === 'year-view') {
@@ -115,7 +128,7 @@ export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
       days.push(
         <Link
           href="/dashboard/[year]/[month]/[day]"
-          as={`/dashboard/${currentYear}/${monthName}/${day}`}
+          as={`/dashboard/${currentYear}/${abbrMonth}/${day}`}
           key={dayId}
         >
           <div>
@@ -188,6 +201,7 @@ const dayStyles = css`
  * @param {Array} [profile] - Contains the authenticated user's profile.
  */
 export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
+  // const classes = useStyles();
   // console.log('classView: ', classView);
   // console.log('fn: ', fn);
   // console.log('selectedMonth: ', selectedMonth);
@@ -201,15 +215,32 @@ export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
   // DETACH the 'year-view' html when 'month-view' is generated.
   if (selectedMonth) {
     const monthIndex = abbrMonths.indexOf(selectedMonth) + 1;
+    const prevMonth = getMonth(monthIndex - 1);
+    const nextMonth = getMonth(monthIndex + 1);
+
     monthArr.push(
       <div
         className={`month-container ${classView} `}
         key={uuidv4()}
         id={monthIndex}
       >
-        <button className="previous-btn">Previous Month</button>
+        <Link
+          href="/dashboard/[year]/[month]"
+          as={`/dashboard/${currentYear}/${prevMonth}`}
+        >
+          <CustomButton variant="outlined" style={prevBtnStyle}>
+            Prev Month
+          </CustomButton>
+        </Link>
         <h5 className="month-name text-center">{selectedMonth}</h5>
-        <button className="next-btn">Next Month</button>
+        <Link
+          href="/dashboard/[year]/[month]"
+          as={`/dashboard/${currentYear}/${nextMonth}`}
+        >
+          <CustomButton variant="outlined" style={nextBtnStyle}>
+            Next Month
+          </CustomButton>
+        </Link>
         {selectedMonth && weekdayWrapper(classView, fn)}
         {selectedMonth &&
           dayWrapper(selectedMonth, monthIndex, classView, allPrograms)}
@@ -220,6 +251,40 @@ export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
   }
 };
 
+const CustomButton = withStyles({
+  root: {
+    // background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)',
+    boxShadow: '0 1px 5px 1px rgba(33, 203, 243, 0.25)',
+    borderRadius: 4,
+    // color: 'white',
+    color: '#2196f3',
+    borderColor: 'rgba(33, 150, 243, 0.25)',
+    fontSize: '0.75rem',
+    paddingLeft: 0,
+    paddingRight: 0,
+    height: '55%',
+    alignSelf: 'center',
+    textTransform: 'capitalize',
+    '&:hover': {
+      boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .50)',
+    },
+    '&:focus': {
+      boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .70)',
+      outline: 'none',
+    },
+  },
+})(Button);
+
+const prevBtnStyle = {
+  gridColumnStart: 1,
+  gridColumnEnd: 3,
+};
+
+const nextBtnStyle = {
+  gridColumnStart: 6,
+  gridColumnEnd: 8,
+};
+
 const monthViewStyles = css`
   .month-view {
     display: grid;
@@ -228,20 +293,22 @@ const monthViewStyles = css`
     width: 100%;
     min-height: 50vh;
   }
-  .previous-btn {
+  /* 
+    Keep this in case I decide to put a container around weekdays.
+    .month-view .weekdayContainer {
     grid-column-start: 1;
-    grid-column-end: 3;
-  }
+    grid-column-end: 8;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(14%, 1fr));
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+  } */
   .month-name {
     /* grid-column-start: 1;
     grid-column-end: 8; */
     grid-column-start: 3;
     grid-column-end: 6;
     align-self: center;
-  }
-  .next-btn {
-    grid-column-start: 6;
-    grid-column-end: 8;
   }
 `;
 
@@ -333,26 +400,35 @@ export const getMonthIndex = month => {
   return monthIndexStr;
 };
 
-/**
- * @description: Remove any zero in the range 01-09 from the days in
- * monthAndDays so we can compare it to the selectedDay (
- * this gets passed to getWeekRange).
- * We're doing the reverse of what I did in getMonthIndex
- * because eventually the selected week range will return
- * the numbers to be rendered. Rather than remove
- * the zeros in the jsx, I decided to do it here.
- * @param {string} month
- */
-const sanitizeDays = month => {
-  let sanitizedDays = [];
+// /**
+//  * @description: Remove any zero in the range 01-09 from the days in
+//  * monthAndDays so we can compare it to the selectedDay (
+//  * this gets passed to getWeekRange).
+//  * We're doing the reverse of what I did in getMonthIndex
+//  * because eventually the selected week range will return
+//  * the numbers to be rendered. Rather than remove
+//  * the zeros in the jsx, I decided to do it here.
+//  * @param {string} month
+//  */
+// const sanitizeDays = month => {
+//   console.log('sanitizeDays month: ', month);
+//   let sanitizedDays = [];
+//   for (let subList of monthsAndDays[month]) {
+//     if (subList[1].charAt(0) === '0') {
+//       sanitizedDays.push([subList[0], subList[1].substr(1)]);
+//     } else {
+//       sanitizedDays.push([subList[0], subList[1]]);
+//     }
+//   }
+//   return sanitizedDays;
+// };
+
+const getMonthDays = month => {
+  let allDaysInMonth = [];
   for (let subList of monthsAndDays[month]) {
-    if (subList[1].charAt(0) === '0') {
-      sanitizedDays.push([subList[0], subList[1].substr(1)]);
-    } else {
-      sanitizedDays.push([subList[0], subList[1]]);
-    }
+    allDaysInMonth.push(subList);
   }
-  return sanitizedDays;
+  return allDaysInMonth;
 };
 
 /**
@@ -363,15 +439,20 @@ const sanitizeDays = month => {
  * @param {string} selectedDay - The selected day.
  */
 export const getWeekRange = (month, selectedDay) => {
+  // console.log('getWeekRange month: ', month);
+  // console.log('getWeekRange selectedDay: ', selectedDay);
   const monthIndexStr = getMonthIndex(month);
-  const sanitizedDays = sanitizeDays(month);
+  const monthDays = getMonthDays(month);
+  // console.log('monthDays: ', monthDays);
+  // const sanitizedDays = sanitizeDays(month);
+  // console.log('sanitizedDays: ', sanitizedDays);
 
   let weeks = [];
   let week = [];
 
   let index = 0;
-  while (index < sanitizedDays.length) {
-    weeks.push(sanitizedDays.slice(index, index + 7));
+  while (index < monthDays.length) {
+    weeks.push(monthDays.slice(index, index + 7));
     index += 7;
   }
 
@@ -382,7 +463,20 @@ export const getWeekRange = (month, selectedDay) => {
       }
     }
   }
+  // console.log('week: ', week);
   return week;
+};
+
+export const sanitizeDay = day => {
+  // console.log('sanitizeDay day: ', day);
+  let sanitizedDay = [];
+  if (day.charAt(0) === '0') {
+    sanitizedDay.push([day.substr(1)]);
+  } else {
+    sanitizedDay.push([day]);
+  }
+  // console.log('sanitizedDay: ', sanitizedDay);
+  return sanitizedDay;
 };
 
 /**
@@ -392,9 +486,14 @@ export const getWeekRange = (month, selectedDay) => {
  * @param {string} day - The selected weekday num.
  */
 export const renderWeekHelper = (weekRangeArr, day, month) => {
+  // console.log('weekRangeArr: ', weekRangeArr);
+  // console.log('day: ', day);
+  // console.log('month: ', month);
   let weekJsx = [];
   for (let item of weekRangeArr) {
     for (let i of item) {
+      // Even though the month argument is the abbreviate month, we need to account
+      // for days that belong to neighboring months.
       const abbrMonth = getMonth(i[0]);
       if (i[1] === day) {
         weekJsx.push(
@@ -403,12 +502,8 @@ export const renderWeekHelper = (weekRangeArr, day, month) => {
             as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
             key={uuidv4()}
           >
-            <div
-              className="day-view-weekdays selected-day"
-              key={uuidv4()}
-              // onClick={() => setDay(i[1])}
-            >
-              {i[1]}
+            <div className="day-view-weekdays selected-day" key={uuidv4()}>
+              {sanitizeDay(i[1])}
               <style jsx>{selectedDayStyles}</style>
             </div>
           </Link>
@@ -420,12 +515,8 @@ export const renderWeekHelper = (weekRangeArr, day, month) => {
             as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
             key={uuidv4()}
           >
-            <div
-              className="day-view-weekdays"
-              key={uuidv4()}
-              // onClick={() => setDay(i[1])}
-            >
-              {i[1]}
+            <div className="day-view-weekdays" key={uuidv4()}>
+              {sanitizeDay(i[1])}
               <style jsx>{dayViewStyles}</style>
             </div>
           </Link>

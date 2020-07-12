@@ -161,6 +161,8 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
 };
 
 export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
+  console.log('userId: ', userId);
+  console.log('jwt: ', jwt);
   const query = `{
     user(id: ${userId}) {
       id
@@ -195,7 +197,7 @@ export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
 
   try {
     const res = await graphqlClient.request(query);
-    console.log('revalidateMyProgram res: ', res);
+    // console.log('revalidateMyProgram res: ', res);
 
     const {
       user: { myPrograms },

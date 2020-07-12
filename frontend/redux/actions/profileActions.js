@@ -101,7 +101,7 @@ export const updateProfile = (
         payload: data,
       });
 
-      Router.push('/dashboard');
+      Router.push('/dashboard/[year]', `/dashboard/${currentYear}`);
     }
   } catch (error) {
     dispatch({

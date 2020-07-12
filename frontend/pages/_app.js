@@ -4,9 +4,11 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import { createWrapper } from 'next-redux-wrapper';
 
+import Layout from '../components/layout/Layout';
+
 function MyApp({ Component, pageProps }) {
   return (
-    <>
+    <Layout>
       <Component {...pageProps} />
       <style jsx global>{`
         html,
@@ -26,7 +28,7 @@ function MyApp({ Component, pageProps }) {
           box-sizing: border-box;
         }
       `}</style>
-    </>
+    </Layout>
   );
 }
 
