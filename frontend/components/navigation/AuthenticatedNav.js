@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 import SquatLogo from './SquatLogo';
 import SettingsModal from '../modal/SettingsModal';
-import privateRoute from '../hocs/privateRoute';
 
 const AuthenticatedNav = props => {
   const [show, setShow] = useState(false);
@@ -41,4 +40,4 @@ const AuthenticatedNav = props => {
 
 AuthenticatedNav.propTypes = {};
 
-export default privateRoute(AuthenticatedNav);
+export default AuthenticatedNav;

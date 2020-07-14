@@ -90,7 +90,9 @@ export const loginUser = values => async dispatch => {
     Router.push('/dashboard/[year]', `/dashboard/${currentYear}`);
   } catch (error) {
     console.log(error);
-
+    dispatch({
+      type: TOGGLE_LOADING,
+    });
     dispatch(setAlert('Incorrect username or password.', 'danger'));
 
     dispatch({

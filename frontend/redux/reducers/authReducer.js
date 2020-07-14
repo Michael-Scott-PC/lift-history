@@ -25,7 +25,6 @@ export default function (state = initialState, action) {
     // case HYDRATE:
     //   return {
     //     ...state,
-    //     ...payload,
     //   };
     case TOGGLE_LOADING:
       return {

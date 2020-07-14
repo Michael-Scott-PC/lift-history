@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 
@@ -10,56 +11,47 @@ import {
   getWeekRange,
   sanitizeDay,
   weekdayWrapper,
-  getMonth,
 } from '../../../../../utils/calendarUtils';
 import { currentYear } from '../../../../../utils/currentDate';
 
-import abbrMonths from '../../../../../abbr-months.json';
-
 const DayView = props => {
+  // console.log('DayView props: ', props);
+  const {
+    month,
+    day,
+    programReducer: { allPrograms },
+  } = props.remainingProps;
   const [currentWeek, setCurrentWeek] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState('');
 
   useEffect(() => {
-    const abbrMonthIndex = abbrMonths.indexOf(props.remainingProps.month) + 1;
-    console.log('abbrMonthIndex: ', abbrMonthIndex);
-    const abbrMonthLink = getMonth(abbrMonthIndex);
-    setCurrentMonth(abbrMonthLink);
-    if (props.remainingProps.day) {
-      const weekRange = getWeekRange(
-        props.remainingProps.month,
-        props.remainingProps.day
-      );
+    if (day) {
+      const weekRange = getWeekRange(month, day);
       setCurrentWeek(weekRange);
     }
-  }, [props.remainingProps.day]);
+  }, [day]);
 
   return (
     <div id="day-view-container">
       <Link
         href="/dashboard/[year]/[month]"
-        as={`/dashboard/${currentYear}/${currentMonth}`}
+        as={`/dashboard/${currentYear}/${month}`}
       >
-        <a className="back-to-month-view">&lt;&lt; {currentMonth}</a>
+        <a className="back-to-month-view">&lt;&lt; {month}</a>
       </Link>
       <h5 className="day-view-month-header" key={uuidv4()}>
-        {props.remainingProps.month}
+        {month}
         <div className="day-header">
-          {sanitizeDay(props.remainingProps.day)}, {currentYear}
+          {sanitizeDay(day)}, {currentYear}
         </div>
       </h5>
-      {props.remainingProps.day && weekdayWrapper('day-view')}
+      {day && weekdayWrapper('day-view')}
       <CurrentWeekNav
         currentYear={currentYear}
         currentWeek={currentWeek}
-        day={props.remainingProps.day}
-        month={props.remainingProps.month}
+        day={day}
+        month={month}
       />
-      <ExercisesForDay
-        day={props.remainingProps.day}
-        program={props.allPrograms}
-        selectedMonth={props.remainingProps.month}
-      />
+      <ExercisesForDay day={day} program={allPrograms} selectedMonth={month} />
       <style jsx>
         {`
           #day-view-container {
@@ -106,10 +98,6 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  console.log('context, index[day].js: ', context);
-  // console.log('params, line 120: ', context.params);
-  // All of the data has already been received upon login
-  // The parms.month is passed to the page in order to be passed to getMonth function
   return {
     props: {
       context: context,
@@ -119,4 +107,10 @@ export async function getStaticProps(context) {
   };
 }
 
-export default privateRoute(DayView);
+const mapStateToProps = state => ({
+  programReducer: state.programReducer,
+});
+
+const AuthenticatedDayView = privateRoute(DayView);
+
+export default connect(mapStateToProps, {})(AuthenticatedDayView);

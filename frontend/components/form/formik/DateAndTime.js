@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 
 const DateAndTime = ({
   time,
+  enableTime,
   values,
   setLocalPickDate,
   pickDateErrors,
@@ -20,7 +21,7 @@ const DateAndTime = ({
       <Field
         as={FormCheck}
         type="checkbox"
-        name="time"
+        name="enableTime"
         label="Include time"
         style={{ gridColumn: '1 / 13', marginTop: '2rem' }}
       />
@@ -31,14 +32,14 @@ const DateAndTime = ({
         style={{
           marginTop: '1rem',
           marginBottom: pickDateErrors && touched.pickDate ? '0' : '2rem',
-          gridColumn: time ? '1 / 7' : '1 / 13',
+          gridColumn: enableTime ? '1 / 7' : '1 / 13',
         }}
         label="Pick a date:"
         InputLabelProps={{
           shrink: true,
         }}
       />
-      {time && (
+      {enableTime && (
         <Field
           as={TextField}
           type="time"
@@ -55,7 +56,7 @@ const DateAndTime = ({
 };
 
 DateAndTime.propTypes = {
-  time: PropTypes.bool.isRequired,
+  enableTime: PropTypes.bool.isRequired,
 };
 
 export default DateAndTime;

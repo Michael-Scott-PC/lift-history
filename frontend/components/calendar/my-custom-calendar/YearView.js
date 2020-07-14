@@ -1,20 +1,22 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Months from './Months';
 
 import { highlightCurrentDay } from '../../../utils/calendarUtils';
 
-const YearView = ({ profile, program }) => {
-  // console.log(props);
+const YearView = ({ profile }) => {
+  // console.log('YearView profile: ', profile);
+
   useEffect(() => {
     highlightCurrentDay();
   }, []);
 
   return (
-    <Fragment>
+    <>
       <div id="custom-year-container">
-        <Months profile={profile} program={program} />
+        {/* {highlightCurrentDay()} */}
+        <Months profile={profile} />
       </div>
 
       <style jsx>{`
@@ -25,7 +27,7 @@ const YearView = ({ profile, program }) => {
           margin-bottom: 5rem;
         }
       `}</style>
-    </Fragment>
+    </>
   );
 };
 

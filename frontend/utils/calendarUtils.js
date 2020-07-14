@@ -6,25 +6,11 @@ import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 
 import abbrWeekdays from '../abbr-weekdays.json';
+import abbrMonths from '../abbr-months.json';
 import monthsAndDays from '../months-and-days.json';
 
 import { renderSelectedMonthProgram } from './scheduleUtils';
 import { currentYear, currentMonth, currentDay } from './currentDate';
-
-const abbrMonths = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
 
 // TODO: this needs to be fixed.
 export const highlightCurrentDay = () => {
@@ -44,7 +30,6 @@ export const highlightCurrentDay = () => {
 /**
  * @description: Wrap each weekday (Mo, Tu, etc.) in a div.
  * @param {string} classView - Adds a class depending on calendar view.
- * @param {requestCallback} handleMonthClick - Render the selected month's data.
  */
 export const weekdayWrapper = classView => {
   let weekdays = [];
@@ -87,17 +72,17 @@ const weekdayStyle = css`
  * @description: Wrap each individual numerical day in a div.
  * @param {string} monthName - The selected month name, e.g. 'Jan'.
  * @param {number} monthIndex - The index of the selected month.
- * @param {Objct} monthsAndDays - Object containing the month and corresponding days in mm/dd format.
- * @param {callbackFunction} handleMonthClick - Render the selected month's data.
  * @param {string} classView - Adds a class depending on calendar view.
- * @param {Array} [program] - Contains a schedule of days with exercises.
+ * @param {Array.<Object>} [allProgram] - Contains the myPrograms res from login that gets stored in allPrograms in programReducer.
+ * @param {Array.<Object>} [dataSWR] - Replaces the myPrograms data stored in allProgram that will be used for 'Optimistic UI'.
  */
-export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
-  // console.log('monthName: ', monthName);
-  // console.log('monthIndex: ', monthIndex);
-  // console.log('classView: ', classView);
-  // console.log('allPrograms: ', allPrograms);
-
+export const dayWrapper = (
+  monthName,
+  monthIndex,
+  classView,
+  allPrograms,
+  dataSWR
+) => {
   let days = [];
   for (let monthDay of monthsAndDays[monthName]) {
     const [month, day] = monthDay;
@@ -118,7 +103,8 @@ export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
           >
             {day[0] === '0' ? day[1] : day}
 
-            {allPrograms && renderSelectedMonthProgram(allPrograms, month, day)}
+            {allPrograms &&
+              renderSelectedMonthProgram(allPrograms, month, day, dataSWR)}
           </div>
           <style jsx>{dayStyles}</style>
         </Fragment>
@@ -142,7 +128,7 @@ export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
               {day[0] === '0' ? day[1] : day}
 
               {allPrograms &&
-                renderSelectedMonthProgram(allPrograms, month, day)}
+                renderSelectedMonthProgram(allPrograms, month, day, dataSWR)}
             </div>
             <style jsx>{dayStyles}</style>
           </div>
@@ -150,7 +136,6 @@ export const dayWrapper = (monthName, monthIndex, classView, allPrograms) => {
       );
     }
   }
-  // const finalDays = [<Fragment>{days}</Fragment>];
   return days;
 };
 
@@ -195,24 +180,18 @@ const dayStyles = css`
  * @description: Wrap the selected month in a div with weekdays and
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
- * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
- * @param {bool} show - Controls the display property of different elements/views.
- * @param {string} [selectedMonth] - Contains the selected month if selected.
- * @param {Array} [profile] - Contains the authenticated user's profile.
+ * @param {string} selectedMonth - Contains the selected month.
+ * @param {Array.<Object>} [allProgram] - Contains the myPrograms res from login that gets stored in allPrograms in programReducer.
+ * @param {Array.<Object>} [dataSWR] - Replaces the myPrograms data stored in allProgram that will be used for 'Optimistic UI'.
  */
-export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
-  // const classes = useStyles();
-  // console.log('classView: ', classView);
-  // console.log('fn: ', fn);
-  // console.log('selectedMonth: ', selectedMonth);
-  // console.log('program: ', program);
+export const monthWrapper = (
+  classView,
+  selectedMonth,
+  allPrograms,
+  dataSWR
+) => {
   let monthArr = [];
 
-  // TODO: the Ids need to be fixed. Display 'none' only hides
-  // the 'year-view', which means when the 'month-view' html
-  // is generated, we have duplicate month Ids - the selected month
-  // and the original from the 'year-view'. Possible solution:
-  // DETACH the 'year-view' html when 'month-view' is generated.
   if (selectedMonth) {
     const monthIndex = abbrMonths.indexOf(selectedMonth) + 1;
     const prevMonth = getMonth(monthIndex - 1);
@@ -241,9 +220,15 @@ export const monthWrapper = (classView, fn, selectedMonth, allPrograms) => {
             Next Month
           </CustomButton>
         </Link>
-        {selectedMonth && weekdayWrapper(classView, fn)}
+        {selectedMonth && weekdayWrapper(classView)}
         {selectedMonth &&
-          dayWrapper(selectedMonth, monthIndex, classView, allPrograms)}
+          dayWrapper(
+            selectedMonth,
+            monthIndex,
+            classView,
+            allPrograms,
+            dataSWR
+          )}
         <style jsx>{monthViewStyles}</style>
       </div>
     );
@@ -316,8 +301,6 @@ const monthViewStyles = css`
  * @description: Wrap each individual month in a div with weekdays and
  * corresponding days.
  * @param {string} classView - Adds a class depending on calendar view.
- * @param {requestCallback} fn - Different calendar views will have different click event callbacks.
- * @param {bool} show - Controls the display property of different elements/views.
  */
 export const allMonthsWrapper = classView => {
   let monthsArr = [];
@@ -370,17 +353,12 @@ const allMonthsStyles = css`
  * Convert the string id to an integer, then get the
  * string month abbreviation.
  * @param {string} month - The selected month.
- * @param {requestCallback} setMonthHeader - The callback
- * to update the state in MonthView.js.
+
  */
-export const getMonth = (month, setMonthHeader) => {
+export const getMonth = month => {
   const num = parseInt(month);
   const monthHeader = abbrMonths[num - 1];
-  if (setMonthHeader) {
-    setMonthHeader(monthHeader);
-  } else {
-    return monthHeader;
-  }
+  return monthHeader;
 };
 
 /**
@@ -423,6 +401,10 @@ export const getMonthIndex = month => {
 //   return sanitizedDays;
 // };
 
+/**
+ * @description - Retrieves the month's corresponding days.
+ * @param {string} month - The month name (e.g. 'Feb')
+ */
 const getMonthDays = month => {
   let allDaysInMonth = [];
   for (let subList of monthsAndDays[month]) {
@@ -439,13 +421,8 @@ const getMonthDays = month => {
  * @param {string} selectedDay - The selected day.
  */
 export const getWeekRange = (month, selectedDay) => {
-  // console.log('getWeekRange month: ', month);
-  // console.log('getWeekRange selectedDay: ', selectedDay);
   const monthIndexStr = getMonthIndex(month);
   const monthDays = getMonthDays(month);
-  // console.log('monthDays: ', monthDays);
-  // const sanitizedDays = sanitizeDays(month);
-  // console.log('sanitizedDays: ', sanitizedDays);
 
   let weeks = [];
   let week = [];
@@ -463,32 +440,30 @@ export const getWeekRange = (month, selectedDay) => {
       }
     }
   }
-  // console.log('week: ', week);
   return week;
 };
 
+/**
+ * @description - The day comes in as a string (e.g. '01', '02', and so on) and sometimes we need to remove the 0.
+ * @param {string} day - The day being sanitized.
+ */
 export const sanitizeDay = day => {
-  // console.log('sanitizeDay day: ', day);
   let sanitizedDay = [];
   if (day.charAt(0) === '0') {
     sanitizedDay.push([day.substr(1)]);
   } else {
     sanitizedDay.push([day]);
   }
-  // console.log('sanitizedDay: ', sanitizedDay);
   return sanitizedDay;
 };
 
 /**
  * @description: Render the corresponding weekday numbers that go with a selected weekday num.
- * @param {string} fullMonthName - The full month name.
- * @param {Array} [weekRangeArr] - Array containing all 7 weekday nums (typeof string) that form a complete week when a single weekday num is clicked.
+ * @param {Array.<Array.<string><string>>} weekRangeArr - Array containing mm/dd pairs that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
-export const renderWeekHelper = (weekRangeArr, day, month) => {
-  // console.log('weekRangeArr: ', weekRangeArr);
-  // console.log('day: ', day);
-  // console.log('month: ', month);
+export const renderWeekHelper = (weekRangeArr, day) => {
+  console.log('weekRangeArr: ', weekRangeArr);
   let weekJsx = [];
   for (let item of weekRangeArr) {
     for (let i of item) {

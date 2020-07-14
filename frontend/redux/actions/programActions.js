@@ -1,4 +1,4 @@
-import { request, GraphQLClient } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
 
 import strapiAPI from '../../api/strapiAPI';
 import { CREATE_USER_PROGRAM, REVALIDATE_MYPROGRAM } from './types';
@@ -43,18 +43,27 @@ const getExerciseIds = async values => {
  * @description: The returned list becomes the value for thisDaysExercises property in
  * mapValues object in createUserProgram function.
  * @param {Object} values - Values from the AddExerciseFormik form.
+ * @param {bool} getExerciseId - Determines if we need to execute getExerciseIds function.
  */
-export const setsAndRepsHelper = async values => {
-  const [
-    primaryExerciseId,
-    secondaryExerciseId,
-    thirdExerciseId,
-  ] = await getExerciseIds(values);
+export const setsAndRepsHelper = async (values, getExerciseId) => {
+  // In order to successfully create or update 'myProgram', the exercise ID must be passed in the object
+  // However, in order to mutate our UI with SWR, we need the exercise name, not the ID. The getExerciseId
+  // param allows us to control which value is passed to 'exercise' so we don't break the rendering logic.
+  let primaryExerciseId, secondaryExerciseId, thirdExerciseId;
+  if (getExerciseId) {
+    [
+      primaryExerciseId,
+      secondaryExerciseId,
+      thirdExerciseId,
+    ] = await getExerciseIds(values);
+  }
 
   const fullWorkout = [];
   if (values.primaryExercise) {
     fullWorkout.push({
-      exercise: { id: primaryExerciseId },
+      exercise: !getExerciseId
+        ? { nameOfExercise: values.primaryExercise }
+        : { id: primaryExerciseId },
       thisSetsAndReps: values.primarySetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -66,7 +75,9 @@ export const setsAndRepsHelper = async values => {
   }
   if (values.secondaryExercise) {
     fullWorkout.push({
-      exercise: { id: secondaryExerciseId },
+      exercise: !getExerciseId
+        ? { nameOfExercise: values.secondaryExercise }
+        : { id: secondaryExerciseId },
       thisSetsAndReps: values.secondarySetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -78,7 +89,9 @@ export const setsAndRepsHelper = async values => {
   }
   if (values.thirdExercise) {
     fullWorkout.push({
-      exercise: { id: thirdExerciseId },
+      exercise: !getExerciseId
+        ? { nameOfExercise: values.thirdExercise }
+        : { id: thirdExerciseId },
       thisSetsAndReps: values.thirdSetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -88,35 +101,9 @@ export const setsAndRepsHelper = async values => {
       })),
     });
   }
-  // console.log(fullWorkout);
+  console.log('fullWorkout: ', fullWorkout);
   return fullWorkout;
 };
-
-// const revalidateMyProgram = (url, jwt) => async dispatch => {
-//   console.log('revalidateMyProgram ran.');
-//   // console.log('url: ', url);
-//   // console.log('jwt: ', jwt);
-//   try {
-//     const res = await strapiAPI.get(url, {
-//       headers: {
-//         Authorization: `Bearer ${jwt}`,
-//       },
-//     });
-//     console.log('revalidateMyProgram res: ', res);
-
-//     const {
-//       data: { myPrograms },
-//     } = res;
-//     // console.log('myProgram: ', myPrograms);
-
-//     dispatch({
-//       type: REVALIDATE_MYPROGRAM,
-//       payload: myPrograms,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 /**
  * @description: Update user's weightlifting program.
@@ -127,15 +114,14 @@ export const setsAndRepsHelper = async values => {
 export const createUserProgram = (jwt, id, values) => async dispatch => {
   const userId = id;
 
+  const getExerciseId = true;
   const mapValues = {
     scheduleExercise: values.pickDate,
     isSuperSet: values.isSuperSet,
     isTripleSet: values.isTripleSet,
-    thisDaysExercises: await setsAndRepsHelper(values),
+    thisDaysExercises: await setsAndRepsHelper(values, getExerciseId),
     users: [{ id: userId }],
   };
-
-  // console.log(mapValues);
 
   try {
     const res = await strapiAPI.post(`/my-programs`, mapValues, {
@@ -146,11 +132,6 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
     // console.log('res from createUserProgram: ', res);
     const { status, data } = res;
 
-    // if (data) {
-    //   // dispatch(revalidateMyProgram(`/users/${userId}`, jwt));
-    //   dispatch(revalidateMyProgram(jwt, userId));
-    // }
-
     dispatch({
       type: CREATE_USER_PROGRAM,
       payload: [status, data],
@@ -160,9 +141,17 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
   }
 };
 
+/**
+ * @description: This revalidates the users 'myPrograms' to ensure the client UI reflects their DB data.
+ * @param {string} url - the backend Strapi CMS graphql endpoint.
+ * @param {string} jwt - User's jwt.
+ * @param {number} userId - User's id.
+ */
 export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
-  console.log('userId: ', userId);
-  console.log('jwt: ', jwt);
+  // console.log('revalidateMyProgram ran.');
+  // console.log('url: ', url);
+  // console.log('jwt: ', jwt);
+  // console.log('userId: ', userId);
   const query = `{
     user(id: ${userId}) {
       id

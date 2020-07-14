@@ -62,7 +62,7 @@ const Options = ({
 Options.propTypes = {
   pct: PropTypes.bool.isRequired,
   rpe: PropTypes.bool.isRequired,
-  resetForm: PropTypes.func.isRequired,
+  values: PropTypes.object.isRequired,
   setLocalIsSuperSet: PropTypes.func.isRequired,
   setLocalIsTripleSet: PropTypes.func.isRequired,
   localIsSuperSet: PropTypes.bool.isRequired,

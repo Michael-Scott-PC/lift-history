@@ -1,52 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
 import Link from 'next/link';
-import useSWR from 'swr';
-// import { request } from 'graphql-request';
 
 import monthsAndDays from '../../../../months-and-days.json';
-import { getMonth, monthWrapper } from '../../../../utils/calendarUtils';
+import { monthWrapper } from '../../../../utils/calendarUtils';
 import { currentYear } from '../../../../utils/currentDate';
+import { revalidateMyProgram } from '../../../../redux/actions/programActions';
 import privateRoute from '../../../../components/hocs/privateRoute';
 
 const MonthView = props => {
+  // console.log('MonthView props: ', props);
   const [monthHeader, setMonthHeader] = useState('');
-  const [day, setDay] = useState('');
-  const { allPrograms } = props;
-
-  const handleDayClick = e => {
-    if (
-      parseInt(e.target.parentNode.innerText[1]) ||
-      parseInt(e.target.parentNode.innerText[1]) === 0
-    ) {
-      console.log('this shouldnt run');
-      const day =
-        e.target.parentNode.innerText[0] + e.target.parentNode.innerText[1];
-      setDay(day);
-      setShow(false);
-      return;
-    }
-    const day = e.target.parentNode.innerText[0];
-    setDay(day);
-    setShow(false);
-  };
+  const {
+    dataSWR,
+    authReducer: { jwt, id: userId },
+    remainingProps: {
+      month,
+      programReducer: { allPrograms },
+    },
+  } = props;
 
   useEffect(() => {
-    if (props.remainingProps.month) {
-      getMonth(props.remainingProps.month, setMonthHeader);
+    console.log('[month]/index.js useEffect ran.');
+    if (month) {
+      setMonthHeader(month);
     }
-  }, []);
+  }, [month, dataSWR]);
 
-  const backBtnStyle2 = {
-    backgroundColor: '#4a4949',
-    color: '#fff',
-    marginTop: '1rem',
-    marginLeft: '2rem',
-    marginBottom: '2rem',
-    fontSize: '0.75rem',
-    textTransform: 'capitalize',
-  };
+  // const { data: dataSWR, error, isValidating } = useSWR(
+  //   [`${process.env.strapiAPI}/graphql`, jwt, userId],
+  //   (url, jwt, userId) => revalidateMyProgram(url, jwt, userId)
+  // );
+  // console.log('dataSWR: ', dataSWR);
 
   return (
     <>
@@ -57,32 +42,10 @@ const MonthView = props => {
         <h1 className="year">{currentYear}</h1>
       </div>
       <div style={{ display: 'block', width: '100%', marginTop: '1rem' }}>
-        {/* <div
-          className="button-container"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(6, 1fr)',
-            marginLeft: '1rem',
-            marginRight: '1rem',
-            marginBottom: '1rem',
-          }}
-        >
-          <h5 style={{ fontSize: '1rem', alignSelf: 'end' }}>Week: </h5>
-
-          <button className="btn btn-primary m-1">1</button>
-          <button className="btn btn-primary m-1">2</button>
-          <button className="btn btn-primary m-1">3</button>
-          <button className="btn btn-primary m-1">4</button>
-          <button className="btn btn-primary m-1">5</button>
-        </div> */}
         <div id="selected-month-view">
-          {props.remainingProps.month &&
-            monthWrapper(
-              'month-view',
-              handleDayClick,
-              props.remainingProps.month,
-              allPrograms
-            )}
+          {monthHeader &&
+            monthHeader === month &&
+            monthWrapper('month-view', monthHeader, allPrograms, dataSWR)}
         </div>
       </div>
       <style jsx>{`
@@ -137,8 +100,6 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  console.log('context, index[month].js: ', context);
-  // console.log('params, line 120: ', context.params);
   // All of the data has already been received upon login
   // The parms.month is passed to the page in order to be passed to getMonth function
   return {
@@ -149,10 +110,41 @@ export async function getStaticProps(context) {
   };
 }
 
-// const mapStateToProps = state => ({
-//   programReducer: state.programReducer,
-// });
+const mapStateToProps = state => ({
+  programReducer: state.programReducer,
+});
 
-// export default connect(mapStateToProps, {})(MonthView);
+const AuthenticatedMonthView = privateRoute(MonthView);
 
-export default privateRoute(MonthView);
+export default connect(mapStateToProps, { revalidateMyProgram })(
+  AuthenticatedMonthView
+);
+
+// KEEP for later testing
+// const testObj = {
+//   scheduleExercise: '2020-07-30T04:00:00.000Z',
+//   thisDaysExercises: [
+//     {
+//       exercise: {
+//         nameOfExercise: 'Squat',
+//       },
+//       thisSetsAndReps: [
+//         {
+//           sets: 1,
+//           reps: 10,
+//           weight: 135,
+//           rpe: 0,
+//           pct: null,
+//           toFailure: null,
+//           isWarmUp: null,
+//         },
+//       ],
+//     },
+//   ],
+//   isSuperSet: false,
+//   isTripleSet: false,
+// };
+
+// if (dataSWR) {
+//   dataSWR.push(testObj);
+// }

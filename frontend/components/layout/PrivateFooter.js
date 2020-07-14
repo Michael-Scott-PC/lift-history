@@ -14,6 +14,7 @@ import {
 import { getMonth } from '../../utils/calendarUtils';
 
 const PrivateFooter = props => {
+  // console.log('PrivateFooter props: ', props);
   const [showAddExModal, setShowAddExModal] = useState(false);
   const abbrMonth = getMonth(currentMonth);
   const abbrWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

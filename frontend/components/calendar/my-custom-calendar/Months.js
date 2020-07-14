@@ -1,41 +1,17 @@
-import css from 'styled-jsx/css';
-import React, { Fragment, useState, useEffect } from 'react';
-import Router from 'next/router';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import MonthView from './MonthView';
-// import NewMonthView from '../../../pages/dashboard/[month]';
 
 import { allMonthsWrapper } from '../../../utils/calendarUtils';
 import { currentYear } from '../../../utils/currentDate';
 
-const Months = ({ profile, program }) => {
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [showMonths, setShowMonths] = useState(true);
-
-  // const handleMonthClick = e => {
-  //   const elId = e.target.parentNode.id;
-
-  //   setShowMonths(false);
-
-  //   setSelectedMonth(elId);
-  // };
-
-  // useEffect(() => {
-  //   // highlightCurrentDay();
-  //   if (selectedMonth) {
-  //     Router.push(`/dashboard/${selectedMonth}`);
-  //   }
-  // }, [selectedMonth]);
-
+const Months = () => {
   return (
-    <Fragment>
+    <>
       <h1
         className="year"
         style={{
-          display: showMonths ? 'block' : 'none',
+          display: 'block',
           width: '100%',
           color: 'red',
           marginBottom: '3rem',
@@ -44,17 +20,8 @@ const Months = ({ profile, program }) => {
       >
         {currentYear}
       </h1>
-      {/* {!selectedMonth &&
-        allMonthsWrapper('year-view', handleMonthClick, showMonths)} */}
-      {!selectedMonth && allMonthsWrapper('year-view', showMonths)}
-      {/* {selectedMonth && (
-        <MonthView
-          selectedMonth={selectedMonth}
-          profile={profile}
-          program={program}
-        />
-      )} */}
-    </Fragment>
+      {allMonthsWrapper('year-view')}
+    </>
   );
 };
 

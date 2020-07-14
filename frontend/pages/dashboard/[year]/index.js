@@ -1,27 +1,16 @@
-import React, { useState, Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import YearView from '../../../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../../../components/hocs/privateRoute';
 
-const dashboard = ({ profile, allPrograms }) => {
-  const [show, setShow] = useState(true);
-
-  // TODO: create a callback to check if DayView is true
-  // if it is, display: none the Today & This Week buttons
-  const checkForDayView = bool => {
-    if (bool) {
-      fn(false);
-    }
-  };
+const dashboard = props => {
+  // console.log('dashboard props: ', props);
+  const { profile } = props;
 
   return (
     <>
-      <YearView
-        checkForDayView={checkForDayView}
-        profile={profile}
-        allPrograms={allPrograms}
-      />
+      <YearView profile={profile} />
 
       <style jsx>
         {`
@@ -52,4 +41,4 @@ const dashboard = ({ profile, allPrograms }) => {
 
 dashboard.propTypes = {};
 
-export default privateRoute(dashboard);
+export default privateRoute(dashboard, 'dashboard');

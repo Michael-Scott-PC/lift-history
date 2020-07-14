@@ -2,8 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, withFormik } from 'formik';
-import { request } from 'graphql-request';
-import useSWR, { mutate, trigger } from 'swr';
+import { mutate, trigger } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
 import DateAndTime from './DateAndTime';
@@ -26,31 +25,21 @@ import {
   setsAndRepsHelper,
 } from '../../../redux/actions/programActions';
 import exerciseSchema from '../schema/exerciseSchema';
-import strapiAPI from '../../../api/strapiAPI';
 
 const AddExerciseFormik = ({
   searchReducer: { results },
-  authReducer: { id, jwt },
-  programReducer,
   values,
-  autoComplete,
   showExerciseForm,
   exerciseSelected,
   setExercise,
   setValues,
   setFieldValue,
   handleSubmit,
-  handleChange,
   resetForm,
   setShowExerciseForm,
-  createUserProgram,
   setLocalPickDate,
-  localPickDate,
-  setShowAddExModal,
   errors,
   touched,
-  dataSWR,
-  mutate,
 }) => {
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
@@ -65,6 +54,7 @@ const AddExerciseFormik = ({
     secondaryExercise,
     thirdExercise,
     pickDate,
+    enableTime,
     time,
     isSuperSet,
     isTripleSet,
@@ -76,16 +66,11 @@ const AddExerciseFormik = ({
     secondarySetsAndReps,
     thirdSetsAndReps,
   } = values;
-  // console.log('primarySetsAndReps: ', primarySetsAndReps);
 
-  // console.log('errors: ', errors);
   const {
     pickDate: pickDateErrors,
     primarySetsAndReps: primarySetsAndRepsErrors,
   } = errors;
-
-  // console.log('pickDateErrors: ', pickDateErrors);
-  // console.log('primarySetsAndRepsErrors: ', primarySetsAndRepsErrors);
 
   useEffect(() => {
     if (!showExerciseForm) {
@@ -106,6 +91,7 @@ const AddExerciseFormik = ({
         >
           {/* Date & Time section */}
           <DateAndTime
+            enableTime={enableTime}
             time={time}
             values={values}
             setLocalPickDate={setLocalPickDate}
@@ -144,6 +130,7 @@ const AddExerciseFormik = ({
           <PrimarySetsAndReps
             pct={pct}
             rpe={rpe}
+            values={values}
             primarySetsAndReps={primarySetsAndReps}
             isSuperSet={isSuperSet}
             isTripleSet={isTripleSet}
@@ -254,7 +241,8 @@ const FormikComp = withFormik({
       secondaryExercise: '',
       thirdExercise: '',
       pickDate: localPickDate,
-      time: false,
+      enableTime: false,
+      time: '',
       isSuperSet: false,
       isTripleSet: false,
       isWarmup: false,
@@ -283,33 +271,31 @@ const FormikComp = withFormik({
         setExercise,
         setLocalPickDate,
         dataSWR,
-        // mutate,
       },
     }
   ) => {
     const updateUI = async () => {
+      const getExerciseId = false;
       const mapValues = {
-        scheduleExercise: values.pickDate,
+        scheduleExercise: values.pickDate + 'T04:00:00.000Z',
         isSuperSet: values.isSuperSet,
         isTripleSet: values.isTripleSet,
-        thisDaysExercises: await setsAndRepsHelper(values),
-        // users: [id],
+        thisDaysExercises: await setsAndRepsHelper(values, getExerciseId),
       };
-      console.log('mapValues: ', mapValues);
       return mapValues;
     };
 
     const result = await updateUI();
-    console.log('result: ', result);
 
     mutate(
       [`${process.env.strapiAPI}/graphql`, jwt, id],
-      { ...dataSWR, result },
+      [...dataSWR, result],
       false
     );
-    console.log('dataSWR: ', dataSWR);
+
     createUserProgram(jwt, id, values);
     setSubmitting(false);
+
     // If successful POST, we want to clear the form and close modal
     if (programReducer.statusCode === 200 || programReducer.program) {
       setExercise('');

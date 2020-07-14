@@ -30,9 +30,14 @@ const colors = [
  * @param {string} day - The current day. programHelper gets called for every day in a selected month.
  * @param {string} classView - The view depending on calendar view.
  */
-const programHelper = (program, month, day, classView) => {
+let count = 0;
+const programHelper = (program, month, day, classView, dataSWR) => {
+  // console.log('programHelper dataSWR: ', dataSWR);
   // console.log(day);
   // console.log(program);
+  // console.log('programHelper called.');
+  count = count + 1;
+  // console.log(count);
   const exerciseSchedule = [];
 
   const monthNum = parseInt(month - 1);
@@ -54,9 +59,10 @@ const programHelper = (program, month, day, classView) => {
     currentSecond
   );
 
-  if (program) {
+  let test;
+  if ((test = dataSWR ? dataSWR : program)) {
     // console.log('program from scheduleUtils.js: ', program);
-    for (let programObj of program) {
+    for (let programObj of test) {
       const convertToDate = new Date(programObj.scheduleExercise);
       if (convertToDate.toDateString() === createDateObj.toDateString()) {
         programObj.thisDaysExercises.map(exerciseObj =>
@@ -87,9 +93,13 @@ const programHelper = (program, month, day, classView) => {
  * @param {string} month - The selected month, & neighboring months.
  * @param {string} day - The current day. programHelper gets called for every day in a selected month.
  */
-export const renderSelectedMonthProgram = (program, month, day) => {
-  // console.log(program);
-  return <Fragment>{programHelper(program, month, day)}</Fragment>;
+export const renderSelectedMonthProgram = (program, month, day, dataSWR) => {
+  // console.log('renderSelectedMonthProgram dataSWR: ', dataSWR);
+  return (
+    <Fragment>
+      {programHelper(program, month, day, 'program-month-view', dataSWR)}
+    </Fragment>
+  );
 };
 
 /**

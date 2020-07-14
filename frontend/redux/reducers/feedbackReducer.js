@@ -12,11 +12,13 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case HYDRATE:
-      return {
-        ...state,
-        ...payload,
-      };
+    // case HYDRATE:
+    //   return {
+    //     ...state,
+    //     feedback: payload.feedbackReducer.feedback,
+    //     sent: payload.feedbackReducer.sent,
+    //     error: payload.feedbackReducer.error,
+    //   };
     case SUCCESS_POST_FEEDBACK:
       return {
         ...state,
