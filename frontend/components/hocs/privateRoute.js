@@ -24,7 +24,7 @@ export default function privateRoute(WrappedComponent) {
       [`${process.env.strapiAPI}/graphql`, jwt, userId],
       (url, jwt, userId) => revalidateMyProgram(url, jwt, userId)
     );
-    console.log('dataSWR: ', dataSWR);
+    // console.log('dataSWR: ', dataSWR);
 
     if (jwt) {
       return (

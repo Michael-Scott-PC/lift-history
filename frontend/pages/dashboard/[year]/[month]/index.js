@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import Link from 'next/link';
 
 import monthsAndDays from '../../../../months-and-days.json';
-import { monthWrapper } from '../../../../utils/calendarUtils';
+import {
+  monthWrapper,
+  checkForNeighborYear,
+  getAllWeeksForMonth,
+} from '../../../../utils/calendarUtils';
 import { currentYear } from '../../../../utils/currentDate';
 import { revalidateMyProgram } from '../../../../redux/actions/programActions';
 import privateRoute from '../../../../components/hocs/privateRoute';
 
 const MonthView = props => {
-  // console.log('MonthView props: ', props);
+  console.log('MonthView props: ', props);
   const [monthHeader, setMonthHeader] = useState('');
   const {
     dataSWR,
@@ -77,15 +81,17 @@ const MonthView = props => {
   );
 };
 
-const getAllMonthIds = () => {
+const getAllPossibleRoutes = () => {
   const finalList = [];
   for (let month in monthsAndDays) {
-    for (let arr of monthsAndDays[month]) {
+    const allWeeksForMonth = getAllWeeksForMonth(month);
+    const validateYear = checkForNeighborYear(month, allWeeksForMonth);
+    for (let date of validateYear) {
       finalList.push({
         params: {
-          year: `${currentYear}`,
-          month: arr[0],
-          day: arr[1],
+          year: date[2],
+          month: date[0],
+          day: date[1],
         },
       });
     }
@@ -95,7 +101,7 @@ const getAllMonthIds = () => {
 
 export async function getStaticPaths() {
   // Return a list of possible value for month id
-  const paths = getAllMonthIds();
+  const paths = getAllPossibleRoutes();
   return { paths, fallback: false };
 }
 

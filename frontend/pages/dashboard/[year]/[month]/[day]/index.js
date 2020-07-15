@@ -15,7 +15,7 @@ import {
 import { currentYear } from '../../../../../utils/currentDate';
 
 const DayView = props => {
-  // console.log('DayView props: ', props);
+  console.log('DayView props: ', props);
   const {
     month,
     day,

@@ -84,8 +84,12 @@ export const dayWrapper = (
   dataSWR
 ) => {
   let days = [];
-  for (let monthDay of monthsAndDays[monthName]) {
-    const [month, day] = monthDay;
+  const allWeeksForMonth = getAllWeeksForMonth(monthName);
+  const validateYear = checkForNeighborYear(monthName, allWeeksForMonth);
+
+  validateYear.map(date => {
+    const [month, day, year] = date;
+
     // Even though the monthName argument is the abbreviated month, we need to account
     // for days that belong to neighboring months.
     const abbrMonth = getMonth(month);
@@ -114,7 +118,7 @@ export const dayWrapper = (
       days.push(
         <Link
           href="/dashboard/[year]/[month]/[day]"
-          as={`/dashboard/${currentYear}/${abbrMonth}/${day}`}
+          as={`/dashboard/${year}/${abbrMonth}/${day}`}
           key={dayId}
         >
           <div>
@@ -127,6 +131,7 @@ export const dayWrapper = (
             >
               {day[0] === '0' ? day[1] : day}
 
+              {/* TODO: the year will need to be passed down to this function */}
               {allPrograms &&
                 renderSelectedMonthProgram(allPrograms, month, day, dataSWR)}
             </div>
@@ -135,7 +140,7 @@ export const dayWrapper = (
         </Link>
       );
     }
-  }
+  });
   return days;
 };
 
@@ -413,6 +418,71 @@ const getMonthDays = month => {
   return allDaysInMonth;
 };
 
+export const checkForNeighborYear = (month, weeks) => {
+  const previousYear = currentYear - 1;
+  const nextYear = currentYear + 1;
+  let previousYearDec = [];
+  let currentYearDates = [];
+  let nextYearJan = [];
+  let combineDates = [];
+  let index = 0;
+  if (month === 'Jan') {
+    while (index < weeks.length) {
+      for (let date of weeks[index]) {
+        const [month, day] = date;
+        if (month === '12') {
+          previousYearDec.push([month, day, `${previousYear}`]);
+        } else {
+          currentYearDates.push([month, day, `${currentYear}`]);
+        }
+      }
+      index++;
+    }
+  }
+  if (month === 'Dec') {
+    while (index < weeks.length) {
+      for (let date of weeks[index]) {
+        const [month, day] = date;
+        if (month === '01') {
+          nextYearJan.push([month, day, `${nextYear}`]);
+        } else {
+          currentYearDates.push([month, day, `${currentYear}`]);
+        }
+      }
+      index++;
+    }
+  } else if (month !== 'Jan' && month !== 'Dec') {
+    while (index < weeks.length) {
+      for (let date of weeks[index]) {
+        const [month, day] = date;
+        currentYearDates.push([month, day, `${currentYear}`]);
+      }
+      index++;
+    }
+  }
+  combineDates.push(...previousYearDec, ...currentYearDates, ...nextYearJan);
+  return combineDates;
+};
+
+/**
+ *
+ * @param {string} month - The current month being processed (e.g. 'Jan').
+ */
+export const getAllWeeksForMonth = month => {
+  let weeks = [];
+
+  const monthDays = getMonthDays(month);
+
+  let index = 0;
+  while (index < monthDays.length) {
+    weeks.push(monthDays.slice(index, index + 7));
+    index += 7;
+  }
+  // checkForNeighborYear(month, weeks);
+  // console.log('weeks getAllWeeksForMonth: ', weeks);
+  return weeks;
+};
+
 /**
  * Retrieve the sublist that contains the selectedDay & month.
  * weeks = [Array(7), Array(7), Array(7), and so on]
@@ -421,17 +491,12 @@ const getMonthDays = month => {
  * @param {string} selectedDay - The selected day.
  */
 export const getWeekRange = (month, selectedDay) => {
+  // console.log('month getWeekRange: ', month);
+  // console.log('selectedDay getWeekRange: ', selectedDay);
   const monthIndexStr = getMonthIndex(month);
-  const monthDays = getMonthDays(month);
+  const weeks = getAllWeeksForMonth(month);
 
-  let weeks = [];
   let week = [];
-
-  let index = 0;
-  while (index < monthDays.length) {
-    weeks.push(monthDays.slice(index, index + 7));
-    index += 7;
-  }
 
   for (let arr of weeks) {
     for (let subArr of arr) {
@@ -440,6 +505,7 @@ export const getWeekRange = (month, selectedDay) => {
       }
     }
   }
+  // console.log('week: ', week);
   return week;
 };
 
