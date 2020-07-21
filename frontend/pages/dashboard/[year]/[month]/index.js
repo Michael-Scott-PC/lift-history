@@ -7,8 +7,9 @@ import {
   monthWrapper,
   checkForNeighborYear,
   getAllWeeksForMonth,
+  getUrlWeekRange,
 } from '../../../../utils/calendarUtils';
-import { currentYear } from '../../../../utils/currentDate';
+// import { currentYear } from '../../../../utils/currentDate';
 import { revalidateMyProgram } from '../../../../redux/actions/programActions';
 import privateRoute from '../../../../components/hocs/privateRoute';
 
@@ -20,12 +21,12 @@ const MonthView = props => {
     authReducer: { jwt, id: userId },
     remainingProps: {
       month,
+      year,
       programReducer: { allPrograms },
     },
   } = props;
 
   useEffect(() => {
-    console.log('[month]/index.js useEffect ran.');
     if (month) {
       setMonthHeader(month);
     }
@@ -40,10 +41,10 @@ const MonthView = props => {
   return (
     <>
       <div className="back-to-year-view-container">
-        <Link href="/dashboard/[year]" as={`/dashboard/${currentYear}`}>
-          <a className="back-to-year-view">&lt;&lt; {currentYear}</a>
+        <Link href="/dashboard/[year]" as={`/dashboard/${year}`}>
+          <a className="back-to-year-view">&lt;&lt; {year}</a>
         </Link>
-        <h1 className="year">{currentYear}</h1>
+        <h1 className="year">{year}</h1>
       </div>
       <div style={{ display: 'block', width: '100%', marginTop: '1rem' }}>
         <div id="selected-month-view">
@@ -81,27 +82,55 @@ const MonthView = props => {
   );
 };
 
-const getAllPossibleRoutes = () => {
-  const finalList = [];
-  for (let month in monthsAndDays) {
-    const allWeeksForMonth = getAllWeeksForMonth(month);
-    const validateYear = checkForNeighborYear(month, allWeeksForMonth);
-    for (let date of validateYear) {
-      finalList.push({
-        params: {
-          year: date[2],
-          month: date[0],
-          day: date[1],
-        },
-      });
-    }
-  }
-  return finalList;
-};
+// const getAllPossibleRoutes = () => {
+//   const finalList = [];
+//   for (let month in monthsAndDays) {
+//     const allWeeksForMonth = getAllWeeksForMonth(month);
+//     const validateYear = checkForNeighborYear(month, allWeeksForMonth);
+//     let index = 0;
+//     let dateIndex = 0;
+//     for (let date of validateYear) {
+//       let [month, day, year] = date;
+//       let firstIndex = validateYear[index];
+//       let lastIndex = validateYear[index + 6];
+//       let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
+//       finalList.push({
+//         params: {
+//           year: year,
+//           month: month,
+//           day: day,
+//           week: urlWeekRange,
+//         },
+//       });
+//       dateIndex++;
+//       if (dateIndex % 7 === 0) {
+//         index += 7;
+//       }
+//     }
+//   }
+//   return finalList;
+// };
+
+// export async function getStaticPaths() {
+//   // Return a list of possible value for month id
+//   const paths = getAllPossibleRoutes();
+//   return { paths, fallback: false };
+// }
+
+// export async function getStaticProps(context) {
+//   return {
+//     props: {
+//       context: context,
+//       year: context.params.year,
+//       month: context.params.month,
+//       weekUrl: context.params.week,
+//       day: context.params.day,
+//     },
+//   };
+// }
 
 export async function getStaticPaths() {
-  // Return a list of possible value for month id
-  const paths = getAllPossibleRoutes();
+  const paths = [];
   return { paths, fallback: false };
 }
 
@@ -111,6 +140,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       context: context,
+      year: context.params.year,
       month: context.params.month,
     },
   };

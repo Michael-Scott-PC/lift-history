@@ -66,6 +66,11 @@ const weekdayStyle = css`
     color: #576777;
     margin-top: 1.5rem;
   }
+  .week-view {
+    text-align: center;
+    color: #576777;
+    margin-top: 1.5rem;
+  }
 `;
 
 /**
@@ -87,6 +92,8 @@ export const dayWrapper = (
   const allWeeksForMonth = getAllWeeksForMonth(monthName);
   const validateYear = checkForNeighborYear(monthName, allWeeksForMonth);
 
+  let index = 0;
+  let dateIndex = 0;
   validateYear.map(date => {
     const [month, day, year] = date;
 
@@ -115,11 +122,17 @@ export const dayWrapper = (
       );
     }
     if (classView === 'month-view') {
+      let firstIndex = validateYear[index];
+      let lastIndex = validateYear[index + 6];
+      let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
       days.push(
         <Link
-          href="/dashboard/[year]/[month]/[day]"
-          as={`/dashboard/${year}/${abbrMonth}/${day}`}
+          // href="/dashboard/[year]/[month]/[day]"
+          // as={`/dashboard/${year}/${abbrMonth}/${day}`}
+          href="/dashboard/[year]/[month]/[week]/[day]"
+          as={`/dashboard/${year}/${abbrMonth}/${urlWeekRange}/${day}`}
           key={dayId}
+          scroll={false}
         >
           <div>
             <div
@@ -139,6 +152,10 @@ export const dayWrapper = (
           </div>
         </Link>
       );
+      dateIndex++;
+      if (dateIndex % 7 === 0) {
+        index += 7;
+      }
     }
   });
   return days;
@@ -211,6 +228,7 @@ export const monthWrapper = (
         <Link
           href="/dashboard/[year]/[month]"
           as={`/dashboard/${currentYear}/${prevMonth}`}
+          scroll={false}
         >
           <CustomButton variant="outlined" style={prevBtnStyle}>
             Prev Month
@@ -220,6 +238,7 @@ export const monthWrapper = (
         <Link
           href="/dashboard/[year]/[month]"
           as={`/dashboard/${currentYear}/${nextMonth}`}
+          scroll={false}
         >
           <CustomButton variant="outlined" style={nextBtnStyle}>
             Next Month
@@ -320,6 +339,7 @@ export const allMonthsWrapper = classView => {
         href="/dashboard/[year]/[month]"
         as={`/dashboard/${currentYear}/${month}`}
         key={uuidv4()}
+        scroll={false}
       >
         <div
           className="month-container col-4"
@@ -411,6 +431,7 @@ export const getMonthIndex = month => {
  * @param {string} month - The month name (e.g. 'Feb')
  */
 const getMonthDays = month => {
+  console.log('getMonthDays month: ', month);
   let allDaysInMonth = [];
   for (let subList of monthsAndDays[month]) {
     allDaysInMonth.push(subList);
@@ -478,10 +499,38 @@ export const getAllWeeksForMonth = month => {
     weeks.push(monthDays.slice(index, index + 7));
     index += 7;
   }
-  // checkForNeighborYear(month, weeks);
-  // console.log('weeks getAllWeeksForMonth: ', weeks);
   return weeks;
 };
+
+// export const getUrlWeekRange = validateYear => {
+//   let index = 0;
+//   let dateIndex = 0;
+//     let firstIndex = validateYear[index];
+//     let lastIndex = validateYear[index + 6];
+//     let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
+//     index += 7;
+//     dateIndex++;
+//     if (dateIndex % 7 === 0) {
+//       index += 7;
+//     }
+// }
+
+// export const getUrlWeekRange = combineDates => {
+//   let urlWeekRange = [];
+//   let index = 0;
+//   while (index < combineDates.length) {
+//     // let slicedRange = combineDates.slice(index, index + 7);
+//     // urlWeekRange.push(slicedRange);
+//     // index += 7;
+//     let firstIndex = combineDates[index];
+//     let lastIndex = combineDates[index + 6];
+//     urlWeekRange.push([firstIndex, lastIndex]);
+//     index += 7;
+//   }
+//   // console.log('urlWeekRange: ', urlWeekRange);
+// };
+
+// return combineDates.map(date => [date[0], date[date.length - 1]]);
 
 /**
  * Retrieve the sublist that contains the selectedDay & month.
@@ -491,8 +540,6 @@ export const getAllWeeksForMonth = month => {
  * @param {string} selectedDay - The selected day.
  */
 export const getWeekRange = (month, selectedDay) => {
-  // console.log('month getWeekRange: ', month);
-  // console.log('selectedDay getWeekRange: ', selectedDay);
   const monthIndexStr = getMonthIndex(month);
   const weeks = getAllWeeksForMonth(month);
 
@@ -505,7 +552,6 @@ export const getWeekRange = (month, selectedDay) => {
       }
     }
   }
-  // console.log('week: ', week);
   return week;
 };
 
@@ -525,44 +571,43 @@ export const sanitizeDay = day => {
 
 /**
  * @description: Render the corresponding weekday numbers that go with a selected weekday num.
- * @param {Array.<Array.<string><string>>} weekRangeArr - Array containing mm/dd pairs that form a complete week when a single weekday num is clicked.
+ * @param {Array.<Object>} weekRangeArr - Array containing mm/dd/yyyy objects that form a complete week when a single weekday num is clicked.
  * @param {string} day - The selected weekday num.
  */
-export const renderWeekHelper = (weekRangeArr, day) => {
-  console.log('weekRangeArr: ', weekRangeArr);
+export const renderWeekHelper = (weekRangeArr, day, month, weekUrl) => {
   let weekJsx = [];
   for (let item of weekRangeArr) {
-    for (let i of item) {
-      // Even though the month argument is the abbreviate month, we need to account
-      // for days that belong to neighboring months.
-      const abbrMonth = getMonth(i[0]);
-      if (i[1] === day) {
-        weekJsx.push(
-          <Link
-            href="/dashboard/[year]/[month]/[day]"
-            as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
-            key={uuidv4()}
-          >
-            <div className="day-view-weekdays selected-day" key={uuidv4()}>
-              {sanitizeDay(i[1])}
-              <style jsx>{selectedDayStyles}</style>
-            </div>
-          </Link>
-        );
-      } else {
-        weekJsx.push(
-          <Link
-            href="/dashboard/[year]/[month]/[day]"
-            as={`/dashboard/${currentYear}/${abbrMonth}/${i[1]}`}
-            key={uuidv4()}
-          >
-            <div className="day-view-weekdays" key={uuidv4()}>
-              {sanitizeDay(i[1])}
-              <style jsx>{dayViewStyles}</style>
-            </div>
-          </Link>
-        );
-      }
+    // Even though the month argument is the abbreviate month, we need to account
+    // for days that belong to neighboring months.
+    const abbrMonth = getMonth(item.month);
+    if (item.day === day) {
+      weekJsx.push(
+        <Link
+          href="/dashboard/[year]/[month]/[week]/[day]"
+          as={`/dashboard/${item.year}/${abbrMonth}/${weekUrl}/${item.day}`}
+          key={uuidv4()}
+          scroll={false}
+        >
+          <div className="day-view-weekdays selected-day" key={uuidv4()}>
+            {sanitizeDay(item.day)}
+            <style jsx>{selectedDayStyles}</style>
+          </div>
+        </Link>
+      );
+    } else {
+      weekJsx.push(
+        <Link
+          href="/dashboard/[year]/[month]/[week]/[day]"
+          as={`/dashboard/${item.year}/${abbrMonth}/${weekUrl}/${item.day}`}
+          key={uuidv4()}
+          scroll={false}
+        >
+          <div className="day-view-weekdays" key={uuidv4()}>
+            {sanitizeDay(item.day)}
+            <style jsx>{dayViewStyles}</style>
+          </div>
+        </Link>
+      );
     }
   }
 

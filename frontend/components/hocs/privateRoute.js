@@ -17,6 +17,7 @@ export default function privateRoute(WrappedComponent) {
     revalidateMyProgram,
     ...props
   }) => {
+    // console.log('privateRoute props: ', props);
     const { profile, profileError } = profileReducer;
     const { id: userId, jwt } = authReducer;
 

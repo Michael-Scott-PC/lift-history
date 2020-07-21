@@ -9,7 +9,12 @@ const Home = () => {
     <div className="parent-container">
       <main id="main">
         <LiftAnimation />
-        <div className="p-container" style={{ marginBottom: '5rem' }}>
+        <motion.div
+          className="p-container"
+          style={{ marginBottom: '5rem' }}
+          exit="exit"
+          variants={{ exit: { transition: { staggerChildren: 0.1 } } }}
+        >
           <motion.p
             style={{ fontSize: '1.45rem ' }}
             initial={{ x: -200 }}
@@ -38,7 +43,7 @@ const Home = () => {
           >
             Single source of truth.
           </motion.p>
-        </div>
+        </motion.div>
         <FaArrowCircleDown id="down" style={{ marginBottom: '5rem' }} />
       </main>
 

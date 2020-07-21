@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import Link from 'next/link';
 
 import AddExerciseModal from '../modal/AddExerciseModal';
@@ -11,18 +12,34 @@ import {
   currentYear,
   currentyDayOfWeek,
 } from '../../utils/currentDate';
-import { getMonth } from '../../utils/calendarUtils';
+import {
+  getMonth,
+  getWeekRange,
+  checkForNeighborYear,
+  sanitizeDay,
+} from '../../utils/calendarUtils';
+
+import {
+  setCurrentWeekRangeGlobal,
+  setCurrentWeekURLGlobal,
+} from '../../redux/actions/calendarActions';
 
 const PrivateFooter = props => {
-  // console.log('PrivateFooter props: ', props);
+  console.log('PrivateFooter props: ', props);
+  const {
+    setCurrentWeekRangeGlobal,
+    setCurrentWeekURLGlobal,
+  } = props.remainingProps;
+  const { weekRangeURL } = props.remainingProps.calendarReducer;
   const [showAddExModal, setShowAddExModal] = useState(false);
   const abbrMonth = getMonth(currentMonth);
   const abbrWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   // current day comes back as a number, we need to convert it to a string &
   // add a 0 before numbers 1-9 to match our routing params.
-  const currentDayStr = currentDay.toString();
-  const sanitizedCurrentDayStr =
-    currentDayStr.length < 2 ? `0${currentDayStr}` : currentDayStr;
+  // const currentDayStr = currentDay.toString();
+  // const sanitizedCurrentDayStr =
+  //   currentDayStr.length < 2 ? `0${currentDayStr}` : currentDayStr;
+  const sanitizedCurrentDayStr = sanitizeDay(currentDay.toString());
 
   const getWeekdayAbbr = () => {
     let result;
@@ -35,6 +52,24 @@ const PrivateFooter = props => {
     return result;
   };
   const currentWeekday = getWeekdayAbbr();
+
+  const [urlWeekRange, setUrlWeekRange] = useState('');
+  const getUrlWeekRange = validateYear => {
+    let firstIndex = validateYear[0];
+    let lastIndex = validateYear[validateYear.length - 1];
+    let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
+    setUrlWeekRange(urlWeekRange);
+  };
+
+  useEffect(() => {
+    if (currentDay) {
+      const weekRange = getWeekRange(abbrMonth, currentDay.toString());
+      const validateYear = checkForNeighborYear(abbrMonth, weekRange);
+      getUrlWeekRange(validateYear);
+      setCurrentWeekURLGlobal(urlWeekRange);
+      setCurrentWeekRangeGlobal(validateYear);
+    }
+  }, [currentDay, urlWeekRange]);
 
   return (
     <nav>
@@ -55,12 +90,12 @@ const PrivateFooter = props => {
           alt="search exercises icon"
         />
         <Link
-          href="/dashboard/[year]/[month]/[day]"
-          as={`/dashboard/${currentYear}/${abbrMonth}/${sanitizedCurrentDayStr}`}
+          href="/dashboard/[year]/[month]/[week]/[day]"
+          as={`/dashboard/${currentYear}/${abbrMonth}/${weekRangeURL}/${sanitizedCurrentDayStr}`}
         >
           <button className="currentDayBtn">
             <h5 className="currentDay">{currentWeekday}</h5>
-            <h3>{currentDay}</h3>
+            <h3>{sanitizedCurrentDayStr}</h3>
           </button>
         </Link>
       </div>
@@ -99,4 +134,13 @@ const PrivateFooter = props => {
 
 PrivateFooter.propTypes = {};
 
-export default privateRoute(PrivateFooter);
+const AuthenticatedFooter = privateRoute(PrivateFooter);
+
+const mapStateToProps = state => ({
+  calendarReducer: state.calendarReducer,
+});
+
+export default connect(mapStateToProps, {
+  setCurrentWeekRangeGlobal,
+  setCurrentWeekURLGlobal,
+})(AuthenticatedFooter);

@@ -1,6 +1,8 @@
 import css from 'styled-jsx/css';
 import { Fragment } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { withStyles } from '@material-ui/core/styles';
+import Collapse from '@material-ui/core/Collapse';
 
 import {
   currentYear,
@@ -32,10 +34,7 @@ const colors = [
  */
 let count = 0;
 const programHelper = (program, month, day, classView, dataSWR) => {
-  // console.log('programHelper dataSWR: ', dataSWR);
-  // console.log(day);
-  // console.log(program);
-  // console.log('programHelper called.');
+  // console.log('dataSWR programHelper: ', dataSWR);
   count = count + 1;
   // console.log(count);
   const exerciseSchedule = [];
@@ -59,13 +58,17 @@ const programHelper = (program, month, day, classView, dataSWR) => {
     currentSecond
   );
 
-  let test;
-  if ((test = dataSWR ? dataSWR : program)) {
-    // console.log('program from scheduleUtils.js: ', program);
-    for (let programObj of test) {
+  let dataSource;
+  if ((dataSource = dataSWR ? dataSWR : program)) {
+    // console.log('dataSource from scheduleUtils.js: ', dataSource);
+    for (let programObj of dataSource) {
       const convertToDate = new Date(programObj.scheduleExercise);
       if (convertToDate.toDateString() === createDateObj.toDateString()) {
-        programObj.thisDaysExercises.map(exerciseObj =>
+        // TODO: render a different UI for super sets and triple sets.
+        if (programObj.isSuperSet || programObj.isTripleSet) {
+        }
+        programObj.thisDaysExercises.map(exerciseObj => {
+          // console.log('exerciseObj: ', exerciseObj);
           exerciseSchedule.push(
             <div
               className={`${classView} nameOfExercise`}
@@ -79,8 +82,8 @@ const programHelper = (program, month, day, classView, dataSWR) => {
               {exerciseObj.exercise.nameOfExercise}
               <style jsx>{programStyles}</style>
             </div>
-          )
-        );
+          );
+        });
       }
     }
   }
@@ -108,11 +111,14 @@ export const renderSelectedMonthProgram = (program, month, day, dataSWR) => {
  * @param {string} selectedMonth - The user selected month.
  * @param {string} day - The current day. programHelper gets called for every day in a selected month.
  */
-export const renderSelectedDayProgram = (program, selectedMonth, day) => {
+export const renderSelectedDayProgram = (
+  program,
+  selectedMonth,
+  day,
+  classView
+) => {
   return (
-    <Fragment>
-      {programHelper(program, selectedMonth, day, 'program-day-view')}
-    </Fragment>
+    <Fragment>{programHelper(program, selectedMonth, day, classView)}</Fragment>
   );
 };
 
@@ -128,12 +134,18 @@ const programStyles = css`
     margin-bottom: 1.5px;
     border-radius: 2px;
   }
+  /* .nameOfExercise.program-day-view {
+    font-size: calc(1vw);
+  } */
   .program-day-view {
     font-size: 1.25rem;
     border-radius: 8px;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     box-shadow: 0px 2px 2px 2px #00000026;
+  }
+  .nameOfExercise.program-week-view {
+    font-size: calc(2vw);
   }
 `;
 

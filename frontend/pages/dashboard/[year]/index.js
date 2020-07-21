@@ -4,8 +4,16 @@ import PropTypes from 'prop-types';
 import YearView from '../../../components/calendar/my-custom-calendar/YearView';
 import privateRoute from '../../../components/hocs/privateRoute';
 
+import monthsAndDays from '../../../months-and-days.json';
+import {
+  monthWrapper,
+  checkForNeighborYear,
+  getAllWeeksForMonth,
+  getUrlWeekRange,
+} from '../../../utils/calendarUtils';
+
 const dashboard = props => {
-  // console.log('dashboard props: ', props);
+  console.log('dashboard props: ', props);
   const { profile } = props;
 
   return (
@@ -38,6 +46,55 @@ const dashboard = props => {
     </>
   );
 };
+
+const getAllPossibleRoutes = () => {
+  const finalList = [];
+  for (let month in monthsAndDays) {
+    const allWeeksForMonth = getAllWeeksForMonth(month);
+    const validateYear = checkForNeighborYear(month, allWeeksForMonth);
+    let index = 0;
+    let dateIndex = 0;
+    for (let date of validateYear) {
+      let [month, day, year] = date;
+      let firstIndex = validateYear[index];
+      let lastIndex = validateYear[index + 6];
+      let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
+      finalList.push({
+        params: {
+          year: year,
+          month: month,
+          day: day,
+          week: urlWeekRange,
+        },
+      });
+      dateIndex++;
+      if (dateIndex % 7 === 0) {
+        index += 7;
+      }
+    }
+  }
+  // console.log('finalList: ', finalList);
+  return finalList;
+};
+
+export async function getStaticPaths() {
+  // Return a list of possible value for month id
+  const paths = getAllPossibleRoutes();
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps(context) {
+  console.log('dashboard context: ', context);
+  return {
+    props: {
+      context: context,
+      year: context.params.year,
+      // month: context.params.month,
+      // week: context.params.week,
+      // day: context.params.day,
+    },
+  };
+}
 
 dashboard.propTypes = {};
 

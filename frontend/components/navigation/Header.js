@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 
 import DropDownMenu from './DropDownMenu';
 import SquatLogo from './SquatLogo';

@@ -1,14 +1,24 @@
 import 'react-calendar/dist/Calendar.css';
+import { AnimatePresence } from 'framer-motion';
 import { wrapper } from '../redux/store';
 
 import Layout from '../components/layout/Layout';
 
 function MyApp(props) {
   // console.log('MyApp props: ', props);
-  const { Component, pageProps } = props;
+  const { Component, pageProps, router } = props;
+
+  const handleExitComplete = () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0 });
+    }
+  };
+
   return (
     <Layout>
-      <Component {...pageProps} />
+      <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
+        <Component {...pageProps} />
+      </AnimatePresence>
       <style jsx global>{`
         html,
         body {
