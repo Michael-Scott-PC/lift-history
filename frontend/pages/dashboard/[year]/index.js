@@ -1,48 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import YearView from '../../../components/calendar/my-custom-calendar/YearView';
+import Months from '../../../components/calendar/Months';
 import privateRoute from '../../../components/hocs/privateRoute';
 
 import monthsAndDays from '../../../months-and-days.json';
 import {
-  monthWrapper,
   checkForNeighborYear,
   getAllWeeksForMonth,
-  getUrlWeekRange,
+  highlightCurrentDay,
 } from '../../../utils/calendarUtils';
 
-const dashboard = props => {
-  console.log('dashboard props: ', props);
+const YearView = props => {
+  console.log('YearView props: ', props);
   const { profile } = props;
+
+  useEffect(() => {
+    highlightCurrentDay();
+  }, []);
 
   return (
     <>
-      <YearView profile={profile} />
+      <div id="custom-year-container">
+        <Months profile={profile} />
+      </div>
 
-      <style jsx>
-        {`
-          #dashboard-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            margin-top: 1rem;
-          }
-          .dashboard-buttons {
-            text-align: center;
-          }
-          .btn {
-            width: 85%;
-            color: #fff;
-            background-color: #758698;
-            box-shadow: 5px 5px 5px black;
-            box-shadow: 0px 2px 11px #8e8e8e;
-          }
-          }
-          #year-calendar-container {
-            padding: 0.75rem;
-          }
-        `}
-      </style>
+      <style jsx>{`
+        #custom-year-container {
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 3rem;
+          margin-bottom: 5rem;
+        }
+      `}</style>
     </>
   );
 };
@@ -73,7 +63,6 @@ const getAllPossibleRoutes = () => {
       }
     }
   }
-  // console.log('finalList: ', finalList);
   return finalList;
 };
 
@@ -84,18 +73,14 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  console.log('dashboard context: ', context);
   return {
     props: {
       context: context,
       year: context.params.year,
-      // month: context.params.month,
-      // week: context.params.week,
-      // day: context.params.day,
     },
   };
 }
 
-dashboard.propTypes = {};
+YearView.propTypes = {};
 
-export default privateRoute(dashboard, 'dashboard');
+export default privateRoute(YearView);

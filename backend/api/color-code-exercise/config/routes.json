@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/color-code-exercises",
+      "handler": "color-code-exercise.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/color-code-exercises/count",
+      "handler": "color-code-exercise.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/color-code-exercises/:id",
+      "handler": "color-code-exercise.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/color-code-exercises",
+      "handler": "color-code-exercise.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/color-code-exercises/:id",
+      "handler": "color-code-exercise.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/color-code-exercises/:id",
+      "handler": "color-code-exercise.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

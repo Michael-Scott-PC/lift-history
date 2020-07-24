@@ -9,7 +9,10 @@ import abbrWeekdays from '../abbr-weekdays.json';
 import abbrMonths from '../abbr-months.json';
 import monthsAndDays from '../months-and-days.json';
 
-import { renderSelectedMonthProgram } from './scheduleUtils';
+import Weekdays from '../components/calendar/Weekdays';
+import ExercisesForDay from '../components/exercise/ExercisesForDay';
+
+import { programHelper } from './scheduleUtils';
 import { currentYear, currentMonth, currentDay } from './currentDate';
 
 // TODO: this needs to be fixed.
@@ -27,23 +30,23 @@ export const highlightCurrentDay = () => {
   }
 };
 
-/**
- * @description: Wrap each weekday (Mo, Tu, etc.) in a div.
- * @param {string} classView - Adds a class depending on calendar view.
- */
-export const weekdayWrapper = classView => {
-  let weekdays = [];
+// /**
+//  * @description: Wrap each weekday (Mo, Tu, etc.) in a div.
+//  * @param {string} classView - Adds a class depending on calendar view.
+//  */
+// export const weekdayWrapper = classView => {
+//   let weekdays = [];
 
-  weekdays.push(
-    abbrWeekdays.map(day => (
-      <div className={`${classView} weekday`} key={uuidv4()}>
-        {day}
-        <style jsx>{weekdayStyle}</style>
-      </div>
-    ))
-  );
-  return weekdays;
-};
+//   weekdays.push(
+//     abbrWeekdays.map(day => (
+//       <div className={`${classView} weekday`} key={uuidv4()}>
+//         {day}
+//         <style jsx>{weekdayStyle}</style>
+//       </div>
+//     ))
+//   );
+//   return weekdays;
+// };
 
 const weekdayStyle = css`
   .abbr-weekdays {
@@ -101,10 +104,9 @@ export const dayWrapper = (
     // for days that belong to neighboring months.
     const abbrMonth = getMonth(month);
 
-    const dayId = uuidv4();
     if (classView === 'year-view') {
       days.push(
-        <Fragment key={dayId}>
+        <Fragment key={uuidv4()}>
           <div
             className={`${classView} ${
               parseInt(month) !== monthIndex
@@ -113,50 +115,51 @@ export const dayWrapper = (
             }`}
           >
             {day[0] === '0' ? day[1] : day}
-
-            {allPrograms &&
-              renderSelectedMonthProgram(allPrograms, month, day, dataSWR)}
           </div>
           <style jsx>{dayStyles}</style>
         </Fragment>
       );
     }
-    if (classView === 'month-view') {
-      let firstIndex = validateYear[index];
-      let lastIndex = validateYear[index + 6];
-      let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
-      days.push(
-        <Link
-          // href="/dashboard/[year]/[month]/[day]"
-          // as={`/dashboard/${year}/${abbrMonth}/${day}`}
-          href="/dashboard/[year]/[month]/[week]/[day]"
-          as={`/dashboard/${year}/${abbrMonth}/${urlWeekRange}/${day}`}
-          key={dayId}
-          scroll={false}
-        >
-          <div>
-            <div
-              className={`${classView} ${
-                parseInt(month) !== monthIndex
-                  ? 'neighbor-month-days'
-                  : 'individual-days'
-              }`}
-            >
-              {day[0] === '0' ? day[1] : day}
+    // if (classView === 'month-view') {
+    //   let firstIndex = validateYear[index];
+    //   let lastIndex = validateYear[index + 6];
+    //   let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
+    //   days.push(
+    //     <Link
+    //       href="/dashboard/[year]/[month]/[week]/[day]"
+    //       as={`/dashboard/${year}/${abbrMonth}/${urlWeekRange}/${day}`}
+    //       key={uuidv4()}
+    //       scroll={false}
+    //     >
+    //       <div>
+    //         <div
+    //           className={`${classView} ${
+    //             parseInt(month) !== monthIndex
+    //               ? 'neighbor-month-days'
+    //               : 'individual-days'
+    //           }`}
+    //         >
+    //           {day[0] === '0' ? day[1] : day}
 
-              {/* TODO: the year will need to be passed down to this function */}
-              {allPrograms &&
-                renderSelectedMonthProgram(allPrograms, month, day, dataSWR)}
-            </div>
-            <style jsx>{dayStyles}</style>
-          </div>
-        </Link>
-      );
-      dateIndex++;
-      if (dateIndex % 7 === 0) {
-        index += 7;
-      }
-    }
+    //           <ExercisesForDay
+    //             allPrograms={allPrograms}
+    //             dataSWR={dataSWR}
+    //             year={year}
+    //             month={month}
+    //             day={day}
+    //             classView={'program-month-view'}
+    //             key={uuidv4()}
+    //           />
+    //         </div>
+    //         <style jsx>{dayStyles}</style>
+    //       </div>
+    //     </Link>
+    //   );
+    // dateIndex++;
+    // if (dateIndex % 7 === 0) {
+    //   index += 7;
+    // }
+    // }
   });
   return days;
 };
@@ -184,11 +187,11 @@ const dayStyles = css`
     font-size: 0.65rem;
     color: #808080;
   }
-  /* .neighbor-month-days {
+  .neighbor-month-days {
     font-size: 0.55rem;
     color: #808080;
     justify-self: center;
-  } */
+  }
   .current-day {
     color: #fff;
     background-color: rgb(38, 191, 81);
@@ -198,128 +201,72 @@ const dayStyles = css`
   }
 `;
 
-/**
- * @description: Wrap the selected month in a div with weekdays and
- * corresponding days.
- * @param {string} classView - Adds a class depending on calendar view.
- * @param {string} selectedMonth - Contains the selected month.
- * @param {Array.<Object>} [allProgram] - Contains the myPrograms res from login that gets stored in allPrograms in programReducer.
- * @param {Array.<Object>} [dataSWR] - Replaces the myPrograms data stored in allProgram that will be used for 'Optimistic UI'.
- */
-export const monthWrapper = (
-  classView,
-  selectedMonth,
-  allPrograms,
-  dataSWR
-) => {
-  let monthArr = [];
+// /**
+//  * @description: Wrap the selected month in a div with weekdays and
+//  * corresponding days.
+//  * @param {string} classView - Adds a class depending on calendar view.
+//  * @param {string} selectedMonth - Contains the selected month.
+//  * @param {Array.<Object>} [allProgram] - Contains the myPrograms res from login that gets stored in allPrograms in programReducer.
+//  * @param {Array.<Object>} [dataSWR] - Replaces the myPrograms data stored in allProgram that will be used for 'Optimistic UI'.
+//  */
+// export const monthWrapper = (
+//   classView,
+//   selectedMonth,
+//   allPrograms,
+//   dataSWR
+// ) => {
+//   let monthArr = [];
 
-  if (selectedMonth) {
-    const monthIndex = abbrMonths.indexOf(selectedMonth) + 1;
-    const prevMonth = getMonth(monthIndex - 1);
-    const nextMonth = getMonth(monthIndex + 1);
+//   if (selectedMonth) {
+//     const monthIndex = abbrMonths.indexOf(selectedMonth) + 1;
 
-    monthArr.push(
-      <div
-        className={`month-container ${classView} `}
-        key={uuidv4()}
-        id={monthIndex}
-      >
-        <Link
-          href="/dashboard/[year]/[month]"
-          as={`/dashboard/${currentYear}/${prevMonth}`}
-          scroll={false}
-        >
-          <CustomButton variant="outlined" style={prevBtnStyle}>
-            Prev Month
-          </CustomButton>
-        </Link>
-        <h5 className="month-name text-center">{selectedMonth}</h5>
-        <Link
-          href="/dashboard/[year]/[month]"
-          as={`/dashboard/${currentYear}/${nextMonth}`}
-          scroll={false}
-        >
-          <CustomButton variant="outlined" style={nextBtnStyle}>
-            Next Month
-          </CustomButton>
-        </Link>
-        {selectedMonth && weekdayWrapper(classView)}
-        {selectedMonth &&
-          dayWrapper(
-            selectedMonth,
-            monthIndex,
-            classView,
-            allPrograms,
-            dataSWR
-          )}
-        <style jsx>{monthViewStyles}</style>
-      </div>
-    );
-    return monthArr;
-  }
-};
+//     monthArr.push(
+//       <div
+//         className={`month-container ${classView} `}
+//         key={uuidv4()}
+//         id={monthIndex}
+//       >
+//         {selectedMonth &&
+//           dayWrapper(
+//             selectedMonth,
+//             monthIndex,
+//             classView,
+//             allPrograms,
+//             dataSWR
+//           )}
+//         <style jsx>{monthViewStyles}</style>
+//       </div>
+//     );
+//     return monthArr;
+//   }
+// };
 
-const CustomButton = withStyles({
-  root: {
-    // background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)',
-    boxShadow: '0 1px 5px 1px rgba(33, 203, 243, 0.25)',
-    borderRadius: 4,
-    // color: 'white',
-    color: '#2196f3',
-    borderColor: 'rgba(33, 150, 243, 0.25)',
-    fontSize: '0.75rem',
-    paddingLeft: 0,
-    paddingRight: 0,
-    height: '55%',
-    alignSelf: 'center',
-    textTransform: 'capitalize',
-    '&:hover': {
-      boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .50)',
-    },
-    '&:focus': {
-      boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .70)',
-      outline: 'none',
-    },
-  },
-})(Button);
-
-const prevBtnStyle = {
-  gridColumnStart: 1,
-  gridColumnEnd: 3,
-};
-
-const nextBtnStyle = {
-  gridColumnStart: 6,
-  gridColumnEnd: 8,
-};
-
-const monthViewStyles = css`
-  .month-view {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(14%, 1fr));
-    grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
-    width: 100%;
-    min-height: 50vh;
-  }
-  /* 
-    Keep this in case I decide to put a container around weekdays.
-    .month-view .weekdayContainer {
-    grid-column-start: 1;
-    grid-column-end: 8;
-    display: grid;
-    grid-template-columns: repeat(7, minmax(14%, 1fr));
-    margin-top: 1rem;
-    margin-bottom: 0.25rem;
-  } */
-  .month-name {
-    /* grid-column-start: 1;
-    grid-column-end: 8; */
-    grid-column-start: 3;
-    grid-column-end: 6;
-    align-self: center;
-  }
-`;
+// const monthViewStyles = css`
+//   .month-view {
+//     display: grid;
+//     grid-template-columns: repeat(7, minmax(14%, 1fr));
+//     grid-template-rows: 1fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+//     width: 100%;
+//     min-height: 50vh;
+//   }
+//   /*
+//     Keep this in case I decide to put a container around weekdays.
+//     .month-view .weekdayContainer {
+//     grid-column-start: 1;
+//     grid-column-end: 8;
+//     display: grid;
+//     grid-template-columns: repeat(7, minmax(14%, 1fr));
+//     margin-top: 1rem;
+//     margin-bottom: 0.25rem;
+//   } */
+//   .month-name {
+//     /* grid-column-start: 1;
+//     grid-column-end: 8; */
+//     grid-column-start: 3;
+//     grid-column-end: 6;
+//     align-self: center;
+//   }
+// `;
 
 /**
  * @description: Wrap each individual month in a div with weekdays and
@@ -348,7 +295,7 @@ export const allMonthsWrapper = classView => {
           key={uuidv4()}
         >
           <h5 className="month-name text-center">{month}</h5>
-          <>{weekdayWrapper(classView)}</>
+          <Weekdays classView={classView} />
           <>{dayWrapper(month, monthIndex, classView)}</>
           <style jsx>{allMonthsStyles}</style>
         </div>
@@ -403,35 +350,11 @@ export const getMonthIndex = month => {
   return monthIndexStr;
 };
 
-// /**
-//  * @description: Remove any zero in the range 01-09 from the days in
-//  * monthAndDays so we can compare it to the selectedDay (
-//  * this gets passed to getWeekRange).
-//  * We're doing the reverse of what I did in getMonthIndex
-//  * because eventually the selected week range will return
-//  * the numbers to be rendered. Rather than remove
-//  * the zeros in the jsx, I decided to do it here.
-//  * @param {string} month
-//  */
-// const sanitizeDays = month => {
-//   console.log('sanitizeDays month: ', month);
-//   let sanitizedDays = [];
-//   for (let subList of monthsAndDays[month]) {
-//     if (subList[1].charAt(0) === '0') {
-//       sanitizedDays.push([subList[0], subList[1].substr(1)]);
-//     } else {
-//       sanitizedDays.push([subList[0], subList[1]]);
-//     }
-//   }
-//   return sanitizedDays;
-// };
-
 /**
  * @description - Retrieves the month's corresponding days.
  * @param {string} month - The month name (e.g. 'Feb')
  */
 const getMonthDays = month => {
-  console.log('getMonthDays month: ', month);
   let allDaysInMonth = [];
   for (let subList of monthsAndDays[month]) {
     allDaysInMonth.push(subList);
@@ -501,36 +424,6 @@ export const getAllWeeksForMonth = month => {
   }
   return weeks;
 };
-
-// export const getUrlWeekRange = validateYear => {
-//   let index = 0;
-//   let dateIndex = 0;
-//     let firstIndex = validateYear[index];
-//     let lastIndex = validateYear[index + 6];
-//     let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
-//     index += 7;
-//     dateIndex++;
-//     if (dateIndex % 7 === 0) {
-//       index += 7;
-//     }
-// }
-
-// export const getUrlWeekRange = combineDates => {
-//   let urlWeekRange = [];
-//   let index = 0;
-//   while (index < combineDates.length) {
-//     // let slicedRange = combineDates.slice(index, index + 7);
-//     // urlWeekRange.push(slicedRange);
-//     // index += 7;
-//     let firstIndex = combineDates[index];
-//     let lastIndex = combineDates[index + 6];
-//     urlWeekRange.push([firstIndex, lastIndex]);
-//     index += 7;
-//   }
-//   // console.log('urlWeekRange: ', urlWeekRange);
-// };
-
-// return combineDates.map(date => [date[0], date[date.length - 1]]);
 
 /**
  * Retrieve the sublist that contains the selectedDay & month.

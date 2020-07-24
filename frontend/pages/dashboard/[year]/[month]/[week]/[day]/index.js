@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 
+import BackToMonthView from '../../../../../../components/navigation/BackToMonthView';
 import CurrentWeekNav from '../../../../../../components/navigation/CurrentWeekNav';
 import ExercisesForDay from '../../../../../../components/exercise/ExercisesForDay';
+import Weekdays from '../../../../../../components/calendar/Weekdays';
 import privateRoute from '../../../../../../components/hocs/privateRoute';
 
 import {
   getWeekRange,
   sanitizeDay,
-  weekdayWrapper,
+  // weekdayWrapper,
   checkForNeighborYear,
 } from '../../../../../../utils/calendarUtils';
 
@@ -21,6 +23,7 @@ import {
 
 const DayView = props => {
   console.log('DayView props: ', props);
+  const { dataSWR } = props;
   const {
     year,
     month,
@@ -63,16 +66,8 @@ const DayView = props => {
 
   return (
     <div id="day-view-container">
-      <Link href="/dashboard/[year]/[month]" as={`/dashboard/${year}/${month}`}>
-        <a className="back-to-month-view">&lt;&lt; {month}</a>
-      </Link>
-      <h5 className="day-view-month-header" key={uuidv4()}>
-        {month}
-        <div className="day-header">
-          {sanitizeDay(day)}, {year}
-        </div>
-      </h5>
-      {day && weekdayWrapper('day-view')}
+      <BackToMonthView year={year} month={month} day={day} />
+      <Weekdays classView={'day-view'} />
       <CurrentWeekNav
         currentWeek={currentWeek}
         day={day}
@@ -81,9 +76,11 @@ const DayView = props => {
       />
       <ExercisesForDay
         day={day}
-        program={allPrograms}
+        month={month}
+        allPrograms={allPrograms}
         selectedMonth={month}
         classView={'program-day-view'}
+        dataSWR={dataSWR}
       />
       <Link
         href="/dashboard/[year]/[month]/[week]"
@@ -98,20 +95,6 @@ const DayView = props => {
             width: 100%;
             grid-template-columns: repeat(7, 1fr);
             margin-top: 2rem;
-          }
-          .back-to-month-view {
-            position: absolute;
-            width: 25%;
-            text-align: center;
-          }
-          .day-view-month-header {
-            grid-column-start: 1;
-            grid-column-end: 8;
-            text-align: center;
-          }
-          .day-header {
-            display: inline;
-            margin-left: 0.5rem;
           }
         `}
       </style>

@@ -64,9 +64,9 @@
       "default": false
     },
     "coach_or_trainers": {
-      "via": "athletes",
       "plugin": "users-permissions",
       "collection": "user",
+      "via": "athletes",
       "dominant": true
     },
     "noneOfTheAbove": {
@@ -75,6 +75,10 @@
     },
     "metric": {
       "model": "metric"
+    },
+    "color_code_exercises": {
+      "collection": "color-code-exercise",
+      "via": "profile"
     }
   }
 }

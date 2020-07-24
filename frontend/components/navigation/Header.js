@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import Link from 'next/link';
 
 import DropDownMenu from './DropDownMenu';
-import SquatLogo from './SquatLogo';
-import LH from './LH';
+import SquatLogo from '../logos/SquatLogo';
+import LH from '../logos/LH';
 
 const Header = ({ setShowContactModal, showContactModal }) => {
   return (

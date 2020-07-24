@@ -7,8 +7,10 @@ import ExercisesForDay from '../../../../../components/exercise/ExercisesForDay'
 
 import privateRoute from '../../../../../components/hocs/privateRoute';
 import CurrentWeekNav from '../../../../../components/navigation/CurrentWeekNav';
+import Weekdays from '../../../../../components/calendar/Weekdays';
+import Week from '../../../../../components/calendar/Week';
 
-import { weekdayWrapper } from '../../../../../utils/calendarUtils';
+// import { weekdayWrapper } from '../../../../../utils/calendarUtils';
 
 const WeekView = props => {
   console.log('WeekView props: ', props);
@@ -48,20 +50,7 @@ const WeekView = props => {
         {month}
         <div className="week-header">{convertWeekUrltoUi()}</div>
       </h5>
-      {weekdayWrapper('week-view')}
-      <CurrentWeekNav currentWeek={weekRange} month={month} />
-      {weekRange.map(date => {
-        const { year, month, day } = date;
-        return (
-          <ExercisesForDay
-            program={allPrograms}
-            selectedMonth={month}
-            day={day}
-            classView={'program-week-view'}
-            key={uuidv4()}
-          />
-        );
-      })}
+      <Week weekRange={weekRange} allPrograms={allPrograms} month={month} />
       <style jsx>{`
         .week-view-container {
           display: grid;

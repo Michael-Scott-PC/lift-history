@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
-import SquatLogo from './SquatLogo';
+import SquatLogo from '../logos/SquatLogo';
 import SettingsModal from '../modal/SettingsModal';
 
 const AuthenticatedNav = props => {

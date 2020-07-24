@@ -58,8 +58,8 @@
       "model": "profile"
     },
     "athletes": {
-      "collection": "profile",
-      "via": "coach_or_trainers"
+      "via": "coach_or_trainers",
+      "collection": "profile"
     },
     "myPrograms": {
       "via": "users",

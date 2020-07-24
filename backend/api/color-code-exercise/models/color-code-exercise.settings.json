@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "color_code_exercises",
+  "info": {
+    "name": "color-code-exercise"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "color": {
+      "model": "default-colors"
+    },
+    "exercise": {
+      "model": "exercise"
+    },
+    "isDefault": {
+      "type": "boolean",
+      "default": false
+    },
+    "profile": {
+      "via": "color_code_exercises",
+      "model": "profile"
+    }
+  }
+}

@@ -25,7 +25,7 @@ import {
 } from '../../redux/actions/calendarActions';
 
 const PrivateFooter = props => {
-  console.log('PrivateFooter props: ', props);
+  // console.log('PrivateFooter props: ', props);
   const {
     setCurrentWeekRangeGlobal,
     setCurrentWeekURLGlobal,
