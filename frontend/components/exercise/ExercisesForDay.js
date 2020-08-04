@@ -5,12 +5,12 @@ import { programHelper } from '../../utils/scheduleUtils';
 // import { useStyles } from '../../utils/scheduleUtils';
 
 const ExercisesForDay = props => {
-  console.log('ExerciesForDay props: ', props);
-  const { allPrograms, month, day, year, classView, dataSWR } = props;
+  // console.log('ExerciesForDay props: ', props);
+  const { profile, allPrograms, month, day, year, classView, dataSWR } = props;
 
   return (
     <div id="exercises-for-day" className={`${classView}`}>
-      {programHelper(allPrograms, month, day, classView, dataSWR)}
+      {programHelper(allPrograms, month, day, classView, dataSWR, profile)}
       <style jsx>
         {`
           #exercises-for-day {

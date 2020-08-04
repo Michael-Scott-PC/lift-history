@@ -1,4 +1,4 @@
-import { GET_AUTOCOMPLETE_RESULTS } from './types';
+import { GET_AUTOCOMPLETE_RESULTS, CLEAR_RESULTS } from './types';
 
 import strapiAPI from '../../api/strapiAPI';
 
@@ -15,15 +15,27 @@ export const autoComplete = values => async dispatch => {
 
     const possibleExercises = [];
     for (let obj of data) {
+      // console.log('obj: ', obj);
+      const { id, nameOfExercise, default_color } = obj;
       //   console.log(obj.nameOfExercise);
-      possibleExercises.push(obj.nameOfExercise);
+      possibleExercises.push({ id, nameOfExercise, default_color });
     }
 
-    // console.log(possibleExercises);
+    // console.log('possibleExercises: ', possibleExercises);
 
     dispatch({
       type: GET_AUTOCOMPLETE_RESULTS,
       payload: possibleExercises,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const clearResults = () => dispatch => {
+  try {
+    dispatch({
+      type: CLEAR_RESULTS,
     });
   } catch (error) {
     console.log(error);

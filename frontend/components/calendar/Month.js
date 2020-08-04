@@ -17,6 +17,7 @@ const Month = ({
   monthHeader,
   validateYear,
   monthIndex,
+  profile,
   allPrograms,
   dataSWR,
 }) => {
@@ -32,6 +33,7 @@ const Month = ({
           />
           <Weekdays classView={'month-view'} />
           <Days
+            profile={profile}
             month={month}
             monthIndex={monthIndex}
             classView={'month-view'}

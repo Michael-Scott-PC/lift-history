@@ -22,7 +22,7 @@ import {
 } from '../../../../../../redux/actions/calendarActions';
 
 const DayView = props => {
-  console.log('DayView props: ', props);
+  // console.log('DayView props: ', props);
   const { dataSWR } = props;
   const {
     year,

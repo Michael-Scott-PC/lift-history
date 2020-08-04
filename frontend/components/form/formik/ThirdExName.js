@@ -3,10 +3,12 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 
 const ThirdExName = ({ values, thirdEx }) => {
+  console.log('thirdEx', thirdEx);
   return (
     <Field
       name="thirdEx"
-      value={(values.thirdExercise = thirdEx)}
+      value={(values.thirdExercise = thirdEx.nameOfExercise)}
+      type="text"
       readOnly
       style={{
         gridColumn: '1 / 13',
@@ -20,7 +22,7 @@ const ThirdExName = ({ values, thirdEx }) => {
 
 ThirdExName.propTypes = {
   values: PropTypes.object.isRequired,
-  thirdEx: PropTypes.string.isRequired,
+  thirdEx: PropTypes.object.isRequired,
 };
 
 export default ThirdExName;

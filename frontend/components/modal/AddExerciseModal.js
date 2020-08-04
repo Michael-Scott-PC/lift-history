@@ -2,20 +2,45 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
+import AddExerciseFormikNEW from '../form/formik/AddExerciseFormikNEW';
 import AddExerciseFormik from '../form/formik/AddExerciseFormik';
 import CloseButton from '../button/CloseButton';
 import SearchBar from '../form/formik/SearchBar';
 
-const AddExerciseModal = ({ showAddExModal, setShowAddExModal, dataSWR }) => {
+const AddExerciseModal = ({
+  showAddExModal,
+  setShowAddExModal,
+  dataSWR,
+  authReducer,
+  profile,
+}) => {
   const [showExerciseForm, setShowExerciseForm] = useState(false);
-  const [exerciseSelected, setExercise] = useState('');
+  const [primaryExerciseSelected, setPrimaryExercise] = useState({});
   const [localPickDate, setLocalPickDate] = useState('');
+  const [localPrimarySetsAndReps, setLocalPrimarySetsAndReps] = useState([
+    { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+  ]);
+  const [localSecondarySetsAndReps, setLocalSecondarySetsAndReps] = useState([
+    { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+  ]);
+  const [localThirdSetsAndReps, setLocalThirdSetsAndReps] = useState([
+    { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+  ]);
 
   const clearFormCloseModal = () => {
-    console.log('clearFormCloseModal ran.');
-    setExercise('');
+    setPrimaryExercise('');
+    setLocalPickDate('');
     setShowExerciseForm(false);
     setShowAddExModal(false);
+    setLocalPrimarySetsAndReps([
+      { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+    ]);
+    setLocalSecondarySetsAndReps([
+      { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+    ]);
+    setLocalThirdSetsAndReps([
+      { sets: '', reps: '', weight: '', rpe: '', pct: '' },
+    ]);
   };
 
   return (
@@ -32,20 +57,32 @@ const AddExerciseModal = ({ showAddExModal, setShowAddExModal, dataSWR }) => {
         <CloseButton handleOnClick={clearFormCloseModal} />
       </Modal.Header>
       <Modal.Body>
-        <SearchBar
+        {/* <SearchBar
           setShowExerciseForm={setShowExerciseForm}
-          setExercise={setExercise}
-        />
-        <AddExerciseFormik
-          showExerciseForm={showExerciseForm}
-          setShowExerciseForm={setShowExerciseForm}
-          exerciseSelected={exerciseSelected}
-          setExercise={setExercise}
-          localPickDate={localPickDate}
-          setLocalPickDate={setLocalPickDate}
+          setPrimaryExercise={setPrimaryExercise}
+        /> */}
+        <AddExerciseFormikNEW
           setShowAddExModal={setShowAddExModal}
+          authReducer={authReducer}
+          profile={profile}
           dataSWR={dataSWR}
         />
+        {/* <AddExerciseFormik
+          showExerciseForm={showExerciseForm}
+          setShowExerciseForm={setShowExerciseForm}
+          primaryExerciseSelected={primaryExerciseSelected}
+          setPrimaryExercise={setPrimaryExercise}
+          localPickDate={localPickDate}
+          setLocalPickDate={setLocalPickDate}
+          setLocalPrimarySetsAndReps={setLocalPrimarySetsAndReps}
+          setLocalSecondarySetsAndReps={setLocalSecondarySetsAndReps}
+          setLocalThirdSetsAndReps={setLocalThirdSetsAndReps}
+          localPrimarySetsAndReps={localPrimarySetsAndReps}
+          localSecondarySetsAndReps={localSecondarySetsAndReps}
+          localThirdSetsAndReps={localThirdSetsAndReps}
+          setShowAddExModal={setShowAddExModal}
+          dataSWR={dataSWR}
+        /> */}
       </Modal.Body>
     </Modal>
   );

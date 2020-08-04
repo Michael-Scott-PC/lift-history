@@ -17,13 +17,13 @@ const Options = ({
 }) => {
   const handleSuperSet = () => {
     setLocalIsSuperSet(!localIsSuperSet);
-    setSecondaryEx('');
+    setSecondaryEx({});
   };
 
   const handleTripleSet = () => {
     setLocalIsTripleSet(!localIsTripleSet);
-    setThirdEx('');
-    setSecondaryEx('');
+    setThirdEx({});
+    setSecondaryEx({});
   };
 
   return (

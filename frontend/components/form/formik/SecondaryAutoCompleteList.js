@@ -1,7 +1,10 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { autoComplete } from '../../../redux/actions/searchActions';
+import {
+  autoComplete,
+  clearResults,
+} from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';
 
 const SecondaryAutoCompleteList = ({
@@ -13,26 +16,50 @@ const SecondaryAutoCompleteList = ({
   resetForm,
   setShowExerciseForm,
   autoComplete,
+  clearResults,
 }) => {
   useEffect(() => {
     if (secondaryExercise.length > 0) {
+      console.log('THISSSSSS RANNNNN!!!!!');
       autoComplete(secondaryExercise);
     }
   }, [secondaryExercise]);
+  console.log('SecondaryAutoCompleteList');
+
+  const addExerciseHelper = (
+    exercise,
+    setValues,
+    setPrimaryExercise,
+    setShowExerciseForm,
+    resetForm
+  ) => {
+    handleAddExercise(
+      exercise,
+      setValues,
+      setSecondaryEx,
+      setShowExerciseForm,
+      resetForm
+    );
+    clearResults();
+  };
 
   return (
     <ul>
       {results.map(exercise => (
-        <Fragment key={exercise}>
-          <li onClick={() => setFieldValue('secondaryExercise', `${exercise}`)}>
-            {exercise}
+        <Fragment key={exercise.id}>
+          <li
+            onClick={() =>
+              setFieldValue('secondaryExercise', `${exercise.nameOfExercise}`)
+            }
+          >
+            {exercise.nameOfExercise}
           </li>
           <img
             src="/greenAddIcon.svg"
             alt="green add icon"
             id="add-exercise-icon"
             onClick={() =>
-              handleAddExercise(
+              addExerciseHelper(
                 exercise,
                 setValues,
                 setSecondaryEx,
@@ -45,7 +72,9 @@ const SecondaryAutoCompleteList = ({
             src="/autoCompleteArrow.svg"
             alt="autocomplete arrow"
             id="auto-complete-arrow"
-            onClick={() => setFieldValue('secondaryExercise', `${exercise}`)}
+            onClick={() =>
+              setFieldValue('secondaryExercise', `${exercise.nameOfExercise}`)
+            }
           />
         </Fragment>
       ))}
@@ -89,6 +118,6 @@ const mapStateToProps = state => ({
   searchReducer: state.searchReducer,
 });
 
-export default connect(mapStateToProps, { autoComplete })(
+export default connect(mapStateToProps, { autoComplete, clearResults })(
   SecondaryAutoCompleteList
 );

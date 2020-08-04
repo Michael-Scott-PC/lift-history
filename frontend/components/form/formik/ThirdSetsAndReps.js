@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Field, FieldArray } from 'formik';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +9,12 @@ const ThirdSetsAndReps = ({
   rpe,
   isSuperSet,
   isTripleSet,
+  setLocalThirdSetsAndReps,
 }) => {
+  useEffect(() => {
+    setLocalThirdSetsAndReps(thirdSetsAndReps);
+  }, [thirdSetsAndReps]);
+
   return (
     <FieldArray name="thirdSetsAndReps">
       {({ push, remove, insert }) => (

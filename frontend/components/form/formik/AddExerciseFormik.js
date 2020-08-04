@@ -5,6 +5,7 @@ import { Form, withFormik } from 'formik';
 import { mutate, trigger } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
+import ErrorMsg from './ErrorMsg';
 import DateAndTime from './DateAndTime';
 import Options from './Options';
 import PrimaryExercise from './PrimaryExercise';
@@ -24,29 +25,41 @@ import {
   createUserProgram,
   setsAndRepsHelper,
 } from '../../../redux/actions/programActions';
+import {
+  checkForColor,
+  createColor,
+  createColorCodeExercise,
+} from '../../../redux/actions/profileActions';
 import exerciseSchema from '../schema/exerciseSchema';
 
-const AddExerciseFormik = ({
-  searchReducer: { results },
-  values,
-  showExerciseForm,
-  exerciseSelected,
-  setExercise,
-  setValues,
-  setFieldValue,
-  handleSubmit,
-  resetForm,
-  setShowExerciseForm,
-  setLocalPickDate,
-  errors,
-  touched,
-}) => {
+const AddExerciseFormik = props => {
+  console.log('AddExerciseFormik props: ', props);
+  const {
+    searchReducer: { results },
+    values,
+    showExerciseForm,
+    primaryExerciseSelected,
+    setPrimaryExercise,
+    setValues,
+    setFieldValue,
+    handleSubmit,
+    resetForm,
+    setShowExerciseForm,
+    setLocalPickDate,
+    setLocalPrimarySetsAndReps,
+    setLocalSecondarySetsAndReps,
+    setLocalThirdSetsAndReps,
+    errors,
+    touched,
+  } = props;
+  console.log('values: ', values);
+  console.log('results: ', results);
   // For now, in order to persist these values from formik I'm storing them in local state.
   // When I update any part of the form, e.g. selecting an exercise, the form values reset
   // to their defaults, which is not what I want.
-  const [secondaryEx, setSecondaryEx] = useState('');
+  const [secondaryEx, setSecondaryEx] = useState({});
   const [localIsSuperSet, setLocalIsSuperSet] = useState(false);
-  const [thirdEx, setThirdEx] = useState('');
+  const [thirdEx, setThirdEx] = useState({});
   const [localIsTripleSet, setLocalIsTripleSet] = useState(false);
 
   const {
@@ -70,17 +83,37 @@ const AddExerciseFormik = ({
   const {
     pickDate: pickDateErrors,
     primarySetsAndReps: primarySetsAndRepsErrors,
+    secondarySetsAndReps: secondarySetsAndRepsErrors,
+    thirdSetsAndReps: thirdSetsAndRepsErrors,
   } = errors;
+
+  const {
+    primarySetsAndReps: primarySetsAndRepsTouched,
+    secondarySetsAndReps: secondarySetsAndRepsTouched,
+    thirdSetsAndReps: thirdSetsAndRepsTouched,
+  } = touched;
 
   useEffect(() => {
     if (!showExerciseForm) {
       resetForm();
     }
-  }, [showExerciseForm]);
+
+    setFieldValue('primaryExercise', primaryExerciseSelected.nameOfExercise);
+    setFieldValue('primaryExerciseId', primaryExerciseSelected.id);
+    if (Object.entries(secondaryEx).length !== 0) {
+      console.log('THIS RAN!!!!!!!!!!!!!!');
+      setFieldValue('secondaryExercise', secondaryEx.nameOfExercise);
+      setFieldValue('secondaryExerciseId', secondaryEx.id);
+    }
+    if (Object.entries(thirdEx).length !== 0) {
+      setFieldValue('thirdExercise', thirdEx.nameOfExercise);
+      setFieldValue('thirdExerciseId', thirdEx.id);
+    }
+  }, [showExerciseForm, primaryExerciseSelected, secondaryEx, thirdEx]);
 
   return (
     <Fragment>
-      {exerciseSelected && (
+      {Object.entries(primaryExerciseSelected).length !== 0 && (
         <Form
           noValidate
           onSubmit={handleSubmit}
@@ -121,9 +154,10 @@ const AddExerciseFormik = ({
           {/* Displays primary exercise name */}
           <PrimaryExercise
             values={values}
-            exerciseSelected={exerciseSelected}
-            setExercise={setExercise}
+            primaryExerciseSelected={primaryExerciseSelected}
+            setPrimaryExercise={setPrimaryExercise}
             setFieldValue={setFieldValue}
+            setValues={setValues}
           />
 
           {/* Displays primary exercise sets and reps */}
@@ -135,38 +169,27 @@ const AddExerciseFormik = ({
             isSuperSet={isSuperSet}
             isTripleSet={isTripleSet}
             touched={touched}
+            setLocalPrimarySetsAndReps={setLocalPrimarySetsAndReps}
           />
 
           {/* We only want to render the error messages if all 3 required fields have been touched */}
-          {primarySetsAndRepsErrors &&
-            touched.primarySetsAndReps &&
-            touched.primarySetsAndReps[0].sets &&
-            touched.primarySetsAndReps[0].reps &&
-            touched.primarySetsAndReps[0].weight &&
-            primarySetsAndRepsErrors.map(errorMsg => (
-              <Fragment key={uuidv4()}>
-                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
-                  {errorMsg.sets}
-                </p>
-                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
-                  {errorMsg.reps}
-                </p>
-                <p style={{ color: 'red', gridColumn: '1 / 13' }}>
-                  {errorMsg.weight}
-                </p>
-              </Fragment>
-            ))}
+          {primarySetsAndRepsErrors && primarySetsAndRepsTouched && (
+            <ErrorMsg
+              whichSetsAndRepsErrors={primarySetsAndRepsErrors}
+              whichSetsAndRepsTouched={primarySetsAndRepsTouched}
+            />
+          )}
 
           {/* Displays search bar for secondary exercise */}
-          {(localIsSuperSet || localIsTripleSet) && !secondaryEx && (
-            <SecondaryExSearchBar />
-          )}
+          {(localIsSuperSet || localIsTripleSet) &&
+            Object.entries(secondaryEx).length === 0 && (
+              <SecondaryExSearchBar />
+            )}
 
           {/* Displays autocomplete list for secondary exercise */}
           {(localIsSuperSet || localIsTripleSet) &&
-            results &&
             secondaryExercise.length > 0 &&
-            !secondaryEx && (
+            Object.entries(secondaryEx).length === 0 && (
               <SecondaryAutoCompleteList
                 setFieldValue={setFieldValue}
                 secondaryExercise={secondaryExercise}
@@ -178,9 +201,10 @@ const AddExerciseFormik = ({
             )}
 
           {/* Displays secondary exercise name */}
-          {(localIsSuperSet || localIsTripleSet) && secondaryEx && (
-            <SecondaryExName secondaryEx={secondaryEx} values={values} />
-          )}
+          {(localIsSuperSet || localIsTripleSet) &&
+            Object.entries(secondaryEx).length !== 0 && (
+              <SecondaryExName secondaryEx={secondaryEx} values={values} />
+            )}
 
           {/* Displays sets and reps for secondary exercise */}
           {(localIsSuperSet || localIsTripleSet) && (
@@ -190,26 +214,40 @@ const AddExerciseFormik = ({
               isTripleSet={isTripleSet}
               pct={pct}
               rpe={rpe}
+              setLocalSecondarySetsAndReps={setLocalSecondarySetsAndReps}
+            />
+          )}
+
+          {secondarySetsAndRepsErrors && secondarySetsAndRepsTouched && (
+            <ErrorMsg
+              whichSetsAndRepsErrors={secondarySetsAndRepsErrors}
+              whichSetsAndRepsTouched={secondarySetsAndRepsTouched}
             />
           )}
 
           {/* Displays search bar for third exercise  */}
-          {localIsTripleSet && !thirdEx && <ThirdExSearchBar />}
-
-          {/* Displays autocomplete results for third exercise search bar */}
-          {results && thirdExercise.length > 0 && !thirdEx && results && (
-            <ThirdAutoComplete
-              setValues={setValues}
-              setThirdEx={setThirdEx}
-              setShowExerciseForm={setShowExerciseForm}
-              resetForm={resetForm}
-              thirdExercise={thirdExercise}
-              setFieldValue={setFieldValue}
-            />
+          {localIsTripleSet && Object.entries(thirdEx).length === 0 && (
+            <ThirdExSearchBar />
           )}
 
+          {/* Displays autocomplete results for third exercise search bar */}
+          {localIsTripleSet &&
+            thirdExercise.length > 0 &&
+            Object.entries(thirdEx).length === 0 && (
+              <ThirdAutoComplete
+                setValues={setValues}
+                setThirdEx={setThirdEx}
+                setShowExerciseForm={setShowExerciseForm}
+                resetForm={resetForm}
+                thirdExercise={thirdExercise}
+                setFieldValue={setFieldValue}
+              />
+            )}
+
           {/* Display Third Exercise name */}
-          {thirdEx && <ThirdExName thirdEx={thirdEx} values={values} />}
+          {localIsTripleSet && Object.entries(thirdEx).length !== 0 && (
+            <ThirdExName thirdEx={thirdEx} values={values} />
+          )}
 
           {/* Displays sets and reps for third exercise */}
           {localIsTripleSet && (
@@ -219,6 +257,13 @@ const AddExerciseFormik = ({
               rpe={rpe}
               isSuperSet={isSuperSet}
               isTripleSet={isTripleSet}
+              setLocalThirdSetsAndReps={setLocalThirdSetsAndReps}
+            />
+          )}
+          {thirdSetsAndRepsErrors && thirdSetsAndRepsTouched && (
+            <ErrorMsg
+              whichSetsAndRepsErrors={thirdSetsAndRepsErrors}
+              whichSetsAndRepsTouched={thirdSetsAndRepsTouched}
             />
           )}
 
@@ -232,14 +277,27 @@ const AddExerciseFormik = ({
 };
 
 const FormikComp = withFormik({
-  mapPropsToValues({ localPickDate }) {
+  mapPropsToValues({
+    localPickDate,
+    localPrimarySetsAndReps,
+    localSecondarySetsAndReps,
+    localThirdSetsAndReps,
+    primaryExerciseSelected,
+  }) {
     // TODO: in order to persist the form state, these are all going to be stored locally
     // via useState (like localPickDate). Formik does not seem to have their own solution
     // for this.
     return {
+      primaryExerciseId: primaryExerciseSelected.id,
       primaryExercise: '',
+      primaryExerciseBgColor: '',
+      isDefaultColor: false,
+      secondaryExerciseId: '',
       secondaryExercise: '',
+      secondaryExerciseBgColor: '',
+      thirdExerciseId: '',
       thirdExercise: '',
+      thirdExerciseBgColor: '',
       pickDate: localPickDate,
       enableTime: false,
       time: '',
@@ -249,13 +307,9 @@ const FormikComp = withFormik({
       isWorkingSet: false,
       rpe: false,
       pct: false,
-      primarySetsAndReps: [
-        { sets: '', reps: '', weight: '', rpe: '', pct: '' },
-      ],
-      secondarySetsAndReps: [
-        { sets: '', reps: '', weight: '', rpe: '', pct: '' },
-      ],
-      thirdSetsAndReps: [{ sets: '', reps: '', weight: '', rpe: '', pct: '' }],
+      primarySetsAndReps: localPrimarySetsAndReps,
+      secondarySetsAndReps: localSecondarySetsAndReps,
+      thirdSetsAndReps: localThirdSetsAndReps,
     };
   },
   validationSchema: props => exerciseSchema,
@@ -266,9 +320,10 @@ const FormikComp = withFormik({
       props: {
         authReducer: { id, jwt },
         createUserProgram,
+        createColorCodeExercise,
         programReducer,
         setShowAddExModal,
-        setExercise,
+        setPrimaryExercise,
         setLocalPickDate,
         dataSWR,
       },
@@ -293,12 +348,37 @@ const FormikComp = withFormik({
       false
     );
 
+    // TODO: colors are unique in the DB. We need to check if
+    // the color exists, if not createColor. Send the color id
+    // (res.data.id) to createColorCodeExercise
+    // remove hash from hex color code
+    const sanitizedColor = values.primaryExerciseBgColor.slice(1);
+    let verifiedColor;
+    const checkForColorRes = await checkForColor(sanitizedColor, jwt);
+    if (checkForColorRes) {
+      verifiedColor = checkForColorRes;
+    }
+    if (!checkForColorRes) {
+      verifiedColor = await createColor(sanitizedColor, jwt);
+    }
+    console.log('verfiedColor: ', verifiedColor);
+
     createUserProgram(jwt, id, values);
+
+    const { primaryExercise, isDefaultColor } = values;
+    createColorCodeExercise(
+      primaryExercise.id,
+      verifiedColor[0].id,
+      isDefaultColor,
+      jwt,
+      id
+    );
+
     setSubmitting(false);
 
     // If successful POST, we want to clear the form and close modal
     if (programReducer.statusCode === 200 || programReducer.program) {
-      setExercise('');
+      setPrimaryExercise({});
       setLocalPickDate('');
       setShowAddExModal(false);
     }
@@ -311,8 +391,8 @@ AddExerciseFormik.propTypes = {
   values: PropTypes.object.isRequired,
   autoComplete: PropTypes.func.isRequired,
   showExerciseForm: PropTypes.bool.isRequired,
-  exerciseSelected: PropTypes.string.isRequired,
-  setExercise: PropTypes.func.isRequired,
+  primaryExerciseSelected: PropTypes.object.isRequired,
+  setPrimaryExercise: PropTypes.func.isRequired,
   setValues: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
@@ -329,6 +409,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   autoComplete,
   createUserProgram,
+  createColorCodeExercise,
   setsAndRepsHelper,
   mutate,
 })(FormikComp);

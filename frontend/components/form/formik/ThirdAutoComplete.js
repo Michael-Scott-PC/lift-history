@@ -2,7 +2,10 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { autoComplete } from '../../../redux/actions/searchActions';
+import {
+  autoComplete,
+  clearResults,
+} from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';
 
 const ThirdAutoComplete = ({
@@ -14,6 +17,7 @@ const ThirdAutoComplete = ({
   resetForm,
   setShowExerciseForm,
   autoComplete,
+  clearResults,
 }) => {
   useEffect(() => {
     if (thirdExercise.length > 0) {
@@ -21,19 +25,40 @@ const ThirdAutoComplete = ({
     }
   }, [thirdExercise]);
 
+  const addExerciseHelper = (
+    exercise,
+    setValues,
+    setPrimaryExercise,
+    setShowExerciseForm,
+    resetForm
+  ) => {
+    handleAddExercise(
+      exercise,
+      setValues,
+      setThirdEx,
+      setShowExerciseForm,
+      resetForm
+    );
+    clearResults();
+  };
+
   return (
     <ul>
       {results.map(exercise => (
-        <Fragment key={exercise}>
-          <li onClick={() => setFieldValue('thirdExercise', `${exercise}`)}>
-            {exercise}
+        <Fragment key={exercise.id}>
+          <li
+            onClick={() =>
+              setFieldValue('thirdExercise', `${exercise.nameOfExercise}`)
+            }
+          >
+            {exercise.nameOfExercise}
           </li>
           <img
             src="/greenAddIcon.svg"
             alt="green add icon"
             id="add-exercise-icon"
             onClick={() =>
-              handleAddExercise(
+              addExerciseHelper(
                 exercise,
                 setValues,
                 setThirdEx,
@@ -46,7 +71,9 @@ const ThirdAutoComplete = ({
             src="/autoCompleteArrow.svg"
             alt="autocomplete arrow"
             id="auto-complete-arrow"
-            onClick={() => setFieldValue('thirdExercise', `${exercise}`)}
+            onClick={() =>
+              setFieldValue('thirdExercise', `${exercise.nameOfExercise}`)
+            }
           />
         </Fragment>
       ))}
@@ -90,4 +117,6 @@ const mapStateToProps = state => ({
   searchReducer: state.searchReducer,
 });
 
-export default connect(mapStateToProps, { autoComplete })(ThirdAutoComplete);
+export default connect(mapStateToProps, { autoComplete, clearResults })(
+  ThirdAutoComplete
+);

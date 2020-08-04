@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Field } from 'formik';
 
 const SecondaryExSearchBar = props => {
+  console.log('SecondaryExSearchBar');
   return (
     <Fragment>
       <Field

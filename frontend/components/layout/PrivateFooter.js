@@ -25,21 +25,24 @@ import {
 } from '../../redux/actions/calendarActions';
 
 const PrivateFooter = props => {
-  // console.log('PrivateFooter props: ', props);
   const {
-    setCurrentWeekRangeGlobal,
-    setCurrentWeekURLGlobal,
-  } = props.remainingProps;
+    authReducer,
+    dataSWR,
+    profile,
+    remainingProps: { setCurrentWeekRangeGlobal, setCurrentWeekURLGlobal },
+  } = props;
+
   const { weekRangeURL } = props.remainingProps.calendarReducer;
+
   const [showAddExModal, setShowAddExModal] = useState(false);
   const abbrMonth = getMonth(currentMonth);
+
   const abbrWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   // current day comes back as a number, we need to convert it to a string &
   // add a 0 before numbers 1-9 to match our routing params.
-  // const currentDayStr = currentDay.toString();
-  // const sanitizedCurrentDayStr =
-  //   currentDayStr.length < 2 ? `0${currentDayStr}` : currentDayStr;
-  const sanitizedCurrentDayStr = sanitizeDay(currentDay.toString());
+  const currentDayStr = currentDay.toString();
+  const matchRouteStr =
+    currentDayStr.length < 2 ? `0${currentDayStr}` : currentDayStr;
 
   const getWeekdayAbbr = () => {
     let result;
@@ -57,13 +60,15 @@ const PrivateFooter = props => {
   const getUrlWeekRange = validateYear => {
     let firstIndex = validateYear[0];
     let lastIndex = validateYear[validateYear.length - 1];
+
     let urlWeekRange = firstIndex.join('-') + '-' + lastIndex.join('-');
     setUrlWeekRange(urlWeekRange);
   };
 
   useEffect(() => {
-    if (currentDay) {
-      const weekRange = getWeekRange(abbrMonth, currentDay.toString());
+    if (matchRouteStr) {
+      const weekRange = getWeekRange(abbrMonth, matchRouteStr);
+
       const validateYear = checkForNeighborYear(abbrMonth, weekRange);
       getUrlWeekRange(validateYear);
       setCurrentWeekURLGlobal(urlWeekRange);
@@ -91,19 +96,23 @@ const PrivateFooter = props => {
         />
         <Link
           href="/dashboard/[year]/[month]/[week]/[day]"
-          as={`/dashboard/${currentYear}/${abbrMonth}/${weekRangeURL}/${sanitizedCurrentDayStr}`}
+          as={`/dashboard/${currentYear}/${abbrMonth}/${weekRangeURL}/${matchRouteStr}`}
         >
           <button className="currentDayBtn">
             <h5 className="currentDay">{currentWeekday}</h5>
-            <h3>{sanitizedCurrentDayStr}</h3>
+            <h3>{sanitizeDay(matchRouteStr)}</h3>
           </button>
         </Link>
       </div>
-      <AddExerciseModal
-        showAddExModal={showAddExModal}
-        setShowAddExModal={setShowAddExModal}
-        dataSWR={props.dataSWR}
-      />
+      {showAddExModal && (
+        <AddExerciseModal
+          showAddExModal={showAddExModal}
+          setShowAddExModal={setShowAddExModal}
+          authReducer={authReducer}
+          profile={profile}
+          dataSWR={dataSWR}
+        />
+      )}
       <style jsx>
         {`
           nav {

@@ -1,5 +1,3 @@
-import { HYDRATE } from 'next-redux-wrapper';
-
 import {
   CREATE_PROFILE,
   ERROR_CREATE_PROFILE,
@@ -9,6 +7,7 @@ import {
   ERROR_LOAD_PROFILE,
   UPDATE_PROFILE,
   ERROR_UPDATE_PROFILE,
+  REVALIDATE_PROFILE,
 } from '../actions/types';
 
 const initialState = {
@@ -20,11 +19,6 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    // case HYDRATE:
-    //   return {
-    //     ...state,
-    //     ...payload,
-    //   };
     case CREATE_PROFILE:
     case ATTACH_PROFILE:
     case LOAD_PROFILE:
@@ -32,6 +26,15 @@ export default function (state = initialState, action) {
       return {
         ...state,
         profile: payload,
+      };
+    case REVALIDATE_PROFILE:
+      const { color_code_exercises } = payload;
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          color_code_exercises: [...color_code_exercises],
+        },
       };
     case ERROR_CREATE_PROFILE:
     case ERROR_LOAD_PROFILE:

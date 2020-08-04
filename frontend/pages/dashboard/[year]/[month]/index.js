@@ -14,22 +14,21 @@ import BackToYearView from '../../../../components/navigation/BackToYearView';
 import Month from '../../../../components/calendar/Month';
 
 const MonthView = props => {
-  console.log('MonthView props: ', props);
+  // console.log('MonthView props: ', props);
   const [monthHeader, setMonthHeader] = useState('');
   const [allWeeksInMonth, setAllWeeksInMonth] = useState([]);
 
   const monthIndex = abbrMonths.indexOf(props.remainingProps.month) + 1;
   const allWeeksForMonth = getAllWeeksForMonth(props.remainingProps.month);
-  // console.log('allWeeksForMonth: ', allWeeksForMonth);
   const validateYear = checkForNeighborYear(
     props.remainingProps.month,
     allWeeksForMonth
   );
-  // console.log('validateYear: ', validateYear);
 
   const {
     dataSWR,
     authReducer: { jwt, id: userId },
+    profile,
     remainingProps: {
       month,
       year,
@@ -46,6 +45,7 @@ const MonthView = props => {
   return (
     <>
       <Month
+        profile={profile}
         year={year}
         monthHeader={monthHeader}
         monthIndex={monthIndex}

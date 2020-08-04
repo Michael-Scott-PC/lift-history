@@ -13,6 +13,7 @@ const Days = props => {
     monthIndex,
     classView,
     allPrograms,
+    profile,
     dataSWR,
     validateYear,
   } = props;
@@ -48,9 +49,11 @@ const Days = props => {
             day={day}
             monthIndex={monthIndex}
             abbrMonth={abbrMonth}
+            profile={profile}
             allPrograms={allPrograms}
             dataSWR={dataSWR}
             urlWeekRange={urlWeekRange}
+            key={uuidv4()}
           />
         );
       })}

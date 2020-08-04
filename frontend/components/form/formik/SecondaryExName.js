@@ -6,7 +6,7 @@ const SecondaryExName = ({ values, secondaryEx }) => {
   return (
     <Field
       name="secondaryEx"
-      value={(values.secondaryExercise = secondaryEx)}
+      value={(values.secondaryExercise = secondaryEx.nameOfExercise)}
       readOnly
       style={{
         gridColumn: '1 / 13',
@@ -20,7 +20,7 @@ const SecondaryExName = ({ values, secondaryEx }) => {
 
 SecondaryExName.propTypes = {
   values: PropTypes.object.isRequired,
-  secondaryEx: PropTypes.string.isRequired,
+  secondaryEx: PropTypes.object.isRequired,
 };
 
 export default SecondaryExName;

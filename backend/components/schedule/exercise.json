@@ -14,6 +14,9 @@
       "type": "component",
       "repeatable": true,
       "component": "schedule.sets-and-reps"
+    },
+    "color": {
+      "model": "default-colors"
     }
   }
 }

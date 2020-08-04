@@ -4,25 +4,23 @@ import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
-import { autoComplete } from '../../../redux/actions/searchActions';
+import {
+  autoComplete,
+  clearResults,
+} from '../../../redux/actions/searchActions';
 import { handleAddExercise } from '../../../utils/scheduleUtils';
 
 const SearchBar = ({
   autoComplete,
+  clearResults,
   searchReducer: { results },
   setShowExerciseForm,
-  setExercise,
+  setPrimaryExercise,
 }) => {
   return (
     <Fragment>
       <Formik
         onSubmit={console.log}
-        //   onSubmit={(values, { setSubmitting, resetForm }) => {
-        //     setTimeout(() => {
-        //       setSubmitting(false);
-        //       resetForm(true);
-        //     }, 400);
-        //   }}
         initialValues={{
           searchTerm: '',
         }}
@@ -41,15 +39,22 @@ const SearchBar = ({
             }
           }, [values.searchTerm]);
 
-          // const highlightCharacters = (item) => {
-          //   const subString = new RegExp(`/${values.searchTerm}/`);
-          //   const finalString = '';
-          //   for (let char of item) {
-          //     if (char === values.searchTerm) {
-
-          //     }
-          //   }
-          // }
+          const addExerciseHelper = (
+            exercise,
+            setValues,
+            setPrimaryExercise,
+            setShowExerciseForm,
+            resetForm
+          ) => {
+            handleAddExercise(
+              exercise,
+              setValues,
+              setPrimaryExercise,
+              setShowExerciseForm,
+              resetForm
+            );
+            clearResults();
+          };
 
           return (
             <>
@@ -91,21 +96,25 @@ const SearchBar = ({
               {results && values.searchTerm.length > 0 && (
                 <ul>
                   {results.map(exercise => (
-                    <Fragment key={exercise}>
+                    <Fragment key={exercise.id}>
                       <li
-                        onClick={() => setValues({ searchTerm: `${exercise}` })}
+                        onClick={() =>
+                          setValues({
+                            searchTerm: `${exercise.nameOfExercise}`,
+                          })
+                        }
                       >
-                        {exercise}
+                        {exercise.nameOfExercise}
                       </li>
                       <img
                         src="/greenAddIcon.svg"
                         alt="green add icon"
                         id="add-exercise-icon"
                         onClick={() =>
-                          handleAddExercise(
+                          addExerciseHelper(
                             exercise,
                             setValues,
-                            setExercise,
+                            setPrimaryExercise,
                             setShowExerciseForm,
                             resetForm
                           )
@@ -115,7 +124,11 @@ const SearchBar = ({
                         src="/autoCompleteArrow.svg"
                         alt="autocomplete arrow"
                         id="auto-complete-arrow"
-                        onClick={() => setValues({ searchTerm: `${exercise}` })}
+                        onClick={() =>
+                          setValues({
+                            searchTerm: `${exercise.nameOfExercise}`,
+                          })
+                        }
                       />
                     </Fragment>
                   ))}
@@ -158,4 +171,6 @@ const mapStateToProps = state => ({
   searchReducer: state.searchReducer,
 });
 
-export default connect(mapStateToProps, { autoComplete })(SearchBar);
+export default connect(mapStateToProps, { autoComplete, clearResults })(
+  SearchBar
+);

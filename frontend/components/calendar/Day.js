@@ -8,7 +8,7 @@ import ExercisesForDay from '../exercise/ExercisesForDay';
 import { dayWrapper } from '../../utils/calendarUtils';
 
 const Day = props => {
-  console.log('Day props: ', props);
+  // console.log('Day props: ', props);
   const {
     year,
     month,
@@ -16,6 +16,7 @@ const Day = props => {
     day,
     abbrMonth,
     allPrograms,
+    profile,
     dataSWR,
     urlWeekRange,
   } = props;
@@ -37,6 +38,7 @@ const Day = props => {
         {day[0] === '0' ? day[1] : day}
 
         <ExercisesForDay
+          profile={profile}
           allPrograms={allPrograms}
           dataSWR={dataSWR}
           year={year}

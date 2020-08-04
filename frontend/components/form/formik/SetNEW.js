@@ -1,43 +1,25 @@
-import React, { useEffect, Fragment, useState } from 'react';
+import React from 'react';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-const SetsAndReps = ({
-  remove,
-  insert,
-  index,
-  setsName,
-  repsName,
-  weightName,
-  rpeName,
-  pctName,
-  values,
-  primarySetsAndReps,
-  rpe,
-  pct,
-}) => {
-  const [localSets, setLocalSets] = useState('');
-  //   console.log('localSets: ', localSets);
-  const [localReps, setLocalReps] = useState('');
-  //   console.log('localReps: ', localReps);
-  const [localWeight, setLocalWeight] = useState('');
-  //   console.log('localWeight: ', localWeight);
-
-  useEffect(() => {
-    setLocalSets(values.primarySetsAndReps[index].sets);
-    setLocalReps(values.primarySetsAndReps[index].reps);
-    setLocalWeight(values.primarySetsAndReps[index].weight);
-  }, [
-    values.primarySetsAndReps[index].sets,
-    values.primarySetsAndReps[index].reps,
-    values.primarySetsAndReps[index].weight,
-  ]);
-
-  const handleChange = (e, fn) => {
-    fn(e.target.value);
-  };
-
+const SetNEW = props => {
+  const {
+    remove,
+    insert,
+    index,
+    setsName,
+    repsName,
+    weightName,
+    rpeName,
+    pctName,
+    values,
+    setFieldValue,
+    whichSetsAndRepsStr,
+    whichSetsAndRepsObj,
+    rpe,
+    pct,
+  } = props;
   return (
     <div
       key={index}
@@ -54,7 +36,7 @@ const SetsAndReps = ({
       <button
         type="button"
         className="btn"
-        onClick={() => primarySetsAndReps.length > 1 && remove(index)}
+        onClick={() => whichSetsAndRepsObj.length > 1 && remove(index)}
         style={{
           paddingLeft: rpe || pct ? '0' : '6px',
           paddingRight: rpe || pct ? '0' : '6px',
@@ -66,8 +48,6 @@ const SetsAndReps = ({
         type="input"
         as={TextField}
         name={setsName}
-        value={(values.primarySetsAndReps[index].sets = localSets)}
-        onChange={e => handleChange(e, setLocalSets)}
         variant="outlined"
         label="sets"
       />
@@ -75,8 +55,6 @@ const SetsAndReps = ({
         type="input"
         as={TextField}
         name={repsName}
-        value={(values.primarySetsAndReps[index].reps = localReps)}
-        onChange={e => handleChange(e, setLocalReps)}
         variant="outlined"
         label="reps"
       />
@@ -84,8 +62,6 @@ const SetsAndReps = ({
         type="input"
         as={TextField}
         name={weightName}
-        value={(values.primarySetsAndReps[index].weight = localWeight)}
-        onChange={e => handleChange(e, setLocalWeight)}
         variant="outlined"
         label="lbs/kg"
       />
@@ -132,6 +108,6 @@ const SetsAndReps = ({
   );
 };
 
-SetsAndReps.propTypes = {};
+SetNEW.propTypes = {};
 
-export default SetsAndReps;
+export default SetNEW;

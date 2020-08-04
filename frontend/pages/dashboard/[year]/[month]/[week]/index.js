@@ -13,7 +13,7 @@ import Week from '../../../../../components/calendar/Week';
 // import { weekdayWrapper } from '../../../../../utils/calendarUtils';
 
 const WeekView = props => {
-  console.log('WeekView props: ', props);
+  // console.log('WeekView props: ', props);
   const {
     programReducer: { allPrograms },
     calendarReducer: { weekRange },

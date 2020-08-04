@@ -1,23 +1,17 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React from 'react';
 import { Field } from 'formik';
 import FormCheck from 'react-bootstrap/FormCheck';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-const DateAndTime = ({
-  time,
-  enableTime,
+const DateAndTimeNEW = ({
   values,
   setLocalPickDate,
   pickDateErrors,
   touched,
 }) => {
-  useEffect(() => {
-    setLocalPickDate(values.pickDate);
-  }, [values.pickDate]);
-
   return (
-    <Fragment>
+    <>
       <Field
         as={FormCheck}
         type="checkbox"
@@ -51,12 +45,10 @@ const DateAndTime = ({
           }}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 
-DateAndTime.propTypes = {
-  enableTime: PropTypes.bool.isRequired,
-};
+DateAndTimeNEW.propTypes = {};
 
-export default DateAndTime;
+export default DateAndTimeNEW;

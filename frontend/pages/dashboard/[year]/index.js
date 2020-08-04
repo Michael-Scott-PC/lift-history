@@ -12,7 +12,7 @@ import {
 } from '../../../utils/calendarUtils';
 
 const YearView = props => {
-  console.log('YearView props: ', props);
+  // console.log('YearView props: ', props);
   const { profile } = props;
 
   useEffect(() => {

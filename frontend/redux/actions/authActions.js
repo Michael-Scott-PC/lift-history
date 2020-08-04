@@ -16,6 +16,7 @@ import {
 import strapiAPI from '../../api/strapiAPI';
 
 import { setAlert } from './alertActions';
+import { loadUserProfile } from './profileActions';
 
 /**
  * @description: register a new user
@@ -61,10 +62,12 @@ export const loginUser = values => async dispatch => {
   });
   try {
     const res = await strapiAPI.post('/auth/local', values);
+    console.log('loginUser res: ', res);
     const {
       jwt,
       user: {
         id,
+        athletes,
         myPrograms,
         profile,
         role: { type },
@@ -77,10 +80,12 @@ export const loginUser = values => async dispatch => {
       payload: { jwt, id, username, type },
     });
 
-    dispatch({
-      type: LOAD_PROFILE,
-      payload: profile,
-    });
+    dispatch(loadUserProfile(id, jwt, `${process.env.strapiAPI}/graphql`));
+
+    // dispatch({
+    //   type: LOAD_PROFILE,
+    //   payload: profile,
+    // });
 
     dispatch({
       type: LOAD_USER_PROGRAMS,

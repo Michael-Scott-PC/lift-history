@@ -1,43 +1,48 @@
 import { GraphQLClient } from 'graphql-request';
 
 import strapiAPI from '../../api/strapiAPI';
-import { CREATE_USER_PROGRAM, REVALIDATE_MYPROGRAM } from './types';
+import {
+  CREATE_USER_PROGRAM,
+  REVALIDATE_MYPROGRAM,
+  REVALIDATE_PROFILE,
+} from './types';
 
-/**
- * @description: Retrieves the exercise Id from database and returns them to be used
- * in setsAndRepsHelper.
- * @param {Object} values - Values from the AddExerciseFormik form.
- */
-const getExerciseIds = async values => {
-  let primaryExerciseId;
-  if (values.primaryExercise) {
-    const { data: primaryData } = await strapiAPI.get(
-      `/exercises?nameOfExercise=${values.primaryExercise}`
-    );
+// THIS IS NO LONGER NECESSARY - the exercise Ids were already available on the frontend.
+// /**
+//  * @description: Retrieves the exercise Id from database and returns them to be used
+//  * in setsAndRepsHelper.
+//  * @param {Object} values - Values from the AddExerciseFormik form.
+//  */
+// export const getExerciseIds = async values => {
+//   let primaryExerciseId;
+//   if (values.primaryExercise) {
+//     const { data: primaryData } = await strapiAPI.get(
+//       `/exercises?nameOfExercise=${values.primaryExercise}`
+//     );
 
-    primaryExerciseId = primaryData[0].id;
-  }
+//     primaryExerciseId = primaryData[0].id;
+//   }
 
-  let secondaryExerciseId;
-  if (values.secondaryExercise) {
-    const { data: secondaryData } = await strapiAPI.get(
-      `/exercises?nameOfExercise=${values.secondaryExercise}`
-    );
+//   let secondaryExerciseId;
+//   if (values.secondaryExercise) {
+//     const { data: secondaryData } = await strapiAPI.get(
+//       `/exercises?nameOfExercise=${values.secondaryExercise}`
+//     );
 
-    secondaryExerciseId = secondaryData[0].id;
-  }
+//     secondaryExerciseId = secondaryData[0].id;
+//   }
 
-  let thirdExerciseId;
-  if (values.thirdExercise) {
-    const { data: thirdData } = await strapiAPI.get(
-      `/exercises?nameOfExercise=${values.thirdExercise}`
-    );
+//   let thirdExerciseId;
+//   if (values.thirdExercise) {
+//     const { data: thirdData } = await strapiAPI.get(
+//       `/exercises?nameOfExercise=${values.thirdExercise}`
+//     );
 
-    thirdExerciseId = thirdData[0].id;
-  }
+//     thirdExerciseId = thirdData[0].id;
+//   }
 
-  return [primaryExerciseId, secondaryExerciseId, thirdExerciseId];
-};
+//   return [primaryExerciseId, secondaryExerciseId, thirdExerciseId];
+// };
 
 /**
  * @description: The returned list becomes the value for thisDaysExercises property in
@@ -45,25 +50,36 @@ const getExerciseIds = async values => {
  * @param {Object} values - Values from the AddExerciseFormik form.
  * @param {bool} getExerciseId - Determines if we need to execute getExerciseIds function.
  */
-export const setsAndRepsHelper = async (values, getExerciseId) => {
+export const setsAndRepsHelper = async (
+  values,
+  getExerciseId,
+  getColorId,
+  colorId
+) => {
+  console.log('setsAndRepsHelper values: ', values);
+  console.log('setsAndRepsHelper colorId: ', colorId);
   // In order to successfully create or update 'myProgram', the exercise ID must be passed in the object
   // However, in order to mutate our UI with SWR, we need the exercise name, not the ID. The getExerciseId
   // param allows us to control which value is passed to 'exercise' so we don't break the rendering logic.
-  let primaryExerciseId, secondaryExerciseId, thirdExerciseId;
-  if (getExerciseId) {
-    [
-      primaryExerciseId,
-      secondaryExerciseId,
-      thirdExerciseId,
-    ] = await getExerciseIds(values);
-  }
+  // let primaryExerciseId, secondaryExerciseId, thirdExerciseId;
+  // if (getExerciseId) {
+  //   [
+  //     primaryExerciseId,
+  //     secondaryExerciseId,
+  //     thirdExerciseId,
+  //   ] = await getExerciseIds(values);
+  // }
 
   const fullWorkout = [];
-  if (values.primaryExercise) {
+  if (values.primaryExercise.id) {
     fullWorkout.push({
       exercise: !getExerciseId
-        ? { nameOfExercise: values.primaryExercise }
-        : { id: primaryExerciseId },
+        ? { nameOfExercise: values.primaryExercise.nameOfExercise }
+        : { id: values.primaryExercise.id },
+      // TODO: do the exact same thing for color Id as exercise Id
+      color: !getColorId
+        ? { color: values.primaryExerciseBgColor }
+        : { id: colorId },
       thisSetsAndReps: values.primarySetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -73,11 +89,11 @@ export const setsAndRepsHelper = async (values, getExerciseId) => {
       })),
     });
   }
-  if (values.secondaryExercise) {
+  if (values.secondaryExercise.id) {
     fullWorkout.push({
       exercise: !getExerciseId
-        ? { nameOfExercise: values.secondaryExercise }
-        : { id: secondaryExerciseId },
+        ? { nameOfExercise: values.secondaryExercise.nameOfExercise }
+        : { id: values.secondaryExercise.id },
       thisSetsAndReps: values.secondarySetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -87,11 +103,11 @@ export const setsAndRepsHelper = async (values, getExerciseId) => {
       })),
     });
   }
-  if (values.thirdExercise) {
+  if (values.thirdExercise.id) {
     fullWorkout.push({
       exercise: !getExerciseId
-        ? { nameOfExercise: values.thirdExercise }
-        : { id: thirdExerciseId },
+        ? { nameOfExercise: values.thirdExercise.nameOfExercise }
+        : { id: values.thirdExercise.id },
       thisSetsAndReps: values.thirdSetsAndReps.map(exercise => ({
         sets: exercise.sets,
         reps: exercise.reps,
@@ -111,15 +127,28 @@ export const setsAndRepsHelper = async (values, getExerciseId) => {
  * @param {number} id - User's id.
  * @param {Object} values - Values from the AddExerciseFormik form.
  */
-export const createUserProgram = (jwt, id, values) => async dispatch => {
+export const createUserProgram = (
+  jwt,
+  id,
+  values,
+  colorId
+) => async dispatch => {
+  console.log('createUserProgram values: ', values);
+  console.log('createUserProgram colorId: ', colorId);
   const userId = id;
 
   const getExerciseId = true;
+  const getColorId = true;
   const mapValues = {
     scheduleExercise: values.pickDate,
     isSuperSet: values.isSuperSet,
     isTripleSet: values.isTripleSet,
-    thisDaysExercises: await setsAndRepsHelper(values, getExerciseId),
+    thisDaysExercises: await setsAndRepsHelper(
+      values,
+      getExerciseId,
+      getColorId,
+      colorId
+    ),
     users: [{ id: userId }],
   };
 
@@ -148,18 +177,21 @@ export const createUserProgram = (jwt, id, values) => async dispatch => {
  * @param {number} userId - User's id.
  */
 export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
-  // console.log('revalidateMyProgram ran.');
-  // console.log('url: ', url);
-  // console.log('jwt: ', jwt);
-  // console.log('userId: ', userId);
   const query = `{
     user(id: ${userId}) {
       id
       myPrograms{
+        id
         scheduleExercise
         thisDaysExercises {
+          id
           exercise {
+            id
             nameOfExercise
+          }
+          color {
+            id
+            color
           }
           thisSetsAndReps {
             sets
@@ -173,7 +205,6 @@ export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
         }
         isSuperSet
         isTripleSet
-        
       }
     }
   }`;
@@ -191,6 +222,24 @@ export const revalidateMyProgram = (url, jwt, userId) => async dispatch => {
     const {
       user: { myPrograms },
     } = res;
+    // console.log('profile: ', profile);
+    // profile {
+    //   color_code_exercises {
+    //     color {
+    //       id
+    //       color
+    //     }
+    //     exercise {
+    //       id
+    //       nameOfExercise
+    //     }
+    //     isDefault
+    //   }
+    // }
+    // dispatch({
+    //   type: REVALIDATE_PROFILE,
+    //   payload: profile,
+    // });
 
     dispatch({
       type: REVALIDATE_MYPROGRAM,
